@@ -1,0 +1,12 @@
+[
+  "POST users/signin",
+  "GET users/:id",
+  "POST users",
+  "PUT users/:id",
+  "DELETE users/:id",
+  "GET blogs",
+  "GET blogs/:id",
+  "POST blogs",
+  "PUT blogs/:id",
+  "DELETE blogs/:id"
+]

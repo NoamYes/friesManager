@@ -1,0 +1,358 @@
+{
+	"info": {
+		"_postman_id": "e23f1816-02a6-4592-ae58-4a8ab7f27c80",
+		"name": "tamplate",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"1\",\n    \"password\":\"ab\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{beckendUrl}}/users/login",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{beckendUrl}}/users/",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"1\",\n    \"password\":\"ab\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{beckendUrl}}/users/",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "by userId",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{beckendUrl}}/users/:userId",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user (name)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{beckendUrl}}/users/:userId",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "62bb107c260074e39cb9d539"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{beckendUrl}}/users/:userId",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "62bb107c260074e39cb9d539"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "blog",
+			"item": [
+				{
+					"name": "all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{beckendUrl}}/blogs/",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"blogs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create blog",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"2\",\n    \"description\":\"ab\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{beckendUrl}}/blogs/",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"blogs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "by blogId",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{beckendUrl}}/blogs/:blogId",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"blogs",
+								":blogId"
+							],
+							"variable": [
+								{
+									"key": "blogId",
+									"value": "62b9eacaa4fea9089c7a5f45"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update blog",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"new decription\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{beckendUrl}}/blogs/:blogId",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"blogs",
+								":blogId"
+							],
+							"variable": [
+								{
+									"key": "blogId",
+									"value": "62b9eacaa4fea9089c7a5f45"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete blog",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{beckendUrl}}/blogs/:blogId",
+							"host": [
+								"{{beckendUrl}}"
+							],
+							"path": [
+								"blogs",
+								":blogId"
+							],
+							"variable": [
+								{
+									"key": "blogId",
+									"value": "62bd29f4ce0bea91b529cdde"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
