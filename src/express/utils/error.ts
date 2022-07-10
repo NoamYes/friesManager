@@ -1,12 +1,40 @@
 import * as express from 'express';
 import { logError } from '../../log/logger';
+import BaseError from './BaseError';
+import ResponseHandler from './responseHandler';
 
-export class ServiceError extends Error {
+/* eslint-disable max-classes-per-file */
+
+export class ServiceError extends BaseError {
     public code: number;
 
     constructor(code: number, message: string) {
         super(message);
         this.code = code;
+    }
+}
+
+export class InternalError extends ServiceError {
+    constructor(message = 'Internal error') {
+        super(500, message);
+    }
+}
+
+export class forbiddenError extends ServiceError {
+    constructor(message = 'Permission denied') {
+        super(401, message);
+    }
+}
+
+export class BadRequestError extends ServiceError {
+    constructor(message = 'Bad Request') {
+        super(400, message);
+    }
+}
+
+export class NotFoundError extends ServiceError {
+    constructor(message = 'Not found') {
+        super(404, message);
     }
 }
 
@@ -18,28 +46,12 @@ export class ServiceError extends Error {
  * @param { express.NextFunction } _next - The next function
  */
 export const errorMiddleware = (error: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-    if (error.name === 'ValidationError') {
-        res.status(400).send({
-            type: error.name,
-            message: error.message,
-        });
-    } else if (error instanceof ServiceError) {
-        res.status(error.code).send({
-            type: error.name,
-            message: error.message,
-        });
-    } else if (error.name === 'MongoServerError') {
-        res.status(400).send({
-            type: error.name,
-            message: 'your data is not valid maybe you have a duplicate data',
-            errorMessage: error.message,
-        });
+    if (error instanceof BadRequestError) {
+        ResponseHandler.clientError(res, error.message);
+    } else if (error instanceof NotFoundError) {
+        ResponseHandler.notFound(res, error.message);
     } else {
-        res.status(500).send({
-            type: error.name,
-            message: error.message,
-        });
+        ResponseHandler.internal(res, error.message);
     }
-
     logError(JSON.stringify(error));
 };
