@@ -1,16 +1,16 @@
-import { UserRepo } from './mongo/repo/user.repo';
+import { UserRepo } from './mongo/repo/request.repo';
 import initializeMongo from './mongo/initializeMongo';
 import App from './express/app';
 import config from './config/config';
 import UserRouter from './express/routes/user.route';
-import { userModel } from './mongo/models/user.model';
-import { UserService } from './express/services/user.service';
-import { UserController } from './express/controllers/user.controller';
+import { userModel } from './mongo/models/request.model';
+import { UserService } from './express/services/request.service';
+import { UserController } from './express/controllers/request.controller';
 import { BlogController } from './express/controllers/blog.controller';
 import BlogRouter from './express/routes/blog.route';
 import { BlogService } from './express/services/blog.service';
-import blogModel from './mongo/models/blog.model';
-import { BlogRepo } from './mongo/repo/blog.repo';
+import blogModel from './mongo/models/group.model';
+import { BlogRepo } from './mongo/repo/group.repo';
 import Auth from './express/services/auth.service';
 
 const { mongo } = config;

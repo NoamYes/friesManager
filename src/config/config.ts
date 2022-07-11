@@ -9,8 +9,8 @@ const config = {
     mongo: {
         uri: env.get('MONGO_URI').required().asString(),
         uriTest: env.get('MONGO_TEST_URI').required().asString(),
-        blogCollectionName: env.get('COLLECTION_NAME').required().asString(),
-        userCollectionName: env.get('USER_COLLECTION_NAME').required().asString(),
+        groupCollectionName: env.get('GROUP_COLLECTION_NAME').required().asString(),
+        requestCollectionName: env.get('REQUEST_COLLECTION_NAME').required().asString(),
     },
     keys: {
         initializationVector: env.get('VECTOR').example('length of 16 456').required().asString(),

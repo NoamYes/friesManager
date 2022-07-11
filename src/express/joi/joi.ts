@@ -28,7 +28,7 @@ const normalizeRequest = (req: any, value: any) => {
  */
 const validateRequest = (schema: Joi.ObjectSchema<any>, options: Joi.ValidationOptions = defaultValidationOptions) => {
     const validator = async (req: Request) => {
-        const { error, value } = schema.unknown().validate(req, options);
+        const { error, value } = schema.validate(req, options); // TODO: removed unknown why in template
         if (error) {
             throw new BadRequestError(error.message);
         }

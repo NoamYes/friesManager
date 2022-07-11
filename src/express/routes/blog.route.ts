@@ -2,7 +2,7 @@ import * as express from 'express';
 import { wrapController } from '../utils/wraps';
 import validateRequest from '../joi/joi';
 import { updateSchema, createSchema } from '../joi/validator/blog.schema';
-import { IBlogController } from '../../interfaces/blogController.interface';
+import { IBlogController } from '../../interfaces/requestController.interface';
 
 class BlogRouter {
     public path: string = '/blogs';

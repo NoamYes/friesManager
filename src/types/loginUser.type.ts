@@ -1,3 +1,3 @@
-import User from './user.type';
+import User from './request.type';
 
 export type LoginUser = { user: User; token: string };

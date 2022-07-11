@@ -1,7 +1,7 @@
 import { IUserController } from './../../interfaces/userController.interface';
 import * as express from 'express';
 import { wrapController } from '../utils/wraps';
-import { updateSchema, createSchema } from '../joi/validator/user.schema';
+import { updateSchema, createSchema } from '../joi/validator/request.schema';
 import validateRequest from '../joi/joi';
 class UserRouter {
     public path: string = '/users';

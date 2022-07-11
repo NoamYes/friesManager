@@ -1,7 +1,7 @@
-import { IBlogService } from './../../interfaces/blogService.interface';
+import { IBlogService } from '../../interfaces/requestService.interface';
 import { Request, Response } from 'express';
 import Blog from '../../types/blog.type';
-import { IBlogController } from '../../interfaces/blogController.interface';
+import { IBlogController } from '../../interfaces/requestController.interface';
 import { logInfo } from '../../log/logger';
 export class BlogController implements IBlogController {
     private blogService: IBlogService;

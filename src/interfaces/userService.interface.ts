@@ -1,4 +1,4 @@
-import User from '../types/user.type';
+import User from '../types/request.type';
 
 export interface IUserService {
     createUser(user: User): Promise<User>;

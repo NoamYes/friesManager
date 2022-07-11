@@ -1,6 +1,6 @@
-import Blog from '../../types/blog.type';
-import { IBlogRepo } from '../../interfaces/blogRepo.interface';
-import { IBlogService } from '../../interfaces/blogService.interface';
+import Blog from '../../types/group.type';
+import { IBlogRepo } from '../../interfaces/requestRepo.interface';
+import { IBlogService } from '../../interfaces/requestService.interface';
 import { logInfo } from '../../log/logger';
 
 export class BlogService implements IBlogService {

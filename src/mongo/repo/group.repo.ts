@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import Blog from '../../types/blog.type';
-import { IBlogRepo } from '../../interfaces/blogRepo.interface';
+import Blog from '../../types/group.type';
+import { IBlogRepo } from '../../interfaces/requestRepo.interface';
 import { logInfo } from '../../log/logger';
 
 export class BlogRepo implements IBlogRepo {
