@@ -1,5 +1,3 @@
-/* eslint-disable guard-for-in */
-/* eslint-disable no-restricted-syntax */
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 

@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as logger from 'morgan';
-import { errorMiddleware } from './utils/error';
+import { errorMiddleware } from './error/errorMiddleware';
 import { logInfo } from '../log/logger';
 import * as cors from 'cors';
 import IRouter from '../interfaces/router.interface';

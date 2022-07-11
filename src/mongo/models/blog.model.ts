@@ -9,13 +9,13 @@ const blogSchema = new mongoose.Schema<Blog>(
         _id: { type: mongoose.Schema.Types.ObjectId, required: false, auto: true, select: true },
         title: { type: String, required: true, unique: true },
         description: { type: String, required: true },
-        author: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+        author: { type: mongoose.Schema.Types.ObjectId, ref: mongo.userCollectionName, required: true },
         createdAt: { type: Date, required: false },
         updatedAt: { type: Date, required: false },
     },
     { versionKey: false },
 );
 
-const blogModel = mongoose.model<Blog>(mongo.collectionName, blogSchema);
+const blogModel = mongoose.model<Blog>(mongo.blogCollectionName, blogSchema);
 
 export default blogModel;

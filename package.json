@@ -4,9 +4,9 @@
   "description": "template-express",
   "main": ".prettierrc.js",
   "scripts": {
-    "start": "nodemon ./src/index.ts",
-    "dev": "npm run build && npm start",
-    "test": "jest --coverage",
+    "start": "npm run build && npm ./dist/index.js",
+    "dev": "LOAD_DEV_DOTENV=true nodemon  ./src/index.ts",
+    "test": "LOAD_DEV_DOTENV=true jest --coverage",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "prettier": "prettier --config .prettierrc.js 'src/**/*.ts' --check",
@@ -15,7 +15,7 @@
     "docker-build": "docker build -t template-express .",
     "docker-compose": "docker-compose up -d"
   },
-  "author": "Alexander Gurevich",
+  "author": "Menahem leibman",
   "license": "ISC",
   "directories": {
     "test": "tests"

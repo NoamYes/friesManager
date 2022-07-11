@@ -1,24 +1,9 @@
 import { Response } from 'express'
 
 export default abstract class ResponseHandler {
-    // TODO: needed sanitize? in manager logic?
-    private static sanitize<T>(response: T): T {
-        const clone: T = {} as T;
-        Object.assign(clone, response);
-        Object.keys(clone).forEach((key) => (clone[key] === undefined || clone[key] === null ? delete clone[key] : {}));
-        return clone;
-    }
 
-    static success<T>(res: Response, dto?: T) {
-        let sanitized;
-        if (dto) {
-            if (Array.isArray(dto)) {
-                sanitized = dto.map((d) => ResponseHandler.sanitize(d));
-            } else {
-                sanitized = ResponseHandler.sanitize(dto);
-            }
-        }
-        return res.status(200).json(sanitized);
+    static success(res: Response, dto?: any) {
+        return res.status(200).json(dto);
     }
 
     static jsonResponse(res: Response, code: number, message: string) {

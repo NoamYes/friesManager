@@ -27,13 +27,17 @@ export class BlogRepo implements IBlogRepo {
     };
 
     public getBlog = async (blogId: string): Promise<Blog | null> => {
-        const blog = await this.BlogModel.findById(blogId);
+        const blog = await this.BlogModel.findById(blogId).populate('author');
         return blog;
     };
 
     public getAllBlogs = async (): Promise<Blog[] | null> => {
-        const blogs = await this.BlogModel.find({});
-        return blogs;
+        try {
+            const blogs = await this.BlogModel.find({}).populate('author');
+            return blogs;
+        } catch (error) {
+            return null;
+        }
     };
 
     public getBlogsByAuthor = async (userName: string): Promise<Blog[] | null> => {
