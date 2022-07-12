@@ -1,24 +1,26 @@
 import { REQUEST_TYPE, GROUP_TYPE, RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS } from './../../config/enums';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import config from '../../config/config';
-import { CreateRequest, Request, ApprovalRound, AddDisToGroup } from '../../types/request.type';
+import { ApprovalRound, AddDisToGroup } from '../../types/request.type';
 
 const requestOptions = {
     discriminatorKey: 'type',
     collection: config.mongo.requestCollectionName,
 };
 
-// export interface RequestDoc {
-//     _id: mongoose.Schema.Types.ObjectId;
-//     type: { type: String; enum: REQUEST_TYPE; required: true };
-//     applicant: { type: mongoose.Schema.Types.ObjectId; required: true };
-//     createdAt: { type: Date; required: false };
-//     updatedAt: { type: Date; required: false };
-// }
+export interface RequestDoc {
+    _id: Types.ObjectId;
+    type: REQUEST_TYPE;
+    applicant: string;
+    createdAt: Date;
+    updatedAt: Date;
+    approvalRounds?: ApprovalRound[];
+}
 
+// TODO: add global status request
 export const requestSchema = new mongoose.Schema(
     {
-        _id: { type: mongoose.Schema.Types.ObjectId, required: false, auto: true, select: true },
+        _id: { type: mongoose.Schema.Types.ObjectId, required: true },
         type: { type: String, enum: REQUEST_TYPE, required: true },
         applicant: { type: mongoose.Schema.Types.ObjectId, required: true },
         createdAt: { type: Date, required: false },
@@ -35,9 +37,9 @@ export const createGroupApprovalSchema = new mongoose.Schema<ApprovalRound>({
     status: { type: String, enum: APPROVAL_ROUND_STATUS, required: true },
 });
 
-const Request = mongoose.model('Request', requestSchema);
+export const RequestModel = mongoose.model('Request', requestSchema);
 
-const CreateRequestModel = Request.discriminator<CreateRequest>(
+const CreateRequestModel = RequestModel.discriminator<CreateRequest>(
     REQUEST_TYPE.CREATE_GROUP,
     new mongoose.Schema<CreateRequest>({
         name: { type: String, required: true, unique: true },
@@ -46,7 +48,7 @@ const CreateRequestModel = Request.discriminator<CreateRequest>(
     }),
 );
 
-const AddDiToGroupRequest = Request.discriminator<AddDisToGroup>(
+const AddDiToGroupRequestModel = RequestModel.discriminator<AddDisToGroup>(
     REQUEST_TYPE.ADD_DIS_GROUP,
     new mongoose.Schema<AddDisToGroup>({
         groupId: { type: mongoose.Schema.Types.ObjectId, required: true },
@@ -55,4 +57,9 @@ const AddDiToGroupRequest = Request.discriminator<AddDisToGroup>(
     }),
 );
 
-export { CreateRequestModel, AddDiToGroupRequest };
+export const modelsMap = {
+    [REQUEST_TYPE.BASE_REQ]: RequestModel,
+    [REQUEST_TYPE.CREATE_GROUP]: CreateRequestModel,
+    [REQUEST_TYPE.ADD_DIS_GROUP]: AddDiToGroupRequestModel,
+};
+export { CreateRequestModel, AddDiToGroupRequestModel };

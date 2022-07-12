@@ -1,4 +1,4 @@
-import { BadRequestError } from './../error/error';
+import { BadRequestError } from './../utils/error';
 import { Request } from 'express';
 import * as Joi from 'joi';
 import { wrapValidator } from '../utils/wraps';

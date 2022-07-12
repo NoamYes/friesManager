@@ -1,22 +1,44 @@
+import { InternalError, BadRequestError, NotFoundError } from './../utils/error';
 import { IRequestRepo } from './../../interfaces/requestRepo.interface';
 import { createGroupDTO } from './../joi/validator/request.schema';
 import { IRequestService } from '../../interfaces/requestService.interface';
-import { generateToken } from '../../auth/token';
-import { IUserRepo } from '../../interfaces/userRepo.interface';
-import { logInfo } from '../../log/logger';
-import { decrypt, encrypt } from '../../utils/encrypt';
-import { verify } from 'jsonwebtoken';
-import config from '../../config/config';
-import findOneByQuery from '../../mongo/util/findOneByQuery';
-import { CreateRequestModel } from '../../mongo/models/request.model';
+import { REQUEST_TYPE } from '../../config/enums';
+import { CreateGroupRequest } from '../../types/request.type';
+import { Request } from '../../domain/request';
 
-export class RequestSerivce implements IRequestService {
+export class RequestService implements IRequestService {
     private repo: IRequestRepo;
 
     constructor(requestRepo: IRequestRepo) {
-        logInfo('UserService created');
         this.repo = requestRepo;
     }
+
+    public createCreateGroup = async (requestDetails: createGroupDTO): Promise<boolean> => {
+        const existsRequest = await this.repo.find({ name: requestDetails.name }, REQUEST_TYPE.CREATE_GROUP);
+
+        if (existsRequest) throw new BadRequestError(`Create request of a group with the name ${requestDetails.name} already exists`);
+
+        const { applicant, approvalsNeeded } = requestDetails;
+        const requestProps = { type: REQUEST_TYPE.CREATE_GROUP, applicant, approvalsNeeded };
+        const payload = { name: requestDetails.name, types: requestDetails.types };
+        const newRequest: Request = Request._createNew({ ...requestProps, payload });
+        const res = await this.repo.create(newRequest, REQUEST_TYPE.CREATE_GROUP);
+        if (!res) throw new InternalError(`Create request of a group with the name ${requestDetails.name} already exists`);
+        return res;
+    };
+
+    // public updateCreateGroup = async (group: createGroupDTO): Promise<boolean> => {
+    //     const existsRequest = await this.repo.find({ name: group.name }, REQUEST_TYPE.CREATE_GROUP);
+
+    //     if (!existsRequest) throw new NotFoundError();
+
+    //     const newRequest: CreateGroupRequest = Request._create(group);
+
+    //     newRequest.approvalRounds = ();
+
+    //     const res = await this.repo.save(newRequest.toP, REQUEST_TYPE.CREATE_GROUP);
+    //     return res;
+    // };
 
     // public auth = async (token: string) => {
     //     const payload: any = verify(token, config.keys.tokenKey);
@@ -31,12 +53,4 @@ export class RequestSerivce implements IRequestService {
 
     //     return userId;
     // };
-
-    public createGroup = async (createGroupRequest: createGroupDTO) => {
-        const existedCreate = await findOneByQuery(CreateRequestModel, { name: createGroupRequest.name });
-
-        this.repo.save(model, query, { ...existedCreate, create });
-    };
-
-    public addDisToGroup = async () => {};
 }

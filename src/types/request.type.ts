@@ -1,5 +1,5 @@
 import { RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS, GROUP_TYPE } from './../config/enums';
-import { Types } from 'mongoose'
+import { Types } from 'mongoose';
 import { REQUEST_TYPE } from '../config/enums';
 
 // type Content = {
@@ -16,26 +16,25 @@ type Request = {
     applicant: string;
     createdAt: Date;
     updatedAt: Date;
+    approvalRounds?: ApprovalRound[];
 };
 
 type ApprovalRound = {
     permissionResponsibility: {
-        type: RESPONSIBILITY_PERM,
-        id: Types.ObjectId,
-    }
-    status: APPROVAL_ROUND_STATUS
-}
+        type: RESPONSIBILITY_PERM;
+        id: Types.ObjectId;
+    };
+    status: APPROVAL_ROUND_STATUS;
+};
 
-type CreateGroupRequest = Request & { 
-    name: string,
-    types: GROUP_TYPE[],
-    approvalRounds?: ApprovalRound[],
-}
+type CreateGroupRequest = Request & {
+    name: string;
+    types: GROUP_TYPE[];
+};
 
-type AddDisToGroup = Request & { 
+type AddDisToGroup = Request & {
     groupId: Types.ObjectId;
     disUniquedId: string[];
-    approvalRounds?: ApprovalRound[];
-}
+};
 
 export { Request, CreateGroupRequest, AddDisToGroup, ApprovalRound };

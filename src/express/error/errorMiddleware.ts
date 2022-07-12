@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { logError } from '../../log/logger';
-import { ServiceError } from './error';
+import { ServiceError } from '../utils/error';
 
 /**
  * Error middleware, handles the error by the status code.
@@ -10,7 +10,7 @@ import { ServiceError } from './error';
  * @param { express.NextFunction } _next - The next function
  */
 
-export const errorMiddleware = (error: ServiceError, _req: express.Request, res: express.Response, _next: express.NextFunction) => {  
-    res.status(error.code).send({ message: error.message })
+export const errorMiddleware = (error: ServiceError, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    res.status(error.code).send({ message: error.message });
     logError(JSON.stringify(error));
 };

@@ -4,6 +4,7 @@ export enum GROUP_TYPE {
 }
 
 export enum REQUEST_TYPE {
+    BASE_REQ = 'basic_request',
     CREATE_GROUP = 'create_group', // TODO: should change names?
     ADD_DIS_GROUP = 'add_dis_group',
 }
@@ -14,8 +15,7 @@ export enum RESPONSIBILITY_PERM {
 }
 
 export enum APPROVAL_ROUND_STATUS {
-    AWAITING_EXECUTION = 'awaiting for execution',
-    AWAITNG_APPROVALS = 'awaiting for approvals',
+    AWAITING = 'awaiting',
     DENIED = 'denied',
     APPROVED = 'approved',
 }
