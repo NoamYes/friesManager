@@ -1,5 +1,5 @@
 import crypto = require('crypto');
-import config from '../config/config';
+import config from '../config';
 
 export function generateHash(toHash: string) {
     return crypto.createHash('sha512').update(toHash).digest('hex');

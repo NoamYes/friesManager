@@ -1,12 +1,11 @@
-import { InternalError, BadRequestError, NotFoundError } from './../utils/error';
+import { InternalError, BadRequestError } from './../utils/error';
 import { IRequestRepo } from './../../interfaces/requestRepo.interface';
 import { createGroupDTO } from './../joi/validator/request.schema';
 import { IRequestService } from '../../interfaces/requestService.interface';
 import { REQUEST_TYPE } from '../../config/enums';
-import { CreateGroupRequest } from '../../types/request.type';
 import { Request } from '../../domain/request';
 
-export class RequestService implements IRequestService {
+export default class implements IRequestService {
     private repo: IRequestRepo;
 
     constructor(requestRepo: IRequestRepo) {
@@ -19,11 +18,17 @@ export class RequestService implements IRequestService {
         if (existsRequest) throw new BadRequestError(`Create request of a group with the name ${requestDetails.name} already exists`);
 
         const { applicant, approvalsNeeded } = requestDetails;
+
         const requestProps = { type: REQUEST_TYPE.CREATE_GROUP, applicant, approvalsNeeded };
+
         const payload = { name: requestDetails.name, types: requestDetails.types };
+
         const newRequest: Request = Request._createNew({ ...requestProps, payload });
+
         const res = await this.repo.create(newRequest, REQUEST_TYPE.CREATE_GROUP);
-        if (!res) throw new InternalError(`Create request of a group with the name ${requestDetails.name} already exists`);
+
+        if (!res) throw new InternalError(`Error creating group: ${payload.name}`);
+
         return res;
     };
 

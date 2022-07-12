@@ -1,6 +1,6 @@
 import { GROUP_TYPE } from '../../config/enums';
 import * as mongoose from 'mongoose';
-import config from '../../config/config';
+import config from '../../config';
 import Group from '../../types/group.type';
 
 const { mongo } = config;

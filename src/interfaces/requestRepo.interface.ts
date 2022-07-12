@@ -1,5 +1,5 @@
-import { GROUP_TYPE, REQUEST_TYPE } from './../config/enums';
-import { ApprovalRound } from '../types/request.type';
+import { REQUEST_TYPE } from './../config/enums';
+// import { ApprovalRound } from '../types/request.type';
 
 export type requestQuery = {
     id?: string;

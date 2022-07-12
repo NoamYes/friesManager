@@ -5,8 +5,10 @@
   "main": ".prettierrc.js",
   "scripts": {
     "start": "npm run build && npm ./dist/index.js",
-    "dev": "LOAD_DEV_DOTENV=true nodemon  ./src/index.ts",
-    "test": "LOAD_DEV_DOTENV=true jest --coverage",
+    "dev:linux": "LOAD_DEV_DOTENV=true nodemon ./src/index.ts",
+    "dev:windows": "set LOAD_DEV_DOTENV=true && nodemon ./src/index.ts",
+    "test1": "LOAD_DEV_DOTENV=true jest --coverage",
+    "test": "set LOAD_DEV_DOTENV=true && jest --coverage --detectOpenHandles --collectCoverageFrom=src/**/*  --runInBand tests/main.spec.ts",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "prettier": "prettier --config .prettierrc.js 'src/**/*.ts' --check",
@@ -38,9 +40,10 @@
     "helmet": "^5.1.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
+    "mongodb-memory-server": "^8.7.2",
     "mongoose": "^6.4.0",
     "morgan": "^1.10.0",
-    "supertest": "^6.2.3",
+    "supertest": "^6.2.4",
     "winston": "^3.8.0"
   },
   "devDependencies": {

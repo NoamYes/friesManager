@@ -19,6 +19,11 @@ export class InternalError extends ServiceError {
         super(500, message);
     }
 }
+export class MongoError extends ServiceError {
+    constructor(message = 'Internal DB error') {
+        super(500, message);
+    }
+}
 
 export class forbiddenError extends ServiceError {
     constructor(message = 'Permission denied') {

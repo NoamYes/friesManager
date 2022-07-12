@@ -1,5 +1,5 @@
 import { sign } from 'jsonwebtoken';
-import config from '../config/config';
+import config from '../config';
 import { encrypt } from '../utils/encrypt';
 
 export const generateToken = (userId: string) => {

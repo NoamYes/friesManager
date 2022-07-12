@@ -2,7 +2,7 @@ import { IRequestService } from '../../interfaces/requestService.interface';
 import { IRequestController } from './../../interfaces/requestController.interface';
 import { Request, Response } from 'express';
 import { logInfo } from '../../log/logger';
-export class RequestController implements IRequestController {
+export default class implements IRequestController {
     private _service: IRequestService;
 
     constructor(RequestService: IRequestService) {
@@ -10,7 +10,7 @@ export class RequestController implements IRequestController {
         this._service = RequestService;
     }
 
-    public createGroup = async (req: Request, res: Response): Promise<void> => {
+    public createCreateGroup = async (req: Request, res: Response): Promise<void> => {
         const { name, applicant, types, approvalsNeeded } = req.body;
         const result: boolean = await this._service.createCreateGroup({ name, applicant, types, approvalsNeeded });
         res.send(result);

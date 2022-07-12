@@ -1,17 +1,12 @@
-import { UserRepo } from './mongo/repo/request.repo';
+import RequestRepo from './mongo/repo/request.repo';
 import initializeMongo from './mongo/initializeMongo';
 import App from './express/app';
-import config from './config/config';
-import UserRouter from './express/routes/user.route';
-import { userModel } from './mongo/models/request.model';
-import { UserService } from './express/services/request.service';
-import { UserController } from './express/controllers/request.controller';
-import { BlogController } from './express/controllers/blog.controller';
-import BlogRouter from './express/routes/blog.route';
-import { BlogService } from './express/services/blog.service';
-import blogModel from './mongo/models/group.model';
-import { BlogRepo } from './mongo/repo/group.repo';
-import Auth from './express/services/auth.service';
+import config from './config';
+import { modelsMap } from './mongo/models/request.model';
+import RequestService from './express/services/request.service';
+import RequestController from './express/controllers/request.controller';
+import RequestRouter from './express/routes/request.route';
+// import Auth from './express/services/auth.service';
 
 const { mongo } = config;
 
@@ -22,22 +17,18 @@ const { mongo } = config;
 const main = async () => {
     await initializeMongo(mongo.uri);
 
-    const userRepo = new UserRepo(userModel);
-    const blogRepo = new BlogRepo(blogModel);
+    const requestRepo = new RequestRepo(modelsMap);
 
-    const userService = new UserService(userRepo);
-    const blogService = new BlogService(blogRepo);
+    const requestService = new RequestService(requestRepo);
 
-    const userController = new UserController(userService);
-    const blogController = new BlogController(blogService);
+    const requestController = new RequestController(requestService);
 
-    const auth = new Auth(userService.auth);
+    // const auth = new Auth(userService.auth);
 
-    const userRouter = new UserRouter(userController, auth.check);
-    const blogRouter = new BlogRouter(blogController, auth.check);
+    const requestRouter = new RequestRouter(requestController);
 
     const port = config.server.port || 2770;
-    new App(port, [userRouter, blogRouter]);
+    new App(port, [requestRouter]);
 };
 
 main().catch((err) => {

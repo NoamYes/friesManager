@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import config from '../../config/config';
+import config from '../../config';
 import IAuth from '../../interfaces/auth.interface';
 
 class Auth implements IAuth {

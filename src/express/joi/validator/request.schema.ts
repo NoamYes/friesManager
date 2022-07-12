@@ -10,14 +10,14 @@ export type createGroupDTO = {
     name: string;
     types: GROUP_TYPE[];
     applicant: string;
-    approvalsNeeded?: approvalNeed[];
+    approvalsNeeded?: approvalNeed[]; // TODO: should be required?
 };
 
 export const createGroupRequestSchema = Joi.object({
     body: {
         name: Joi.string().required(),
         types: Joi.alternatives()
-            .try(Joi.array().items(Joi.string().valid(Object.values(GROUP_TYPE))), Joi.string())
+            .try(Joi.array().items(Joi.string().valid(...Object.values(GROUP_TYPE))), Joi.string())
             .required(),
         applicant: Joi.string().required(), // TODO: consider transform to objectId validation
         approvalsNeeded: Joi.array().items(

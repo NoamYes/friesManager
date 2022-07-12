@@ -1,7 +1,7 @@
 import { REQUEST_TYPE, GROUP_TYPE, RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS } from './../../config/enums';
 import mongoose, { Types } from 'mongoose';
-import config from '../../config/config';
-import { ApprovalRound, AddDisToGroup } from '../../types/request.type';
+import config from '../../config';
+import { ApprovalRound, AddDisToGroup, CreateGroupRequest } from '../../types/request.type';
 
 const requestOptions = {
     discriminatorKey: 'type',
@@ -22,11 +22,13 @@ export const requestSchema = new mongoose.Schema(
     {
         _id: { type: mongoose.Schema.Types.ObjectId, required: true },
         type: { type: String, enum: REQUEST_TYPE, required: true },
-        applicant: { type: mongoose.Schema.Types.ObjectId, required: true },
+        applicant: { type: String, required: true },
         createdAt: { type: Date, required: false },
         updatedAt: { type: Date, required: false },
-    },
-    { ...requestOptions, ...{ versionKey: false } },
+    }, {
+    // versionKey: false,
+    ...requestOptions
+}
 );
 
 export const createGroupApprovalSchema = new mongoose.Schema<ApprovalRound>({
@@ -39,9 +41,9 @@ export const createGroupApprovalSchema = new mongoose.Schema<ApprovalRound>({
 
 export const RequestModel = mongoose.model('Request', requestSchema);
 
-const CreateRequestModel = RequestModel.discriminator<CreateRequest>(
+const CreateRequestModel = RequestModel.discriminator<CreateGroupRequest>(
     REQUEST_TYPE.CREATE_GROUP,
-    new mongoose.Schema<CreateRequest>({
+    new mongoose.Schema<CreateGroupRequest>({
         name: { type: String, required: true, unique: true },
         types: { type: [String], enum: GROUP_TYPE, required: true },
         approvalRounds: { type: [createGroupApprovalSchema], required: false },
@@ -52,7 +54,7 @@ const AddDiToGroupRequestModel = RequestModel.discriminator<AddDisToGroup>(
     REQUEST_TYPE.ADD_DIS_GROUP,
     new mongoose.Schema<AddDisToGroup>({
         groupId: { type: mongoose.Schema.Types.ObjectId, required: true },
-        disUniquedId: { type: [String], required: true },
+        disUniqueId: { type: [String], required: true },
         approvalRounds: { type: [createGroupApprovalSchema], required: false },
     }),
 );
@@ -62,4 +64,5 @@ export const modelsMap = {
     [REQUEST_TYPE.CREATE_GROUP]: CreateRequestModel,
     [REQUEST_TYPE.ADD_DIS_GROUP]: AddDiToGroupRequestModel,
 };
+
 export { CreateRequestModel, AddDiToGroupRequestModel };

@@ -34,7 +34,7 @@ type CreateGroupRequest = Request & {
 
 type AddDisToGroup = Request & {
     groupId: Types.ObjectId;
-    disUniquedId: string[];
+    disUniqueId: string[];
 };
 
 export { Request, CreateGroupRequest, AddDisToGroup, ApprovalRound };
