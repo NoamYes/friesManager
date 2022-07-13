@@ -1,39 +1,22 @@
 import * as request from 'supertest';
 import config from '../../src/config';
-import { REQUEST_STATUS } from '../../src/config/enums';
+import { APPROVAL_ROUND_STATUS, REQUEST_STATUS } from '../../src/config/enums';
 import { server } from '../main.spec';
 import { emptyDB, findOneByQuery } from '../seed';
 
 const requestsCollectionName = config.mongo.requestCollectionName;
 
-export const testCreateGroup = () => {
+export const testApprovalRounds = () => {
 
     beforeEach(async () => {
         await emptyDB();
     })
 
-    describe('Create create group requests useCases', () => {
-        it('Valid Create Group Request Without Approvals', async () => {
+    describe('Update approval rounds useCases', () => {
+        it('2 Rounds approval of create group request', async () => {
 
             const reqBody = {
-                name: "RoeiGroup",
-                types: ["distribution"],
-                applicant: "507f1f77bcf86cd799439011"
-            }
-
-            const res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
-            expect(res.status).toBe(200);
-
-            const insertedCreateGroupRequest = (await findOneByQuery(requestsCollectionName, {
-                name: reqBody.name
-            }));
-
-            expect(insertedCreateGroupRequest).toBeTruthy();
-        })
-
-        it('Valid Create Group Request With Approvals', async () => {
-            const reqBody = {
-                name: "WithApprovals",
+                name: "GroupWithApprovals",
                 types: ["distribution"],
                 applicant: "507f1f77bcf86cd799439011",
                 approvalsNeeded: [
@@ -54,15 +37,30 @@ export const testCreateGroup = () => {
 
             let insertedCreateGroupRequest;
 
+            await request(server.app).put(`/api/requests/approve/${res.body.id}`).send({
+                authorityId: "123456789",
+                approved: true
+            }).expect(200);
+
             insertedCreateGroupRequest = (await findOneByQuery(requestsCollectionName, {
                 name: reqBody.name
             }));
 
-            expect(insertedCreateGroupRequest.approvalRounds.length).toBe(2);
+            expect(insertedCreateGroupRequest.approvalRounds[0].status).toBe(APPROVAL_ROUND_STATUS.APPROVED);
             expect(insertedCreateGroupRequest.status).toBe(REQUEST_STATUS.WAITING_FOR_APPROVALS);
-        }
 
-        )
+            await request(server.app).put(`/api/requests/approve/${res.body.id}`).send({
+                authorityId: "987654321",
+                approved: true
+            }).expect(200);
+
+            insertedCreateGroupRequest = (await findOneByQuery(requestsCollectionName, {
+                name: reqBody.name
+            }));
+
+            expect(insertedCreateGroupRequest.approvalRounds[1].status).toBe(APPROVAL_ROUND_STATUS.APPROVED);
+            expect(insertedCreateGroupRequest.status).toBe(REQUEST_STATUS.IN_PROCESS);
+        })
     })
 
     // TODO: test - create group with approval rounds

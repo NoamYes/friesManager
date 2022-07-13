@@ -1,4 +1,4 @@
-import { InternalError, BadRequestError } from './../utils/error';
+import { InternalError, BadRequestError, NotFoundError } from './../utils/error';
 import { IRequestRepo } from './../../interfaces/requestRepo.interface';
 import { createGroupDTO } from './../joi/validator/request.schema';
 import { IRequestService } from '../../interfaces/requestService.interface';
@@ -12,8 +12,8 @@ export default class implements IRequestService {
         this.repo = requestRepo;
     }
 
-    public createCreateGroup = async (requestDetails: createGroupDTO): Promise<boolean> => {
-        const existsRequest = await this.repo.find({ name: requestDetails.name }, REQUEST_TYPE.CREATE_GROUP);
+    public createCreateGroup = async (requestDetails: createGroupDTO): Promise<string> => {
+        const existsRequest = await this.repo.findOne({ name: requestDetails.name }, REQUEST_TYPE.CREATE_GROUP);
 
         if (existsRequest) throw new BadRequestError(`Create request of a group with the name ${requestDetails.name} already exists`);
 
@@ -29,8 +29,22 @@ export default class implements IRequestService {
 
         if (!res) throw new InternalError(`Error creating group: ${payload.name}`);
 
-        return res;
+        return newRequest.id!.toString();
     };
+
+    public approveRound = async (requestId: string, authorityId: string, approved: boolean): Promise<boolean> => {
+        const request: Request | null = await this.repo.findById(requestId);
+
+        if (!request) throw new NotFoundError(`Request Not Found`);
+
+        request.approveRound(authorityId, approved);
+        request.checkAllApproved();
+
+        const res = await this.repo.save(requestId, request, request.type);
+
+        return !!res;
+
+    }
 
     // public updateCreateGroup = async (group: createGroupDTO): Promise<boolean> => {
     //     const existsRequest = await this.repo.find({ name: group.name }, REQUEST_TYPE.CREATE_GROUP);
@@ -39,7 +53,7 @@ export default class implements IRequestService {
 
     //     const newRequest: CreateGroupRequest = Request._create(group);
 
-    //     newRequest.approvalRounds = ();
+    //     newRequest.approvalsNeeded = ();
 
     //     const res = await this.repo.save(newRequest.toP, REQUEST_TYPE.CREATE_GROUP);
     //     return res;

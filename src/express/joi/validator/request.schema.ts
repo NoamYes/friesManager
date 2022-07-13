@@ -1,9 +1,9 @@
-import { GROUP_TYPE } from './../../../config/enums';
+import { GROUP_TYPE, RESPONSIBILITY_PERM } from './../../../config/enums';
 import * as Joi from 'joi';
 
-type approvalNeed = {
-    id: string;
-    approvalType: string;
+export type approvalNeed = {
+    authorityId: string;
+    approvalType: RESPONSIBILITY_PERM;
 };
 
 export type createGroupDTO = {
@@ -22,9 +22,19 @@ export const createGroupRequestSchema = Joi.object({
         applicant: Joi.string().required(), // TODO: consider transform to objectId validation
         approvalsNeeded: Joi.array().items(
             Joi.object({
-                id: Joi.string().required(),
-                approvalType: Joi.string().required(),
+                authorityId: Joi.string().required(),
+                approvalType: Joi.string().valid(...Object.values(RESPONSIBILITY_PERM)).required(),
             }),
         ),
     },
 });
+
+export const approveRequestSchema = Joi.object({
+    params: {
+        requestId: Joi.string().required()
+    },
+    body: {
+        authorityId: Joi.string().required(),
+        approved: Joi.boolean().required()
+    }
+})

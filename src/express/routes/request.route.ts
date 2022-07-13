@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { wrapController } from '../utils/wraps';
-import { createGroupRequestSchema } from '../joi/validator/request.schema';
+import { approveRequestSchema, createGroupRequestSchema } from '../joi/validator/request.schema';
 import validateRequest from '../joi/joi';
 import { IRequestController } from '../../interfaces/requestController.interface';
 
@@ -22,6 +22,7 @@ export default class {
 
     public initializeRoutes() {
         this.router.post('/createGroup', validateRequest(createGroupRequestSchema), wrapController(this.controller.createCreateGroup))
+        this.router.put('/approve/:requestId', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound))
         // this.router.patch('/createGroup', validate)
         // this.router.post('/login', wrapController(this.userController.login));
         // this.router.post('', validateRequest(createSchema), wrapController(this.userController.createUser));

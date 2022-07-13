@@ -10,32 +10,32 @@ import { REQUEST_TYPE } from '../config/enums';
 //     updatedAt?: Date;
 // };
 
-type Request = {
+type request = {
     _id?: Types.ObjectId;
     type: REQUEST_TYPE;
     applicant: string;
     createdAt: Date;
     updatedAt: Date;
-    approvalRounds?: ApprovalRound[];
+    approvalsNeeded?: approvalRound[];
     status: REQUEST_STATUS;
 };
 
-type ApprovalRound = {
+type approvalRound = {
     permissionResponsibility: {
         type: RESPONSIBILITY_PERM;
-        id: Types.ObjectId;
+        authorityId: String;
     };
     status: APPROVAL_ROUND_STATUS;
 };
 
-type CreateGroupRequest = Request & {
+type createGroupRequest = request & {
     name: string;
     types: GROUP_TYPE[];
 };
 
-type AddDisToGroup = Request & {
+type addDisToGroup = request & {
     groupId: Types.ObjectId;
     disUniqueId: string[];
 };
 
-export { Request, CreateGroupRequest, AddDisToGroup, ApprovalRound };
+export { request, createGroupRequest, addDisToGroup, approvalRound };

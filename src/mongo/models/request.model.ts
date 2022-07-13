@@ -1,7 +1,7 @@
 import { REQUEST_TYPE, GROUP_TYPE, RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS, REQUEST_STATUS } from './../../config/enums';
 import mongoose, { Types } from 'mongoose';
 import config from '../../config';
-import { ApprovalRound, AddDisToGroup, CreateGroupRequest } from '../../types/request.type';
+import { approvalRound, addDisToGroup, createGroupRequest } from '../../types/request.type';
 
 const requestOptions = {
     discriminatorKey: 'type',
@@ -14,9 +14,18 @@ export interface RequestDoc {
     applicant: string;
     createdAt: Date;
     updatedAt: Date;
-    approvalRounds?: ApprovalRound[];
+    approvalRounds?: approvalRound[];
     status: REQUEST_STATUS;
 }
+
+export const createGroupApprovalSchema = new mongoose.Schema<approvalRound>({
+    permissionResponsibility: {
+        type: { type: String, enum: RESPONSIBILITY_PERM, required: true },
+        authorityId: { type: String, required: true },
+    },
+    status: { type: String, enum: APPROVAL_ROUND_STATUS, required: true },
+});
+
 
 // TODO: add global status request
 export const requestSchema = new mongoose.Schema<RequestDoc>(
@@ -26,38 +35,29 @@ export const requestSchema = new mongoose.Schema<RequestDoc>(
         status: { type: String, enums: REQUEST_STATUS, required: true },
         applicant: { type: String, required: true },
         createdAt: { type: Date, required: false },
-        updatedAt: { type: Date, required: false }
+        updatedAt: { type: Date, required: false },
+        approvalRounds: { type: [createGroupApprovalSchema], required: false },
     }, {
     // versionKey: false,
     ...requestOptions
 }
 );
 
-export const createGroupApprovalSchema = new mongoose.Schema<ApprovalRound>({
-    permissionResponsibility: {
-        type: { type: String, enum: RESPONSIBILITY_PERM, required: true },
-        id: { type: mongoose.Schema.Types.ObjectId, required: true },
-    },
-    status: { type: String, enum: APPROVAL_ROUND_STATUS, required: true },
-});
-
 export const RequestModel = mongoose.model('Request', requestSchema);
 
-const CreateRequestModel = RequestModel.discriminator<CreateGroupRequest>(
+const CreateRequestModel = RequestModel.discriminator<createGroupRequest>(
     REQUEST_TYPE.CREATE_GROUP,
-    new mongoose.Schema<CreateGroupRequest>({
+    new mongoose.Schema<createGroupRequest>({
         name: { type: String, required: true, unique: true },
         types: { type: [String], enum: GROUP_TYPE, required: true },
-        approvalRounds: { type: [createGroupApprovalSchema], required: false },
     }),
 );
 
-const AddDiToGroupRequestModel = RequestModel.discriminator<AddDisToGroup>(
+const AddDiToGroupRequestModel = RequestModel.discriminator<addDisToGroup>(
     REQUEST_TYPE.ADD_DIS_GROUP,
-    new mongoose.Schema<AddDisToGroup>({
+    new mongoose.Schema<addDisToGroup>({
         groupId: { type: mongoose.Schema.Types.ObjectId, required: true },
         disUniqueId: { type: [String], required: true },
-        approvalRounds: { type: [createGroupApprovalSchema], required: false },
     }),
 );
 

@@ -12,6 +12,7 @@ import RequestService from '../src/express/services/request.service';
 import RequestController from '../src/express/controllers/request.controller';
 import RequestRouter from '../src/express/routes/request.route';
 import { testCreateGroup } from './requests/createGroup.spec';
+import { testApprovalRounds } from './requests/approveRounds.spec';
 
 export let server: Server;
 let replset: MongoMemoryReplSet;
@@ -66,6 +67,7 @@ describe('Run all tests', () => {
     // TODO: add  tests
     jest.setTimeout(3 * 60 * 1000);
     testCreateGroup();
+    testApprovalRounds();
 });
 
 afterAll(async () => {

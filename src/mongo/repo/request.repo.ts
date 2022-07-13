@@ -2,9 +2,10 @@
 import { requestQuery } from './../../interfaces/requestRepo.interface';
 import { REQUEST_TYPE } from '../../config/enums';
 import { IRequestRepo } from '../../interfaces/requestRepo.interface';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { MongoError } from '../../express/utils/error';
 import { Request } from '../../domain/request';
+import { RequestDoc } from '../models/request.model';
 
 export default class implements IRequestRepo {
     private _modelsMap: { [key: string]: typeof mongoose.Model };
@@ -13,9 +14,9 @@ export default class implements IRequestRepo {
         this._modelsMap = modelsMap;
     }
 
-    public create = async (req: Request, requestType: REQUEST_TYPE): Promise<boolean> => {
+    public create = async (request: Request, requestType: REQUEST_TYPE): Promise<boolean> => {
         try {
-            const doc = Request.toPersistance(req);
+            const doc: RequestDoc = Request.toPersistance(request);
             const res = await this._modelsMap[requestType].create(doc);
             return !!res;
         } catch (err: any) {
@@ -24,10 +25,10 @@ export default class implements IRequestRepo {
         }
     };
 
-    public save = async (req: Request, requestType: REQUEST_TYPE, query: requestQuery): Promise<boolean> => {
+    public save = async (id: string, request: Request, requestType: REQUEST_TYPE): Promise<boolean> => {
         try {
-            const doc = Request.toPersistance(req);
-            const res = await this._modelsMap[requestType].updateOne(query, { $set: doc });
+            const doc: RequestDoc = Request.toPersistance(request);
+            const res = await this._modelsMap[requestType].updateOne({ _id: new Types.ObjectId(id) }, { $set: doc });
             return !!res;
         } catch (err: any) {
             console.log(err.message);
@@ -35,9 +36,21 @@ export default class implements IRequestRepo {
         }
     };
 
-    public find = async (query: requestQuery, requestType: REQUEST_TYPE = REQUEST_TYPE.BASE_REQ): Promise<any> => {
+    public findById = async (id: string): Promise<Request | null> => {
         // TODO: again, specify doc type
-        const res = await this._modelsMap[requestType].findOne(query);
-        return res;
+        const res = await this._modelsMap[REQUEST_TYPE.BASE_REQ].findOne({ _id: new Types.ObjectId(id) }).lean();
+
+        if (!res) return null;
+
+        return Request.toDomain(res);
+    };
+
+    public findOne = async (query: requestQuery, requestType: REQUEST_TYPE = REQUEST_TYPE.BASE_REQ): Promise<Request | null> => {
+        // TODO: again, specify doc type
+        const res = await this._modelsMap[requestType].findOne(query).lean();
+
+        if (!res) return null;
+
+        return Request.toDomain(res);
     };
 }
