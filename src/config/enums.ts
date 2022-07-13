@@ -19,3 +19,9 @@ export enum APPROVAL_ROUND_STATUS {
     DENIED = 'denied',
     APPROVED = 'approved',
 }
+
+export enum REQUEST_STATUS {
+    DONE = 'done',
+    FAILED = 'failed',
+    IN_PROCESS = 'in_process'
+}

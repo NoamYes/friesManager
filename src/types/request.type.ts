@@ -1,4 +1,4 @@
-import { RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS, GROUP_TYPE } from './../config/enums';
+import { RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS, GROUP_TYPE, REQUEST_STATUS } from './../config/enums';
 import { Types } from 'mongoose';
 import { REQUEST_TYPE } from '../config/enums';
 
@@ -17,6 +17,7 @@ type Request = {
     createdAt: Date;
     updatedAt: Date;
     approvalRounds?: ApprovalRound[];
+    status: REQUEST_STATUS;
 };
 
 type ApprovalRound = {

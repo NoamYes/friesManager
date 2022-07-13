@@ -1,11 +1,12 @@
 import { RequestDoc } from './../mongo/models/request.model';
-import { REQUEST_TYPE } from './../config/enums';
+import { REQUEST_STATUS, REQUEST_TYPE } from './../config/enums';
 import { Types } from 'mongoose';
 import { ApprovalRound } from '../types/request.type';
 
 export type RequestState = {
     _id?: Types.ObjectId;
     type: REQUEST_TYPE;
+    status: REQUEST_STATUS;
     applicant: string;
     createdAt: Date;
     updatedAt: Date;
@@ -16,6 +17,7 @@ export type RequestState = {
 export class Request {
     private _id?: Types.ObjectId;
     private _type: REQUEST_TYPE;
+    private _status: REQUEST_STATUS;
     private _applicant: string;
     private _createdAt: Date;
     private _updatedAt: Date;
@@ -25,21 +27,30 @@ export class Request {
     protected constructor(props: RequestState) {
         this._id = props._id;
         this._type = props.type;
+        this._status = props.status;
         this._applicant = props.applicant;
         this._createdAt = props.createdAt;
         this._updatedAt = props.updatedAt;
         this._approvalRounds = props.approvalRounds;
         this._payload = props.payload;
     }
+
     get id() {
         return this._id;
     }
+
     get type() {
         return this._type;
     }
+
+    get status() {
+        return this._status;
+    }
+
     get applicant() {
         return this._applicant;
     }
+
     get createdAt() {
         return this._createdAt;
     }
@@ -60,11 +71,12 @@ export class Request {
         return new Request(state);
     }
 
-    static _createNew(state: Omit<RequestState, 'createdAt' | 'updatedAt' | '_id'>): Request {
+    static _createNew(state: Omit<RequestState, 'createdAt' | 'updatedAt' | '_id' | 'status'>): Request {
         const createdAt = new Date();
         const updatedAt = createdAt;
         const _id = new Types.ObjectId();
-        return new Request({ ...state, createdAt, updatedAt, _id });
+        const status = REQUEST_STATUS.IN_PROCESS;
+        return new Request({ ...state, createdAt, updatedAt, _id, status });
     }
 
     static toPersistance(request: Request): RequestDoc {
@@ -75,6 +87,7 @@ export class Request {
             createdAt: request.createdAt,
             updatedAt: request.updatedAt,
             approvalRounds: request.approvalRounds,
+            status: request.status,
             ...request.payload,
         };
     }
@@ -82,7 +95,7 @@ export class Request {
     static toDomain(raw: RequestDoc): Request {
         let createdRequest: Request;
         const { _id, ...requestState } = raw;
-        const { type, applicant, createdAt, updatedAt, approvalRounds, ...payload } = requestState;
+        const { type, applicant, createdAt, updatedAt, status, approvalRounds, ...payload } = requestState;
         createdRequest = Request._create({ _id, ...requestState, payload });
         return createdRequest;
     }

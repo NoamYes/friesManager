@@ -1,4 +1,4 @@
-import { REQUEST_TYPE, GROUP_TYPE, RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS } from './../../config/enums';
+import { REQUEST_TYPE, GROUP_TYPE, RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS, REQUEST_STATUS } from './../../config/enums';
 import mongoose, { Types } from 'mongoose';
 import config from '../../config';
 import { ApprovalRound, AddDisToGroup, CreateGroupRequest } from '../../types/request.type';
@@ -15,16 +15,18 @@ export interface RequestDoc {
     createdAt: Date;
     updatedAt: Date;
     approvalRounds?: ApprovalRound[];
+    status: REQUEST_STATUS;
 }
 
 // TODO: add global status request
-export const requestSchema = new mongoose.Schema(
+export const requestSchema = new mongoose.Schema<RequestDoc>(
     {
         _id: { type: mongoose.Schema.Types.ObjectId, required: true },
         type: { type: String, enum: REQUEST_TYPE, required: true },
+        status: { type: String, enums: REQUEST_STATUS, required: true },
         applicant: { type: String, required: true },
         createdAt: { type: Date, required: false },
-        updatedAt: { type: Date, required: false },
+        updatedAt: { type: Date, required: false }
     }, {
     // versionKey: false,
     ...requestOptions

@@ -26,6 +26,7 @@ export class CreateGroupRequest extends Request {
             applicant: request.applicant,
             createdAt: request.createdAt,
             updatedAt: request.updatedAt,
+            status: request.status,
         };
     }
 
