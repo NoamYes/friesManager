@@ -1,6 +1,6 @@
 import { InternalError, BadRequestError, NotFoundError } from './../utils/error';
 import { IRequestRepo } from './../../interfaces/requestRepo.interface';
-import { createGroupDTO } from './../joi/validator/request.schema';
+import { createGroupDTO, disToGroupDTO as addDisToGroupDTO } from './../joi/validator/request.schema';
 import { IRequestService } from '../../interfaces/requestService.interface';
 import { REQUEST_TYPE } from '../../config/enums';
 import { Request } from '../../domain/request';
@@ -18,19 +18,35 @@ export default class implements IRequestService {
         if (existsRequest) throw new BadRequestError(`Create request of a group with the name ${requestDetails.name} already exists`);
 
         const { applicant, approvalsNeeded } = requestDetails;
-
         const requestProps = { type: REQUEST_TYPE.CREATE_GROUP, applicant, approvalsNeeded };
-
         const payload = { name: requestDetails.name, types: requestDetails.types };
 
         const newRequest: Request = Request._createNew({ ...requestProps, payload });
 
         const res = await this.repo.create(newRequest, REQUEST_TYPE.CREATE_GROUP);
 
-        if (!res) throw new InternalError(`Error creating group: ${payload.name}`);
+        if (!res) throw new InternalError(`Error Creating Create Group Request: ${payload.name}`);
 
         return newRequest.id!.toString();
     };
+
+    public addDisToGroup = async (requestDetails: addDisToGroupDTO): Promise<string> => {
+        // TODO: check if request already exists ?
+        // TODO: Check that the groupId is exists in the groups collection !!!
+
+        const { applicant, approvalsNeeded } = requestDetails;
+        const requestProps = { type: REQUEST_TYPE.ADD_DIS_GROUP, applicant, approvalsNeeded };
+        const payload = { groupId: requestDetails.groupId, disUniqueId: requestDetails.disUniqueId };
+
+        const newRequest: Request = Request._createNew({ ...requestProps, payload })
+
+        const res = await this.repo.create(newRequest, REQUEST_TYPE.ADD_DIS_GROUP);
+
+        if (!res) throw new InternalError(`Error Creating Add Dis To Group Request: ${payload.groupId} -> ${payload.disUniqueId}`);
+
+        return newRequest.id!.toString();
+
+    }
 
     public approveRound = async (requestId: string, authorityId: string, approved: boolean): Promise<boolean> => {
         const request: Request | null = await this.repo.findById(requestId);
@@ -43,21 +59,7 @@ export default class implements IRequestService {
         const res = await this.repo.save(requestId, request, request.type);
 
         return !!res;
-
     }
-
-    // public updateCreateGroup = async (group: createGroupDTO): Promise<boolean> => {
-    //     const existsRequest = await this.repo.find({ name: group.name }, REQUEST_TYPE.CREATE_GROUP);
-
-    //     if (!existsRequest) throw new NotFoundError();
-
-    //     const newRequest: CreateGroupRequest = Request._create(group);
-
-    //     newRequest.approvalsNeeded = ();
-
-    //     const res = await this.repo.save(newRequest.toP, REQUEST_TYPE.CREATE_GROUP);
-    //     return res;
-    // };
 
     // public auth = async (token: string) => {
     //     const payload: any = verify(token, config.keys.tokenKey);

@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 import config from '../../src/config';
-import { REQUEST_STATUS } from '../../src/config/enums';
+import { REQUEST_STATUS, REQUEST_TYPE } from '../../src/config/enums';
 import { server } from '../main.spec';
 import { emptyDB, findOneByQuery } from '../seed';
 
@@ -16,12 +16,13 @@ export const testCreateGroup = () => {
         it('Valid Create Group Request Without Approvals', async () => {
 
             const reqBody = {
+                type: REQUEST_TYPE.CREATE_GROUP,
                 name: "RoeiGroup",
                 types: ["distribution"],
                 applicant: "507f1f77bcf86cd799439011"
             }
 
-            const res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            const res = await request(server.app).post(`/api/requests`).send(reqBody);
             expect(res.status).toBe(200);
 
             const insertedCreateGroupRequest = (await findOneByQuery(requestsCollectionName, {
@@ -33,6 +34,7 @@ export const testCreateGroup = () => {
 
         it('Valid Create Group Request With Approvals', async () => {
             const reqBody = {
+                type: REQUEST_TYPE.CREATE_GROUP,
                 name: "GroupWithApprovals",
                 types: ["distribution"],
                 applicant: "507f1f77bcf86cd799439011",
@@ -48,7 +50,7 @@ export const testCreateGroup = () => {
                 ]
             }
 
-            const res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            const res = await request(server.app).post(`/api/requests`).send(reqBody);
             expect(res.status).toBe(200);
 
 

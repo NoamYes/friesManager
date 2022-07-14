@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 import config from '../../src/config';
-import { APPROVAL_ROUND_STATUS, REQUEST_STATUS } from '../../src/config/enums';
+import { APPROVAL_ROUND_STATUS, REQUEST_STATUS, REQUEST_TYPE } from '../../src/config/enums';
 import { server } from '../main.spec';
 import { emptyDB, findOneByQuery } from '../seed';
 
@@ -15,6 +15,7 @@ export const testApprovalRounds = () => {
     describe('Update approval rounds useCases', () => {
         it('2 approval Rounds of create group request', async () => {
             const reqBody = {
+                type: REQUEST_TYPE.CREATE_GROUP,
                 name: "GroupWithApprovals",
                 types: ["distribution"],
                 applicant: "507f1f77bcf86cd799439011",
@@ -30,7 +31,7 @@ export const testApprovalRounds = () => {
                 ]
             }
 
-            const res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            const res = await request(server.app).post(`/api/requests`).send(reqBody);
             expect(res.status).toBe(200);
 
 
@@ -63,6 +64,7 @@ export const testApprovalRounds = () => {
 
         it('Create Group Request With Approval Rounds - Denied', async () => {
             const reqBody = {
+                type: REQUEST_TYPE.CREATE_GROUP,
                 name: "GroupWithApprovals",
                 types: ["distribution"],
                 applicant: "507f1f77bcf86cd799439011",
@@ -74,7 +76,7 @@ export const testApprovalRounds = () => {
                 ]
             }
 
-            const res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            const res = await request(server.app).post(`/api/requests`).send(reqBody);
             expect(res.status).toBe(200);
 
             let insertedCreateGroupRequest;

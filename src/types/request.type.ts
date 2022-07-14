@@ -33,9 +33,9 @@ type createGroupRequest = request & {
     types: GROUP_TYPE[];
 };
 
-type addDisToGroup = request & {
+type disToGroup = request & {
     groupId: Types.ObjectId;
     disUniqueId: string[];
 };
 
-export { request, createGroupRequest, addDisToGroup, approvalRound };
+export { request, createGroupRequest, disToGroup, approvalRound };

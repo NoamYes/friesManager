@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { wrapController } from '../utils/wraps';
-import { approveRequestSchema, createGroupRequestSchema } from '../joi/validator/request.schema';
+import { approveRequestSchema } from '../joi/validator/request.schema';
 import validateRequest from '../joi/joi';
 import { IRequestController } from '../../interfaces/requestController.interface';
 
@@ -21,15 +21,11 @@ export default class {
     }
 
     public initializeRoutes() {
-        this.router.post('/createGroup', validateRequest(createGroupRequestSchema), wrapController(this.controller.createCreateGroup))
+        this.router.post('', wrapController(this.controller.createRequest))
+
         this.router.put('/approve/:requestId', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound))
-        // this.router.patch('/createGroup', validate)
-        // this.router.post('/login', wrapController(this.userController.login));
-        // this.router.post('', validateRequest(createSchema), wrapController(this.userController.createUser));
-        // this.router.use(this.auth);
-        // this.router.get('', wrapController(this.userController.getAllUsers));
-        // this.router.get('/:userId', wrapController(this.userController.getUserById));
-        // this.router.put('/:userId', validateRequest(updateSchema), wrapController(this.userController.updateUser));
-        // this.router.delete('/:userId', wrapController(this.userController.deleteUser));
+
+        // this.router.post('/createGroup', validateRequest(createGroupRequestSchema), wrapController(this.controller.createCreateGroup))
+        // this.router.post('/addDisToGroup', validateRequest(AddDisToGroupSchema), wrapController(this.controller.addDisToGroup))
     }
 }

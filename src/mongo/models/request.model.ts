@@ -1,7 +1,7 @@
 import { REQUEST_TYPE, GROUP_TYPE, RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS, REQUEST_STATUS } from './../../config/enums';
 import mongoose, { Types } from 'mongoose';
 import config from '../../config';
-import { approvalRound, addDisToGroup, createGroupRequest } from '../../types/request.type';
+import { approvalRound, disToGroup, createGroupRequest } from '../../types/request.type';
 
 const requestOptions = {
     discriminatorKey: 'type',
@@ -53,9 +53,9 @@ const CreateRequestModel = RequestModel.discriminator<createGroupRequest>(
     }),
 );
 
-const AddDiToGroupRequestModel = RequestModel.discriminator<addDisToGroup>(
+const AddDiToGroupRequestModel = RequestModel.discriminator<disToGroup>(
     REQUEST_TYPE.ADD_DIS_GROUP,
-    new mongoose.Schema<addDisToGroup>({
+    new mongoose.Schema<disToGroup>({
         groupId: { type: mongoose.Schema.Types.ObjectId, required: true },
         disUniqueId: { type: [String], required: true },
     }),

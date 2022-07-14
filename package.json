@@ -7,6 +7,7 @@
     "start": "npm run build && npm ./dist/index.js",
     "dev:linux": "LOAD_DEV_DOTENV=true nodemon ./src/index.ts",
     "dev:windows": "set LOAD_DEV_DOTENV=true && nodemon ./src/index.ts",
+    "ts": "set LOAD_DEV_DOTENV=true && ts-node ./src/index.ts",
     "test1": "LOAD_DEV_DOTENV=true jest --coverage",
     "test": "set LOAD_DEV_DOTENV=true && jest --coverage --detectOpenHandles --collectCoverageFrom=src/**/*  --runInBand tests/main.spec.ts",
     "build": "tsc",
@@ -61,7 +62,7 @@
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.5",
-    "ts-node": "^10.8.1",
+    "ts-node": "^10.9.1",
     "typescript": "^4.7.4"
   }
 }
