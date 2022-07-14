@@ -13,8 +13,7 @@ export const testApprovalRounds = () => {
     })
 
     describe('Update approval rounds useCases', () => {
-        it('2 Rounds approval of create group request', async () => {
-
+        it('2 approval Rounds of create group request', async () => {
             const reqBody = {
                 name: "GroupWithApprovals",
                 types: ["distribution"],
@@ -61,7 +60,38 @@ export const testApprovalRounds = () => {
             expect(insertedCreateGroupRequest.approvalRounds[1].status).toBe(APPROVAL_ROUND_STATUS.APPROVED);
             expect(insertedCreateGroupRequest.status).toBe(REQUEST_STATUS.IN_PROCESS);
         })
+
+        it('Create Group Request With Approval Rounds - Denied', async () => {
+            const reqBody = {
+                name: "GroupWithApprovals",
+                types: ["distribution"],
+                applicant: "507f1f77bcf86cd799439011",
+                approvalsNeeded: [
+                    {
+                        authorityId: "123456789",
+                        approvalType: "entity"
+                    }
+                ]
+            }
+
+            const res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            expect(res.status).toBe(200);
+
+            let insertedCreateGroupRequest;
+
+            await request(server.app).put(`/api/requests/approve/${res.body.id}`).send({
+                authorityId: "123456789",
+                approved: false
+            }).expect(200);
+
+            insertedCreateGroupRequest = (await findOneByQuery(requestsCollectionName, {
+                name: reqBody.name
+            }));
+
+            expect(insertedCreateGroupRequest.approvalRounds[0].status).toBe(APPROVAL_ROUND_STATUS.DENIED);
+            expect(insertedCreateGroupRequest.status).toBe(REQUEST_STATUS.DENIED);
+        })
     })
 
-    // TODO: test - create group with approval rounds
+
 }

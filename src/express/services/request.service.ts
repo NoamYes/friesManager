@@ -38,7 +38,7 @@ export default class implements IRequestService {
         if (!request) throw new NotFoundError(`Request Not Found`);
 
         request.approveRound(authorityId, approved);
-        request.checkAllApproved();
+        request.checkAllApprovalRounds();
 
         const res = await this.repo.save(requestId, request, request.type);
 

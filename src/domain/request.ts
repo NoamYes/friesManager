@@ -85,9 +85,11 @@ export class Request {
         this._approvalRounds![approvalRoundIndex].status = approved ? APPROVAL_ROUND_STATUS.APPROVED : APPROVAL_ROUND_STATUS.DENIED;
     }
 
-    public checkAllApproved(): void {
+    public checkAllApprovalRounds(): void {
         if (!this.approvalRounds?.some(round => round.status !== APPROVAL_ROUND_STATUS.APPROVED))
             this._status = REQUEST_STATUS.IN_PROCESS;
+        if (this.approvalRounds?.some(round => round.status === APPROVAL_ROUND_STATUS.DENIED))
+            this._status = REQUEST_STATUS.DENIED;
     }
 
     static initApprovalRounds(approvalsNeeded: approvalNeed[]): approvalRound[] {

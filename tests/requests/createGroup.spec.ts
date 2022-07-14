@@ -33,7 +33,7 @@ export const testCreateGroup = () => {
 
         it('Valid Create Group Request With Approvals', async () => {
             const reqBody = {
-                name: "WithApprovals",
+                name: "GroupWithApprovals",
                 types: ["distribution"],
                 applicant: "507f1f77bcf86cd799439011",
                 approvalsNeeded: [

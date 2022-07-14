@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 import config from '../../src/config';
 
 export const emptyDB = async () => {
-    const requestsCollection = mongoose.models[config.mongo.requestCollectionName];
+    const requestsCollection = mongoose.connection.db.collection(config.mongo.requestCollectionName);
     try {
         await requestsCollection.deleteMany({});
     } catch (err) { }
