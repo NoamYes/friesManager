@@ -23,14 +23,23 @@ export default class {
     }
 
     public initializeRoutes() {
-        this.router.post('/createGroup', validateRequest(createGroupRequestSchema),
-            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.CREATE_GROUP }))
-        this.router.post('/addDisToGroup', validateRequest(AddDisToGroupSchema),
-            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.ADD_DIS_GROUP }))
-        this.router.post('/removeDisFromGroup', validateRequest(AddDisToGroupSchema),
-            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_DIS_GROUP }))
+        this.router.post(
+            '/createGroup',
+            validateRequest(createGroupRequestSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.CREATE_GROUP }),
+        );
+        this.router.post(
+            '/addDisToGroup',
+            validateRequest(AddDisToGroupSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.ADD_DIS_GROUP }),
+        );
+        this.router.post(
+            '/removeDisFromGroup',
+            validateRequest(AddDisToGroupSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_DIS_GROUP }),
+        );
 
-        this.router.put('/approve/:requestId', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound))
+        this.router.put('/approve/:requestId', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound));
 
         // this.router.post('', wrapController(this.controller.createRequest))
     }

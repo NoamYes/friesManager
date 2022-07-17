@@ -5,8 +5,7 @@ import { GroupDoc } from '../models/group.model';
 import { groupQuery, IGroupRepo } from '../../interfaces/group.interface';
 
 export default class implements IGroupRepo {
-
-    private _model: mongoose.Model<GroupDoc>
+    private _model: mongoose.Model<GroupDoc>;
 
     constructor(model: mongoose.Model<GroupDoc>) {
         this._model = model;

@@ -10,7 +10,7 @@
     "ts": "set LOAD_DEV_DOTENV=true && ts-node ./src/index.ts",
     "test1": "LOAD_DEV_DOTENV=true jest --coverage",
     "test": "set LOAD_DEV_DOTENV=true && jest --coverage --detectOpenHandles --collectCoverageFrom=src/**/*  --runInBand tests/main.spec.ts",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.json",
     "build:watch": "tsc --watch",
     "prettier": "prettier --config .prettierrc.js 'src/**/*.ts' --check",
     "prettier:fix": "prettier --config .prettierrc.js 'src/**/*.ts' --write",

@@ -1,3 +1,4 @@
+import { testExecutedRequests } from './requests/executedRequest.spec';
 import { modelsMap } from './../src/mongo/models/request.model';
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable import/prefer-default-export */
@@ -68,6 +69,7 @@ describe('Run all tests', () => {
     testCreateGroup();
     testApprovalRounds();
     testAddDisToGroup();
+    testExecutedRequests();
 });
 
 afterAll(async () => {
