@@ -1,9 +1,9 @@
-import { InternalError, BadRequestError, NotFoundError } from './../utils/error';
-import { IRequestRepo } from './../../interfaces/requestRepo.interface';
-import { createGroupDTO, disToGroupDTO as addDisToGroupDTO } from './../joi/validator/request.schema';
-import { IRequestService } from '../../interfaces/requestService.interface';
-import { REQUEST_TYPE } from '../../config/enums';
-import { Request } from '../../domain/request';
+import { InternalError, BadRequestError, NotFoundError } from '../express/utils/error';
+import { IRequestRepo } from '../interfaces/requestRepo.interface';
+import { createGroupDTO, disToGroupDTO as addDisToGroupDTO } from '../express/joi/validator/request.schema';
+import { IRequestService } from '../interfaces/requestService.interface';
+import { REQUEST_TYPE } from '../config/enums';
+import { Request } from '../domain/request';
 
 export default class implements IRequestService {
     private repo: IRequestRepo;
@@ -20,11 +20,13 @@ export default class implements IRequestService {
         const { applicant, approvalsNeeded } = requestDetails;
         const requestProps = { type: REQUEST_TYPE.CREATE_GROUP, applicant, approvalsNeeded };
         const payload = {
-            name: requestDetails.name, types: requestDetails.types, admin: applicant,
-            ...(requestDetails.clearance ? { clearance: requestDetails.clearance } : {})
+            name: requestDetails.name,
+            types: requestDetails.types,
+            admin: applicant,
+            ...(requestDetails.clearance ? { clearance: requestDetails.clearance } : {}),
         }; //TODO: think about applicant
 
-        const requestNumber = await this.repo.count() + 1;
+        const requestNumber = (await this.repo.count()) + 1;
 
         const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
 
@@ -43,35 +45,32 @@ export default class implements IRequestService {
         const requestProps = { type: REQUEST_TYPE.ADD_DIS_GROUP, applicant, approvalsNeeded };
         const payload = { groupId: requestDetails.groupId, disUniqueId: requestDetails.disUniqueId };
 
-        const requestNumber = await this.repo.count() + 1;
+        const requestNumber = (await this.repo.count()) + 1;
 
-        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber })
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
 
         const res = await this.repo.create(newRequest, REQUEST_TYPE.ADD_DIS_GROUP);
 
         if (!res) throw new InternalError(`Error Creating Add Dis To Group Request: ${payload.groupId} -> ${payload.disUniqueId}`);
 
         return newRequest.id!.toString();
-
-    }
+    };
 
     public removeDisFromGroup = async (requestDetails: addDisToGroupDTO): Promise<string> => {
-
         const { applicant, approvalsNeeded } = requestDetails;
         const requestProps = { type: REQUEST_TYPE.REMOVE_DIS_GROUP, applicant, approvalsNeeded };
         const payload = { groupId: requestDetails.groupId, disUniqueId: requestDetails.disUniqueId };
 
-        const requestNumber = await this.repo.count() + 1;
+        const requestNumber = (await this.repo.count()) + 1;
 
-        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber })
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
 
         const res = await this.repo.create(newRequest, REQUEST_TYPE.REMOVE_DIS_GROUP);
 
         if (!res) throw new InternalError(`Error Creating Add Dis To Group Request: ${payload.groupId} -> ${payload.disUniqueId}`);
 
         return newRequest.id!.toString();
-
-    }
+    };
 
     public approveRound = async (requestId: string, authorityId: string, approved: boolean): Promise<boolean> => {
         const request: Request | null = await this.repo.findById(requestId);
@@ -84,7 +83,7 @@ export default class implements IRequestService {
         const res = await this.repo.save(requestId, request, request.type);
 
         return !!res;
-    }
+    };
 
     // public auth = async (token: string) => {
     //     const payload: any = verify(token, config.keys.tokenKey);

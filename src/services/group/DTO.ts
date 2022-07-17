@@ -1,5 +1,5 @@
-import { Types } from "mongoose";
-import { GROUP_TYPE } from "../../../config/enums";
+import { Types } from 'mongoose';
+import { GROUP_TYPE } from '../../config/enums';
 
 export type createGroupDTO = {
     name: string;
@@ -10,4 +10,4 @@ export type createGroupDTO = {
 export type disToGroupDTO = {
     groupId: Types.ObjectId;
     disUniqueId: string[];
-}
+};

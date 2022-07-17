@@ -1,9 +1,9 @@
-import { REQUEST_TYPE } from './../../config/enums';
-import { IGroupService } from '../../interfaces/groupService.interface';
-import { IExecutedRequestsService } from "../../interfaces/IExecutedRequestService.interface";
-import { IRequestRepo } from "../../interfaces/requestRepo.interface";
-import { BadRequestError } from '../utils/error';
-import { Request } from '../../domain/request';
+import { REQUEST_TYPE } from '../config/enums';
+import { IGroupService } from '../interfaces/groupService.interface';
+import { IExecutedRequestsService } from '../interfaces/IExecutedRequestService.interface';
+import { IRequestRepo } from '../interfaces/requestRepo.interface';
+import { BadRequestError } from '../express/utils/error';
+import { Request } from '../domain/request';
 
 export default class implements IExecutedRequestsService {
     private _requestRepo: IRequestRepo;
@@ -18,7 +18,7 @@ export default class implements IExecutedRequestsService {
             [REQUEST_TYPE.CREATE_GROUP]: this._groupService.createGroup,
             [REQUEST_TYPE.ADD_DIS_GROUP]: this._groupService.addDisToGroup,
             [REQUEST_TYPE.REMOVE_DIS_GROUP]: this._groupService.removeDisFromGroup,
-        }
+        };
     }
 
     public async executedRequest(requestNumber: number): Promise<boolean> {
@@ -30,5 +30,4 @@ export default class implements IExecutedRequestsService {
 
         return !!res;
     }
-
 }

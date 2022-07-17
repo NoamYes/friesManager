@@ -1,6 +1,6 @@
 import { IBlogService } from '../src/interfaces/blogService.interface';
 import Blog from '../src/types/blog.type';
-import { BlogService } from '../src/express/services/blog.service';
+import { BlogService } from '../src/services/blog.service';
 import BlogRepoMock from './mocks/blogRepo';
 
 let blogService: IBlogService;

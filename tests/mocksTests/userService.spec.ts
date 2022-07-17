@@ -1,6 +1,6 @@
 import { IUserService } from '../src/interfaces/userService.interface';
 import User from '../src/types/user.type';
-import { UserService } from '../src/express/services/user.service';
+import { UserService } from '../src/services/user.service';
 import UserRepoMock from './mocks/userRepo';
 
 let userService: IUserService;

@@ -8,7 +8,7 @@ import config from '../src/config';
 import initializeMongo from '../src/mongo/initializeMongo';
 import { emptyDB } from './seed';
 import RequestRepo from '../src/mongo/repo/request.repo';
-import RequestService from '../src/express/services/request.service';
+import RequestService from '../src/services/request.service';
 import RequestController from '../src/express/controllers/request.controller';
 import RequestRouter from '../src/express/routes/request.route';
 import { testCreateGroup } from './requests/createGroup.spec';
@@ -46,7 +46,6 @@ beforeAll(async () => {
 
             await replset.waitUntilRunning();
             // uri = replset.getUri();
-
         } catch (err) {
             await replset.start();
             await replset.waitUntilRunning();

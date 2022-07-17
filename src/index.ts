@@ -3,10 +3,10 @@ import initializeMongo from './mongo/initializeMongo';
 import App from './express/app';
 import config from './config';
 import { modelsMap } from './mongo/models/request.model';
-import RequestService from './express/services/request.service';
+import RequestService from './services/request.service';
 import RequestController from './express/controllers/request.controller';
 import RequestRouter from './express/routes/request.route';
-// import Auth from './express/services/auth.service';
+// import Auth from './services/auth.service';
 
 const { mongo } = config;
 

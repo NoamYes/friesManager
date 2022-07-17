@@ -1,8 +1,8 @@
-import { IGroupRepo } from '../../../interfaces/group.interface';
-import { IGroupService } from '../../../interfaces/groupService.interface';
+import { IGroupRepo } from '../../interfaces/group.interface';
+import { IGroupService } from '../../interfaces/groupService.interface';
 import { createGroupDTO, disToGroupDTO } from './DTO';
-import { Group } from '../../../domain/group';
-import { BadRequestError, InternalError, NotFoundError } from '../../utils/error';
+import { Group } from '../../domain/group';
+import { BadRequestError, InternalError, NotFoundError } from '../../express/utils/error';
 
 export default class implements IGroupService {
     private _repo: IGroupRepo;
@@ -52,5 +52,4 @@ export default class implements IGroupService {
 
         return true;
     }
-
 }

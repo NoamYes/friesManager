@@ -1,4 +1,4 @@
-import { createGroupDTO, disToGroupDTO } from "../express/services/group/DTO";
+import { createGroupDTO, disToGroupDTO } from '../services/group/DTO';
 
 export interface IGroupService {
     createGroup(dto: createGroupDTO): Promise<string>;
