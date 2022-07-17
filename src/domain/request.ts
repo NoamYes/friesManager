@@ -7,6 +7,7 @@ import { approvalNeed } from '../express/joi/validator/request.schema';
 
 export type RequestState = {
     _id: Types.ObjectId;
+    requestNumber: number;
     type: REQUEST_TYPE;
     status: REQUEST_STATUS;
     applicant: string;
@@ -21,10 +22,12 @@ export type newRequestProps = {
     applicant: string;
     approvalsNeeded?: approvalNeed[];
     payload?: any;
+    requestNumber: number;
 };
 
 export class Request {
     private _id?: Types.ObjectId;
+    private _requestNumber: number;
     private _type: REQUEST_TYPE;
     private _status: REQUEST_STATUS;
     private _applicant: string;
@@ -35,6 +38,7 @@ export class Request {
 
     protected constructor(props: RequestState) {
         this._id = props._id;
+        this._requestNumber = props.requestNumber;
         this._type = props.type;
         this._status = props.status;
         this._applicant = props.applicant;
@@ -46,6 +50,10 @@ export class Request {
 
     get id() {
         return this._id;
+    }
+
+    get requestNumber() {
+        return this._requestNumber;
     }
 
     get type() {
@@ -104,12 +112,12 @@ export class Request {
         })
     }
 
-    static _create(state: RequestState): Request {
+    static create(state: RequestState): Request {
         return new Request(state);
     }
 
-    static _createNew(props: newRequestProps): Request {
-        const createdAt = new Date();
+    static createNew(props: newRequestProps): Request {
+        const createdAt = new Date(); // TODO: let mongo decide
         const updatedAt = createdAt;
         const _id = new Types.ObjectId();
         const status = props.approvalsNeeded ? REQUEST_STATUS.WAITING_FOR_APPROVALS : REQUEST_STATUS.IN_PROCESS;
@@ -125,6 +133,7 @@ export class Request {
     static toPersistance(request: Request): RequestDoc {
         return {
             _id: new Types.ObjectId(request._id),
+            requestNumber: request.requestNumber,
             type: request.type,
             applicant: request.applicant,
             createdAt: request.createdAt,
@@ -137,9 +146,8 @@ export class Request {
 
     static toDomain(raw: RequestDoc): Request {
         let createdRequest: Request;
-        const { _id, ...requestState } = raw;
-        const { type, applicant, createdAt, updatedAt, status, approvalRounds, ...payload } = requestState;
-        createdRequest = Request._create({ _id, ...requestState, payload });
+        const { _id, requestNumber, type, applicant, createdAt, updatedAt, status, approvalRounds, ...payload } = raw;
+        createdRequest = Request.create({ _id, requestNumber, type, applicant, createdAt, updatedAt, status, approvalRounds, payload });
         return createdRequest;
     }
 }

@@ -7,6 +7,7 @@ export enum REQUEST_TYPE {
     BASE_REQ = 'basic_request',
     CREATE_GROUP = 'create_group', // TODO: should change names?
     ADD_DIS_GROUP = 'add_dis_group',
+    REMOVE_DIS_GROUP = 'remove_dis_group'
 }
 
 export enum RESPONSIBILITY_PERM {

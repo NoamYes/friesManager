@@ -28,7 +28,7 @@ const normalizeRequest = (req: any, value: any) => {
  */
 const validateRequest = (schema: Joi.ObjectSchema<any>, options: Joi.ValidationOptions = defaultValidationOptions) => {
     const validator = async (req: Request) => {
-        const { error, value } = schema.unknown().validate(req, options); // TODO: removed unknown why in template
+        const { error, value } = schema.unknown().validate(req, options);
         if (error) {
             throw new BadRequestError(error.message);
         }
@@ -40,16 +40,5 @@ const validateRequest = (schema: Joi.ObjectSchema<any>, options: Joi.ValidationO
 
     return wrapValidator(validator);
 };
-
-export const validateRequestBySchema = (schema: Joi.ObjectSchema<any>, req: Request, options: Joi.ValidationOptions = defaultValidationOptions) => {
-    const { error, value } = schema.unknown().validate(req, options); // TODO: removed unknown why in template
-    if (error) {
-        throw new BadRequestError(error.message);
-    }
-
-    if (options.convert) {
-        normalizeRequest(req, value);
-    }
-}
 
 export default validateRequest;

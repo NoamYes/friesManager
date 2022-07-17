@@ -10,6 +10,7 @@ const requestOptions = {
 
 export interface RequestDoc {
     _id: Types.ObjectId;
+    requestNumber: number;
     type: REQUEST_TYPE;
     applicant: string;
     createdAt: Date;
@@ -26,11 +27,10 @@ export const createGroupApprovalSchema = new mongoose.Schema<approvalRound>({
     status: { type: String, enum: APPROVAL_ROUND_STATUS, required: true },
 });
 
-
-// TODO: add global status request
 export const requestSchema = new mongoose.Schema<RequestDoc>(
     {
         _id: { type: mongoose.Schema.Types.ObjectId, required: true },
+        requestNumber: { type: Number, required: true, unique: true },
         type: { type: String, enum: REQUEST_TYPE, required: true },
         status: { type: String, enums: REQUEST_STATUS, required: true },
         applicant: { type: String, required: true },
@@ -45,26 +45,28 @@ export const requestSchema = new mongoose.Schema<RequestDoc>(
 
 export const RequestModel = mongoose.model('Request', requestSchema);
 
-const CreateRequestModel = RequestModel.discriminator<createGroupRequest>(
+const CreateGroupRequestModel = RequestModel.discriminator<createGroupRequest>(
     REQUEST_TYPE.CREATE_GROUP,
     new mongoose.Schema<createGroupRequest>({
         name: { type: String, required: true, unique: true },
         types: { type: [String], enum: GROUP_TYPE, required: true },
+        admin: { type: String, required: true },
+        clearance: { type: String, required: false }
     }),
 );
 
 const AddDiToGroupRequestModel = RequestModel.discriminator<disToGroup>(
     REQUEST_TYPE.ADD_DIS_GROUP,
     new mongoose.Schema<disToGroup>({
-        groupId: { type: mongoose.Schema.Types.ObjectId, required: true },
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true }, //TODO: refer ?
         disUniqueId: { type: [String], required: true },
     }),
 );
 
 export const modelsMap = {
     [REQUEST_TYPE.BASE_REQ]: RequestModel,
-    [REQUEST_TYPE.CREATE_GROUP]: CreateRequestModel,
+    [REQUEST_TYPE.CREATE_GROUP]: CreateGroupRequestModel,
     [REQUEST_TYPE.ADD_DIS_GROUP]: AddDiToGroupRequestModel,
 };
 
-export { CreateRequestModel, AddDiToGroupRequestModel };
+export { CreateGroupRequestModel, AddDiToGroupRequestModel };

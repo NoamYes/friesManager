@@ -31,6 +31,8 @@ type approvalRound = {
 type createGroupRequest = request & {
     name: string;
     types: GROUP_TYPE[];
+    admin: string;
+    clearance?: string;
 };
 
 type disToGroup = request & {

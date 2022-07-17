@@ -12,16 +12,21 @@ export default class implements IRequestService {
         this.repo = requestRepo;
     }
 
-    public createCreateGroup = async (requestDetails: createGroupDTO): Promise<string> => {
+    public createGroup = async (requestDetails: createGroupDTO): Promise<string> => {
         const existsRequest = await this.repo.findOne({ name: requestDetails.name }, REQUEST_TYPE.CREATE_GROUP);
 
         if (existsRequest) throw new BadRequestError(`Create request of a group with the name ${requestDetails.name} already exists`);
 
         const { applicant, approvalsNeeded } = requestDetails;
         const requestProps = { type: REQUEST_TYPE.CREATE_GROUP, applicant, approvalsNeeded };
-        const payload = { name: requestDetails.name, types: requestDetails.types };
+        const payload = {
+            name: requestDetails.name, types: requestDetails.types, admin: applicant,
+            ...(requestDetails.clearance ? { clearance: requestDetails.clearance } : {})
+        }; //TODO: think about applicant
 
-        const newRequest: Request = Request._createNew({ ...requestProps, payload });
+        const requestNumber = await this.repo.count() + 1;
+
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
 
         const res = await this.repo.create(newRequest, REQUEST_TYPE.CREATE_GROUP);
 
@@ -38,9 +43,29 @@ export default class implements IRequestService {
         const requestProps = { type: REQUEST_TYPE.ADD_DIS_GROUP, applicant, approvalsNeeded };
         const payload = { groupId: requestDetails.groupId, disUniqueId: requestDetails.disUniqueId };
 
-        const newRequest: Request = Request._createNew({ ...requestProps, payload })
+        const requestNumber = await this.repo.count() + 1;
+
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber })
 
         const res = await this.repo.create(newRequest, REQUEST_TYPE.ADD_DIS_GROUP);
+
+        if (!res) throw new InternalError(`Error Creating Add Dis To Group Request: ${payload.groupId} -> ${payload.disUniqueId}`);
+
+        return newRequest.id!.toString();
+
+    }
+
+    public removeDisFromGroup = async (requestDetails: addDisToGroupDTO): Promise<string> => {
+
+        const { applicant, approvalsNeeded } = requestDetails;
+        const requestProps = { type: REQUEST_TYPE.REMOVE_DIS_GROUP, applicant, approvalsNeeded };
+        const payload = { groupId: requestDetails.groupId, disUniqueId: requestDetails.disUniqueId };
+
+        const requestNumber = await this.repo.count() + 1;
+
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber })
+
+        const res = await this.repo.create(newRequest, REQUEST_TYPE.REMOVE_DIS_GROUP);
 
         if (!res) throw new InternalError(`Error Creating Add Dis To Group Request: ${payload.groupId} -> ${payload.disUniqueId}`);
 

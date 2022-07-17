@@ -1,4 +1,3 @@
-// import { RequestModel } from './../models/request.model';
 import { requestQuery } from './../../interfaces/requestRepo.interface';
 import { REQUEST_TYPE } from '../../config/enums';
 import { IRequestRepo } from '../../interfaces/requestRepo.interface';
@@ -37,7 +36,6 @@ export default class implements IRequestRepo {
     };
 
     public findById = async (id: string): Promise<Request | null> => {
-        // TODO: again, specify doc type
         const res = await this._modelsMap[REQUEST_TYPE.BASE_REQ].findOne({ _id: new Types.ObjectId(id) }).lean();
 
         if (!res) return null;
@@ -46,11 +44,18 @@ export default class implements IRequestRepo {
     };
 
     public findOne = async (query: requestQuery, requestType: REQUEST_TYPE = REQUEST_TYPE.BASE_REQ): Promise<Request | null> => {
-        // TODO: again, specify doc type
         const res = await this._modelsMap[requestType].findOne(query).lean();
 
         if (!res) return null;
 
         return Request.toDomain(res);
     };
+
+    public count = async (): Promise<number> => {
+        return await this._modelsMap[REQUEST_TYPE.BASE_REQ].count({});
+    }
+
+    public async findByRequestNumber(requestNumber: number): Promise<Request | null> {
+        return await this._modelsMap[REQUEST_TYPE.BASE_REQ].findOne({ requestNumber });
+    }
 }

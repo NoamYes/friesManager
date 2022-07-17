@@ -18,7 +18,7 @@ class App {
     private server: Server | undefined;
 
     constructor(port: number, routers: IRouter[]) {
-        this.port = port || 1770;
+        this.port = port;
         this.routers = routers;
         this._app = express();
         this.config();

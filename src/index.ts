@@ -27,7 +27,7 @@ const main = async () => {
 
     const requestRouter = new RequestRouter(requestController);
 
-    const port = config.server.port || 2770;
+    const port = config.server.port;
     new App(port, [requestRouter]);
 };
 

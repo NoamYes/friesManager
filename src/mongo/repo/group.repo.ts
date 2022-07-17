@@ -1,63 +1,52 @@
-// import mongoose from 'mongoose';
-// import Blog from '../../types/group.type';
-// import { IBlogRepo } from '../../interfaces/requestRepo.interface';
-// import { logInfo } from '../../log/logger';
+import mongoose, { Types } from 'mongoose';
+import { MongoError } from '../../express/utils/error';
+import { Group } from '../../domain/group';
+import { GroupDoc } from '../models/group.model';
+import { groupQuery, IGroupRepo } from '../../interfaces/group.interface';
 
-// export class BlogRepo implements IBlogRepo {
-//     private BlogModel: mongoose.Model<Blog>;
+export default class implements IGroupRepo {
 
-//     constructor(blogModel: mongoose.Model<Blog>) {
-//         logInfo('BlogRepo created');
-//         this.BlogModel = blogModel;
-//     }
+    private _model: mongoose.Model<GroupDoc>
 
-//     public createBlog = async (blog: Blog): Promise<Blog> => {
-//         const newBlog = await this.BlogModel.create(blog);
-//         return newBlog;
-//     };
+    constructor(model: mongoose.Model<GroupDoc>) {
+        this._model = model;
+    }
 
-//     public updateBlog = async (blogId: string, description: string): Promise<Blog | null> => {
-//         const blog = await this.BlogModel.findByIdAndUpdate(blogId, { description }, { new: true });
-//         return blog;
-//     };
+    public create = async (group: Group): Promise<boolean> => {
+        try {
+            const doc: GroupDoc = Group.toPersistance(group);
+            const res = await this._model.create(doc);
+            return !!res;
+        } catch (err: any) {
+            console.log(err.message);
+            throw new MongoError(err.message);
+        }
+    };
 
-//     public deleteBlog = async (blogId: string): Promise<Blog | null> => {
-//         const blog = await this.BlogModel.findByIdAndDelete(blogId);
-//         return blog;
-//     };
+    public save = async (group: Group): Promise<boolean> => {
+        try {
+            const doc: GroupDoc = Group.toPersistance(group);
+            const res = await this._model.updateOne({ _id: doc._id }, { $set: doc });
+            return !!res;
+        } catch (err: any) {
+            console.log(err.message);
+            throw new MongoError(err.message);
+        }
+    };
 
-//     public getBlog = async (blogId: string): Promise<Blog | null> => {
-//         const blog = await this.BlogModel.findById(blogId).populate('author');
-//         return blog;
-//     };
+    public findById = async (id: Types.ObjectId): Promise<Group | null> => {
+        const res = await this._model.findOne({ _id: id }).lean();
 
-//     public getAllBlogs = async (): Promise<Blog[] | null> => {
-//         try {
-//             const blogs = await this.BlogModel.find({}).populate('author');
-//             return blogs;
-//         } catch (error) {
-//             return null;
-//         }
-//     };
+        if (!res) return null;
 
-//     public getBlogsByAuthor = async (userName: string): Promise<Blog[] | null> => {
-//         try {
-//             const blogs = await this.BlogModel.aggregate([
-//                 {
-//                     $lookup: {
-//                         from: 'users',
-//                         localField: 'author',
-//                         foreignField: '_id',
-//                         as: 'author',
-//                     },
-//                 },
-//                 { $match: { 'author.name': userName } },
-//                 { $unwind: '$author' },
-//             ]);
+        return Group.toDomain(res);
+    };
 
-//             return blogs;
-//         } catch (error) {
-//             return null;
-//         }
-//     };
-// }
+    public findOne = async (query: groupQuery): Promise<Group | null> => {
+        const res = await this._model.findOne(query).lean();
+
+        if (!res) return null;
+
+        return Group.toDomain(res);
+    };
+}
