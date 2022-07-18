@@ -11,8 +11,8 @@ export default class {
     private controller: IExecutedRequestsController;
     // private auth?: express.RequestHandler;
 
-    constructor(requestController: IExecutedRequestsController, _auth?: express.RequestHandler) {
-        this.controller = requestController;
+    constructor(executedRequestController: IExecutedRequestsController, _auth?: express.RequestHandler) {
+        this.controller = executedRequestController;
         // this.auth = auth;
         this.initializeRoutes();
     }
@@ -22,6 +22,6 @@ export default class {
     }
 
     public initializeRoutes() {
-        this.router.post('/executed', validateRequest(executedRequestSchema), wrapController(this.controller.executedRequest));
+        this.router.post('/executed/:requestNumber', validateRequest(executedRequestSchema), wrapController(this.controller.executedRequest));
     }
 }

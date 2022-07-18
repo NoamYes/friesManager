@@ -53,9 +53,10 @@ export default class implements IRequestRepo {
 
     public count = async (): Promise<number> => {
         return await this._modelsMap[REQUEST_TYPE.BASE_REQ].count({});
-    }
+    };
 
-    public async findByRequestNumber(requestNumber: number): Promise<Request | null> {
-        return await this._modelsMap[REQUEST_TYPE.BASE_REQ].findOne({ requestNumber });
-    }
+    public findByRequestNumber = async (requestNumber: number): Promise<Request | null> => {
+        const foundRequest = await this._modelsMap[REQUEST_TYPE.BASE_REQ].findOne({ requestNumber }).lean();
+        return Request.toDomain(foundRequest);
+    };
 }

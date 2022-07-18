@@ -1,6 +1,6 @@
 import { InternalError, BadRequestError, NotFoundError } from '../express/utils/error';
 import { IRequestRepo } from '../interfaces/requestRepo.interface';
-import { createGroupDTO, disToGroupDTO as addDisToGroupDTO } from '../express/joi/validator/request.schema';
+import { approveRoundDTO, createGroupDTO, disToGroupDTO as addDisToGroupDTO } from '../express/joi/validator/request.schema';
 import { IRequestService } from '../interfaces/requestService.interface';
 import { REQUEST_TYPE } from '../config/enums';
 import { Request } from '../domain/request';
@@ -72,7 +72,8 @@ export default class implements IRequestService {
         return newRequest.id!.toString();
     };
 
-    public approveRound = async (requestId: string, authorityId: string, approved: boolean): Promise<boolean> => {
+    public approveRound = async (approveDetails: approveRoundDTO): Promise<boolean> => {
+        const { requestId, authorityId, approved } = approveDetails;
         const request: Request | null = await this.repo.findById(requestId);
 
         if (!request) throw new NotFoundError(`Request Not Found`);

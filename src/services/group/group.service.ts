@@ -11,7 +11,7 @@ export default class implements IGroupService {
         this._repo = repo;
     }
 
-    public async createGroup(dto: createGroupDTO): Promise<string> {
+    public createGroup = async (dto: createGroupDTO): Promise<string> => {
         const existsRequest = await this._repo.findOne({ name: dto.name });
 
         if (existsRequest) throw new BadRequestError(`Group with name ${dto.name} already exists`);
@@ -23,9 +23,9 @@ export default class implements IGroupService {
         if (!res) throw new InternalError(`Error Creating Group: ${dto.name}`);
 
         return newGroup.id!.toString();
-    }
+    };
 
-    public async addDisToGroup(dto: disToGroupDTO): Promise<boolean> {
+    public addDisToGroup = async (dto: disToGroupDTO): Promise<boolean> => {
         const group = await this._repo.findById(dto.groupId);
 
         if (!group) throw new NotFoundError(`Group Not Found`);
@@ -37,9 +37,9 @@ export default class implements IGroupService {
         if (!res) throw new InternalError(`Error adding dis to group: ${group.name}`);
 
         return true;
-    }
+    };
 
-    public async removeDisFromGroup(dto: disToGroupDTO): Promise<boolean> {
+    public removeDisFromGroup = async (dto: disToGroupDTO): Promise<boolean> => {
         const group = await this._repo.findById(dto.groupId);
 
         if (!group) throw new NotFoundError(`Group Not Found`);
@@ -51,5 +51,5 @@ export default class implements IGroupService {
         if (!res) throw new InternalError(`Error adding dis to group: ${group.name}`);
 
         return true;
-    }
+    };
 }

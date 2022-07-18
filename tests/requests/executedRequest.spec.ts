@@ -70,7 +70,7 @@ export const testExecutedRequests = () => {
             const resExecuted = await request(server.app).post(`/api/executedRequest/executed/${requestNumber}`).send({});
             expect(resExecuted.status).toBe(200);
             let foundCreatedGroup = await findOneByQuery(groupsCollectionName, {
-                requestNumber: requestNumber,
+                name: insertedCreateGroupRequest.name,
             });
 
             expect(foundCreatedGroup.name).toBe(insertedCreateGroupRequest.name);

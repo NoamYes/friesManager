@@ -21,13 +21,13 @@ export default class implements IExecutedRequestsService {
         };
     }
 
-    public async executedRequest(requestNumber: number): Promise<boolean> {
+    public executedRequest = async (requestNumber: number): Promise<boolean> => {
         const request: Request | null = await this._requestRepo.findByRequestNumber(requestNumber);
 
         if (!request) throw new BadRequestError('Group with request number not found');
 
-        const res = this._groupServiceMap[request.type](request.payload);
+        const res = await this._groupServiceMap[request.type](request.payload);
 
         return !!res;
-    }
+    };
 }

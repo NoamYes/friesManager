@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 export type basicRequestDTO = {
     applicant: string;
     approvalsNeeded?: approvalNeed[]; // TODO: should be required?
-}
+};
 
 export type approvalNeed = {
     authorityId: string;
@@ -20,7 +20,13 @@ export type createGroupDTO = basicRequestDTO & {
 export type disToGroupDTO = basicRequestDTO & {
     groupId: string;
     disUniqueId: string[];
-}
+};
+
+export type approveRoundDTO = {
+    requestId: string;
+    authorityId: string;
+    approved: boolean;
+};
 
 export const createGroupRequestSchema = Joi.object({
     body: {
@@ -33,7 +39,9 @@ export const createGroupRequestSchema = Joi.object({
         approvalsNeeded: Joi.array().items(
             Joi.object({
                 authorityId: Joi.string().required(),
-                approvalType: Joi.string().valid(...Object.values(RESPONSIBILITY_PERM)).required(),
+                approvalType: Joi.string()
+                    .valid(...Object.values(RESPONSIBILITY_PERM))
+                    .required(),
             }),
         ),
     },
@@ -47,7 +55,9 @@ export const AddDisToGroupSchema = Joi.object({
         approvalsNeeded: Joi.array().items(
             Joi.object({
                 authorityId: Joi.string().required(),
-                approvalType: Joi.string().valid(...Object.values(RESPONSIBILITY_PERM)).required(),
+                approvalType: Joi.string()
+                    .valid(...Object.values(RESPONSIBILITY_PERM))
+                    .required(),
             }),
         ),
     },
@@ -57,13 +67,13 @@ export const removeDisFromGroupSchema = AddDisToGroupSchema;
 
 export const approveRequestSchema = Joi.object({
     params: {
-        requestId: Joi.string().required()
+        requestId: Joi.string().required(),
     },
     body: {
         authorityId: Joi.string().required(),
-        approved: Joi.boolean().required()
-    }
-})
+        approved: Joi.boolean().required(),
+    },
+});
 
 // export const schemasMap = {
 //     [REQUEST_TYPE.CREATE_GROUP]: createGroupRequestSchema,
