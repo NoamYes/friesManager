@@ -26,7 +26,7 @@ const main = async () => {
     const requestRepo = new RequestRepo(modelsMap);
     const groupRepo = new GroupRepo(groupModel);
 
-    const requestUseCases = new RequestUseCases(requestRepo);
+    const requestUseCases = new RequestUseCases(requestRepo, groupRepo);
     const groupService = new GroupService(groupRepo);
     const executedRequestUseCases = new ExecutedRequestUseCases(requestRepo, groupService);
 
