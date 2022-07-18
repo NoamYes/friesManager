@@ -1,6 +1,6 @@
 import { approveRoundDTO, createGroupDTO, disToGroupDTO } from '../express/joi/validator/request.schema';
 
-export interface IRequestService {
+export interface IRequestUseCases {
     createGroup(requestDetails: createGroupDTO): Promise<string>;
     addDisToGroup(requestDetails: disToGroupDTO): Promise<string>;
     removeDisFromGroup(requestDetails: disToGroupDTO): Promise<string>;

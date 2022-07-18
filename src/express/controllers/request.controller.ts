@@ -1,25 +1,25 @@
-import { IRequestService } from '../../interfaces/requestService.interface';
+import { IRequestUseCases } from '../../interfaces/requestService.interface';
 import { IRequestController } from './../../interfaces/requestController.interface';
 import { Request, Response } from 'express';
 import { REQUEST_TYPE } from '../../config/enums';
 export default class implements IRequestController {
-    private _service: IRequestService;
+    private _useCases: IRequestUseCases;
 
-    private _serviceMap;
+    private _useCasesMap;
 
-    constructor(RequestService: IRequestService) {
-        this._service = RequestService;
-        this._serviceMap = {
-            [REQUEST_TYPE.CREATE_GROUP]: this._service.createGroup,
-            [REQUEST_TYPE.ADD_DIS_GROUP]: this._service.addDisToGroup,
-            [REQUEST_TYPE.REMOVE_DIS_GROUP]: this._service.removeDisFromGroup,
+    constructor(RequestUseCases: IRequestUseCases) {
+        this._useCases = RequestUseCases;
+        this._useCasesMap = {
+            [REQUEST_TYPE.CREATE_GROUP]: this._useCases.createGroup,
+            [REQUEST_TYPE.ADD_DIS_GROUP]: this._useCases.addDisToGroup,
+            [REQUEST_TYPE.REMOVE_DIS_GROUP]: this._useCases.removeDisFromGroup,
         };
     }
 
     public createRequest = async (req: Request, res: Response): Promise<void> => {
         const requestType = res.locals.type;
 
-        const id: string = await this._serviceMap[requestType]({ ...req.body });
+        const id: string = await this._useCasesMap[requestType]({ ...req.body });
 
         res.send({ id });
     };
@@ -28,7 +28,7 @@ export default class implements IRequestController {
         const { requestId } = req.params;
         const { authorityId, approved } = req.body;
 
-        const result: boolean = await this._service.approveRound({ requestId, authorityId, approved });
+        const result: boolean = await this._useCases.approveRound({ requestId, authorityId, approved });
 
         res.send(result);
     };

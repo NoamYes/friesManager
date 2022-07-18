@@ -11,9 +11,9 @@ import initializeMongo from '../src/mongo/initializeMongo';
 import { emptyDB } from './seed';
 import RequestRepo from '../src/mongo/repo/request.repo';
 import GroupRepo from '../src/mongo/repo/group.repo';
-import RequestService from '../src/services/request.service';
+import RequestUseCases from '../src/useCases/request.useCases';
 import GroupService from '../src/services/group/group.service';
-import ExecutedRequestService from '../src/services/executedRequest.service';
+import ExecutedRequestUseCases from '../src/useCases/executedRequest.useCases';
 import RequestController from '../src/express/controllers/request.controller';
 import ExecutedRequestController from '../src/express/controllers/executedRequest.controller';
 import RequestRouter from '../src/express/routes/request.route';
@@ -32,9 +32,9 @@ beforeAll(async () => {
         const requestRepo = new RequestRepo(modelsMap);
         const groupRepo = new GroupRepo(groupModel);
 
-        const requestService = new RequestService(requestRepo);
+        const requestService = new RequestUseCases(requestRepo);
         const groupService = new GroupService(groupRepo);
-        const executedRequestService = new ExecutedRequestService(requestRepo, groupService);
+        const executedRequestService = new ExecutedRequestUseCases(requestRepo, groupService);
 
         const requestController = new RequestController(requestService);
         const executedRequestController = new ExecutedRequestController(executedRequestService);

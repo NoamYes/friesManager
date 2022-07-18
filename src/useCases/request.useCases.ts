@@ -1,11 +1,11 @@
 import { InternalError, BadRequestError, NotFoundError } from '../express/utils/error';
 import { IRequestRepo } from '../interfaces/requestRepo.interface';
 import { approveRoundDTO, createGroupDTO, disToGroupDTO as addDisToGroupDTO } from '../express/joi/validator/request.schema';
-import { IRequestService } from '../interfaces/requestService.interface';
+import { IRequestUseCases } from '../interfaces/requestService.interface';
 import { REQUEST_TYPE } from '../config/enums';
 import { Request } from '../domain/request';
 
-export default class implements IRequestService {
+export default class implements IRequestUseCases {
     private repo: IRequestRepo;
 
     constructor(requestRepo: IRequestRepo) {

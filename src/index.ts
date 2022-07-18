@@ -1,4 +1,3 @@
-import { executedRequestSchema } from './express/joi/validator/executedRequests';
 import RequestRepo from './mongo/repo/request.repo';
 import GroupRepo from './mongo/repo/group.repo';
 import initializeMongo from './mongo/initializeMongo';
@@ -6,12 +5,12 @@ import App from './express/app';
 import config from './config';
 import { modelsMap } from './mongo/models/request.model';
 import groupModel from './mongo/models/group.model';
-import RequestService from './services/request.service';
+import RequestUseCases from './useCases/request.useCases';
 import GroupService from './services/group/group.service';
 import RequestController from './express/controllers/request.controller';
 import ExecutedRequestController from './express/controllers/executedRequest.controller';
 import RequestRouter from './express/routes/request.route';
-import ExecutedRequestService from './services/executedRequest.service';
+import ExecutedRequestUseCases from './useCases/executedRequest.useCases';
 import ExecutedRequestRouter from './express/routes/executedRequest.route';
 // import Auth from './services/auth.service';
 
@@ -27,12 +26,12 @@ const main = async () => {
     const requestRepo = new RequestRepo(modelsMap);
     const groupRepo = new GroupRepo(groupModel);
 
-    const requestService = new RequestService(requestRepo);
+    const requestUseCases = new RequestUseCases(requestRepo);
     const groupService = new GroupService(groupRepo);
-    const executedRequestService = new ExecutedRequestService(requestRepo, groupService);
+    const executedRequestUseCases = new ExecutedRequestUseCases(requestRepo, groupService);
 
-    const requestController = new RequestController(requestService);
-    const executedRequestController = new ExecutedRequestController(executedRequestService);
+    const requestController = new RequestController(requestUseCases);
+    const executedRequestController = new ExecutedRequestController(executedRequestUseCases);
 
     // const auth = new Auth(userService.auth);
 
