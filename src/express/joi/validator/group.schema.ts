@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
 
+//TODO: check objectId
 export const getByIdSchema = Joi.object({
     params: {
         id: Joi.string().required()

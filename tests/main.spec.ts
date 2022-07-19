@@ -21,6 +21,10 @@ import ExecutedRequestRouter from '../src/express/routes/executedRequest.route';
 import { testCreateGroup } from './requests/createGroup.spec';
 import { testApprovalRounds } from './requests/approveRounds.spec';
 import { testAddDisToGroup } from './requests/addDisToGroup.spec';
+import { testGroupGets } from './groups/get.spec';
+import GroupUseCases from '../src/useCases/group.useCases';
+import GroupController from '../src/express/controllers/group.controller';
+import GroupRouter from '../src/express/routes/group.route';
 
 export let server: Server;
 let replset: MongoMemoryReplSet;
@@ -35,16 +39,19 @@ beforeAll(async () => {
         const requestService = new RequestUseCases(requestRepo);
         const groupService = new GroupService(groupRepo);
         const executedRequestService = new ExecutedRequestUseCases(requestRepo, groupService);
+        const groupUseCases = new GroupUseCases(groupRepo);
 
         const requestController = new RequestController(requestService);
         const executedRequestController = new ExecutedRequestController(executedRequestService);
+        const groupController = new GroupController(groupUseCases);
 
         // const auth = new Auth(userService.auth);
 
         const requestRouter = new RequestRouter(requestController);
         const executedRequestRouter = new ExecutedRequestRouter(executedRequestController);
+        const groupsRouter = new GroupRouter(groupController);
 
-        server = new Server(config.server.port, [requestRouter, executedRequestRouter]);
+        server = new Server(config.server.port, [requestRouter, executedRequestRouter, groupsRouter]);
 
         try {
             replset = new MongoMemoryReplSet({
@@ -81,6 +88,7 @@ describe('Run all tests', () => {
     testApprovalRounds();
     testAddDisToGroup();
     testExecutedRequests();
+    testGroupGets();
 });
 
 afterAll(async () => {

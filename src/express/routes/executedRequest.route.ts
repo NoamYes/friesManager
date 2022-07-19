@@ -22,6 +22,6 @@ export default class {
     }
 
     public initializeRoutes() {
-        this.router.post('/executed/:requestNumber', validateRequest(executedRequestSchema), wrapController(this.controller.executedRequest));
+        this.router.post('/:requestNumber', validateRequest(executedRequestSchema), wrapController(this.controller.executedRequest));
     }
 }

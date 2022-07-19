@@ -49,11 +49,8 @@ export default class implements IGroupRepo {
         return Group.toDomain(res);
     };
 
-    public findMany = async (query: groupQuery): Promise<Group[] | null> => {
+    public findMany = async (query: groupQuery): Promise<Group[]> => {
         const res = await this._model.find(query).lean();
-
-        if (!res) return null;
-
         return res.map((group) => Group.toDomain(group));
     };
 }

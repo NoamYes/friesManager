@@ -12,6 +12,7 @@ export default class implements IRequestUseCases {
         this.repo = requestRepo;
     }
 
+    //TODO: return request number instead of request id
     public createGroup = async (requestDetails: createGroupDTO): Promise<string> => {
         const existsRequest = await this.repo.findOne({ name: requestDetails.name }, REQUEST_TYPE.CREATE_GROUP);
 
