@@ -17,7 +17,7 @@ export default class implements IRequestUseCases {
     }
 
     //TODO: return request number instead of request id
-    public createGroup = async (requestDetails: createGroupDTO): Promise<string> => {
+    public createGroup = async (requestDetails: createGroupDTO): Promise<number> => {
         const existsGroup = await this.groupRepo.findOne({ name: requestDetails.name });
 
         if (existsGroup) throw new BadRequestError(`Group with the name ${requestDetails.name} already exists`);
@@ -43,10 +43,10 @@ export default class implements IRequestUseCases {
 
         if (!res) throw new InternalError(`Error Creating Create Group Request: ${payload.name}`);
 
-        return newRequest.id!.toString();
+        return requestNumber;
     };
 
-    public addDisToGroup = async (requestDetails: addDisToGroupDTO): Promise<string> => {
+    public addDisToGroup = async (requestDetails: addDisToGroupDTO): Promise<number> => {
         // TODO: check if request already exists ?
         const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
 
@@ -64,10 +64,10 @@ export default class implements IRequestUseCases {
 
         if (!res) throw new InternalError(`Error Creating Add Dis To Group Request: ${payload.groupId} -> ${payload.disUniqueId}`);
 
-        return newRequest.id!.toString();
+        return requestNumber;
     };
 
-    public removeDisFromGroup = async (requestDetails: addDisToGroupDTO): Promise<string> => {
+    public removeDisFromGroup = async (requestDetails: addDisToGroupDTO): Promise<number> => {
         const { applicant, approvalsNeeded } = requestDetails;
         const requestProps = { type: REQUEST_TYPE.REMOVE_DIS_GROUP, applicant, approvalsNeeded };
         const payload = { groupId: requestDetails.groupId, disUniqueId: requestDetails.disUniqueId };
@@ -80,19 +80,19 @@ export default class implements IRequestUseCases {
 
         if (!res) throw new InternalError(`Error Creating Add Dis To Group Request: ${payload.groupId} -> ${payload.disUniqueId}`);
 
-        return newRequest.id!.toString();
+        return requestNumber;
     };
 
     public approveRound = async (approveDetails: approveRoundDTO): Promise<boolean> => {
-        const { requestId, authorityId, approved } = approveDetails;
-        const request: Request | null = await this.requestRepo.findById(requestId);
+        const { requestNumber, authorityId, approved } = approveDetails;
+        const request: Request | null = await this.requestRepo.findByRequestNumber(requestNumber);
 
         if (!request) throw new NotFoundError(`Request Not Found`);
 
         request.approveRound(authorityId, approved);
         request.checkAllApprovalRounds();
 
-        const res = await this.requestRepo.save(requestId, request, request.type);
+        const res = await this.requestRepo.save(request, request.type);
 
         return !!res;
     };

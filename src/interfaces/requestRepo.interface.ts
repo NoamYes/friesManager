@@ -14,7 +14,7 @@ export interface IRequestRepo {
     // create(document: any, query?: requestQuery): Promise<boolean>;
     findById(id: string): Promise<Request | null>;
     findOne(query: requestQuery, requestType: REQUEST_TYPE): Promise<Request | null>;
-    save(id: string, request: Request, requestType: REQUEST_TYPE): Promise<boolean>;
+    save(request: Request, requestType: REQUEST_TYPE): Promise<boolean>;
     create(request: Request, requestType: REQUEST_TYPE): Promise<boolean>;
     count(): Promise<number>;
     findByRequestNumber(requestNumber: number): Promise<Request | null>;

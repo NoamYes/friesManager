@@ -39,7 +39,7 @@ export default class {
             wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_DIS_GROUP }),
         );
 
-        this.router.put('/approve/:requestId', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound));
+        this.router.put('/approve/:requestNumber', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound));
 
         // this.router.post('', wrapController(this.controller.createRequest))
     }

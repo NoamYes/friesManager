@@ -1,3 +1,4 @@
+import { findByQuery } from './../seed/index';
 import * as request from 'supertest';
 import config from '../../src/config';
 import { APPROVAL_ROUND_STATUS, REQUEST_STATUS } from '../../src/config/enums';
@@ -34,13 +35,13 @@ export const testApprovalRounds = () => {
 
             let insertedCreateGroupRequest;
 
-            await request(server.app)
-                .put(`/api/requests/approve/${res.body.id}`)
+            const a = await request(server.app)
+                .put(`/api/requests/approve/${res.body.requestNumber}`)
                 .send({
                     authorityId: '507f1f77bcf86cd799438011',
                     approved: true,
                 })
-                .expect(200);
+            expect(a.status).toBe(200);
 
             insertedCreateGroupRequest = await findOneByQuery(requestsCollectionName, {
                 name: reqBody.name,
@@ -50,7 +51,7 @@ export const testApprovalRounds = () => {
             expect(insertedCreateGroupRequest.status).toBe(REQUEST_STATUS.WAITING_FOR_APPROVALS);
 
             await request(server.app)
-                .put(`/api/requests/approve/${res.body.id}`)
+                .put(`/api/requests/approve/${res.body.requestNumber}`)
                 .send({
                     authorityId: '507f1f77bcf86cd799439011',
                     approved: true,
@@ -84,7 +85,7 @@ export const testApprovalRounds = () => {
             let insertedCreateGroupRequest;
 
             await request(server.app)
-                .put(`/api/requests/approve/${res.body.id}`)
+                .put(`/api/requests/approve/${res.body.requestNumber}`)
                 .send({
                     authorityId: '507f1f77bcf86cd799438011',
                     approved: false,

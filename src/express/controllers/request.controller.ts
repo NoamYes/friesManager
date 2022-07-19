@@ -19,16 +19,16 @@ export default class implements IRequestController {
     public createRequest = async (req: Request, res: Response): Promise<void> => {
         const requestType = res.locals.type;
 
-        const id: string = await this._useCasesMap[requestType]({ ...req.body });
+        const requestNumber: number = await this._useCasesMap[requestType]({ ...req.body });
 
-        res.send({ id });
+        res.send({ requestNumber });
     };
 
     public approveRound = async (req: Request, res: Response): Promise<void> => {
-        const { requestId } = req.params;
+        const { requestNumber } = req.params;
         const { authorityId, approved } = req.body;
 
-        const result: boolean = await this._useCases.approveRound({ requestId, authorityId, approved });
+        const result: boolean = await this._useCases.approveRound({ requestNumber: +requestNumber, authorityId, approved });
 
         res.send(result);
     };

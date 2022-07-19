@@ -26,7 +26,7 @@ export type disToGroupDTO = basicRequestDTO & {
 };
 
 export type approveRoundDTO = {
-    requestId: string;
+    requestNumber: number;
     authorityId: string;
     approved: boolean;
 };
@@ -70,7 +70,7 @@ export const removeDisFromGroupSchema = AddDisToGroupSchema;
 
 export const approveRequestSchema = Joi.object({
     params: {
-        requestId: objectIdValidation().required(),
+        requestNumber: Joi.number().required(),
     },
     body: {
         authorityId: Joi.string().required(),

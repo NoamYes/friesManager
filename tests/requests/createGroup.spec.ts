@@ -22,6 +22,7 @@ export const testCreateGroup = () => {
 
             let res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
             expect(res.status).toBe(200);
+            expect(res.body.requestNumber).toBe(1);
 
             let insertedCreateGroupRequest = await findOneByQuery(requestsCollectionName, {
                 name: reqBody.name,
@@ -40,6 +41,7 @@ export const testCreateGroup = () => {
 
             res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
             expect(res.status).toBe(200);
+            expect(res.body.requestNumber).toBe(2);
 
             insertedCreateGroupRequest = await findOneByQuery(requestsCollectionName, {
                 name: reqBody.name,

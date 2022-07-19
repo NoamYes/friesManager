@@ -38,7 +38,7 @@ export const testExecutedRequests = () => {
             let insertedCreateGroupRequest;
 
             await request(server.app)
-                .put(`/api/requests/approve/${res.body.id}`)
+                .put(`/api/requests/approve/${res.body.requestNumber}`)
                 .send({
                     authorityId: '123456789',
                     approved: true,
@@ -53,7 +53,7 @@ export const testExecutedRequests = () => {
             expect(insertedCreateGroupRequest.status).toBe(REQUEST_STATUS.WAITING_FOR_APPROVALS);
 
             await request(server.app)
-                .put(`/api/requests/approve/${res.body.id}`)
+                .put(`/api/requests/approve/${res.body.requestNumber}`)
                 .send({
                     authorityId: '987654321',
                     approved: true,

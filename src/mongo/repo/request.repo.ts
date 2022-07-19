@@ -24,10 +24,10 @@ export default class implements IRequestRepo {
         }
     };
 
-    public save = async (id: string, request: Request, requestType: REQUEST_TYPE): Promise<boolean> => {
+    public save = async (request: Request, requestType: REQUEST_TYPE): Promise<boolean> => {
         try {
             const doc: RequestDoc = Request.toPersistance(request);
-            const res = await this._modelsMap[requestType].updateOne({ _id: new Types.ObjectId(id) }, { $set: doc });
+            const res = await this._modelsMap[requestType].updateOne({ _id: request.id }, { $set: doc });
             return !!res;
         } catch (err: any) {
             console.log(err.message);
