@@ -53,7 +53,9 @@ export const testGroupGets = () => {
             let res = await request(server.app).get(`/api/groups/${groupInDB._id.toString()}`).expect(200);
             expect(res.body).toBeTruthy()
 
-            res = await request(server.app).get(`/api/groups/507f1f77bcf86cd799438011`).expect(404);
+            await request(server.app).get(`/api/groups/507f1f77bcf86cd799438011`).expect(404);
+
+            await request(server.app).get(`/api/groups/1234`).expect(400);
         })
 
         it('Get By Group name', async () => {
@@ -76,7 +78,10 @@ export const testGroupGets = () => {
             res = await request(server.app).get(`/api/groups/admin/507f1f77bcf86cd799438011`).expect(200);
             expect(res.body.length).toBe(1)
 
-            res = await request(server.app).get(`/api/groups/admin/507f1f77ccf86cd799438011`).expect(404);
+            res = await request(server.app).get(`/api/groups/admin/507f1f77ccf86cd799438011`).expect(200);
+            expect(res.body.length).toBe(0)
+
+            await request(server.app).get(`/api/groups/admin/123465`).expect(400);
         })
 
     })

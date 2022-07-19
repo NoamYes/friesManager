@@ -1,5 +1,8 @@
 import { GROUP_TYPE, RESPONSIBILITY_PERM } from './../../../config/enums';
 import * as Joi from 'joi';
+import * as JoiObjectId from 'joi-objectid';
+
+const objectIdValidation = JoiObjectId(Joi);
 
 export type basicRequestDTO = {
     applicant: string;
@@ -35,10 +38,10 @@ export const createGroupRequestSchema = Joi.object({
             .try(Joi.array().items(Joi.string().valid(...Object.values(GROUP_TYPE))), Joi.string())
             .required(),
         clearance: Joi.string(),
-        applicant: Joi.string().required(), // TODO: consider transform to objectId validation
+        applicant: objectIdValidation().required(), // TODO: consider transform to objectId validation
         approvalsNeeded: Joi.array().items(
             Joi.object({
-                authorityId: Joi.string().required(),
+                authorityId: objectIdValidation().required(),
                 approvalType: Joi.string()
                     .valid(...Object.values(RESPONSIBILITY_PERM))
                     .required(),
@@ -49,12 +52,12 @@ export const createGroupRequestSchema = Joi.object({
 
 export const AddDisToGroupSchema = Joi.object({
     body: {
-        groupId: Joi.string().required(),
+        groupId: objectIdValidation().required(),
         disUniqueId: Joi.array().items(Joi.string()).required(),
-        applicant: Joi.string().required(),
+        applicant: objectIdValidation().required(),
         approvalsNeeded: Joi.array().items(
             Joi.object({
-                authorityId: Joi.string().required(),
+                authorityId: objectIdValidation().required(),
                 approvalType: Joi.string()
                     .valid(...Object.values(RESPONSIBILITY_PERM))
                     .required(),
@@ -67,10 +70,10 @@ export const removeDisFromGroupSchema = AddDisToGroupSchema;
 
 export const approveRequestSchema = Joi.object({
     params: {
-        requestId: Joi.string().required(),
+        requestId: objectIdValidation().required(),
     },
     body: {
-        authorityId: Joi.string().required(),
+        authorityId: objectIdValidation().required(),
         approved: Joi.boolean().required(),
     },
 });

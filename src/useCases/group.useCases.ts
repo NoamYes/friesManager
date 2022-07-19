@@ -59,8 +59,6 @@ export default class implements IGroupUseCases {
     public getByAdminId = async (id: string): Promise<groupResponseDTO[]> => {
         const groups: Group[] = await this._repo.findMany({ admins: id });
 
-        if (!groups.length) throw new NotFoundError(`Group where ${id} is admin are not found`);
-
         return groups.map(group => this.toResponseDTO(group));
     }
 }
