@@ -16,6 +16,7 @@ export default class implements IRequestUseCases {
         this.groupRepo = groupRepo;
     }
 
+    //TODO: return request number instead of request id
     public createGroup = async (requestDetails: createGroupDTO): Promise<string> => {
         const existsGroup = await this.groupRepo.findOne({ name: requestDetails.name });
 
@@ -47,7 +48,7 @@ export default class implements IRequestUseCases {
 
     public addDisToGroup = async (requestDetails: addDisToGroupDTO): Promise<string> => {
         // TODO: check if request already exists ?
-        const existsGroup = await this.groupRepo.findById(new Types.ObjectId(requestDetails.groupId));
+        const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
 
         if (!existsGroup) throw new BadRequestError(`Add dis to non exists group with id ${requestDetails.groupId}`);
 

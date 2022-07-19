@@ -7,11 +7,11 @@ import { emptyDB, findOneByQuery } from '../seed';
 const requestsCollectionName = config.mongo.requestCollectionName;
 
 export const testApprovalRounds = () => {
-    beforeEach(async () => {
-        await emptyDB();
-    });
-
     describe('Update approval rounds useCases', () => {
+        beforeEach(async () => {
+            await emptyDB();
+        });
+
         it('2 approval Rounds of create group request', async () => {
             const reqBody = {
                 name: 'GroupWithApprovals',
@@ -19,11 +19,11 @@ export const testApprovalRounds = () => {
                 applicant: '507f1f77bcf86cd799439011',
                 approvalsNeeded: [
                     {
-                        authorityId: '123456789',
+                        authorityId: '507f1f77bcf86cd799438011',
                         approvalType: 'entity',
                     },
                     {
-                        authorityId: '987654321',
+                        authorityId: '507f1f77bcf86cd799439011',
                         approvalType: 'entity',
                     },
                 ],
@@ -37,7 +37,7 @@ export const testApprovalRounds = () => {
             await request(server.app)
                 .put(`/api/requests/approve/${res.body.id}`)
                 .send({
-                    authorityId: '123456789',
+                    authorityId: '507f1f77bcf86cd799438011',
                     approved: true,
                 })
                 .expect(200);
@@ -52,7 +52,7 @@ export const testApprovalRounds = () => {
             await request(server.app)
                 .put(`/api/requests/approve/${res.body.id}`)
                 .send({
-                    authorityId: '987654321',
+                    authorityId: '507f1f77bcf86cd799439011',
                     approved: true,
                 })
                 .expect(200);
@@ -72,7 +72,7 @@ export const testApprovalRounds = () => {
                 applicant: '507f1f77bcf86cd799439011',
                 approvalsNeeded: [
                     {
-                        authorityId: '123456789',
+                        authorityId: '507f1f77bcf86cd799438011',
                         approvalType: 'entity',
                     },
                 ],
@@ -86,7 +86,7 @@ export const testApprovalRounds = () => {
             await request(server.app)
                 .put(`/api/requests/approve/${res.body.id}`)
                 .send({
-                    authorityId: '123456789',
+                    authorityId: '507f1f77bcf86cd799438011',
                     approved: false,
                 })
                 .expect(200);

@@ -56,7 +56,10 @@ export default class implements IRequestRepo {
     };
 
     public findByRequestNumber = async (requestNumber: number): Promise<Request | null> => {
-        const foundRequest = await this._modelsMap[REQUEST_TYPE.BASE_REQ].findOne({ requestNumber }).lean();
-        return Request.toDomain(foundRequest);
+        const res = await this._modelsMap[REQUEST_TYPE.BASE_REQ].findOne({ requestNumber }).lean();
+
+        if (!res) return null;
+
+        return Request.toDomain(res);
     };
 }

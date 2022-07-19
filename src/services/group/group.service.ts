@@ -26,7 +26,7 @@ export default class implements IGroupService {
     };
 
     public addDisToGroup = async (dto: disToGroupDTO): Promise<boolean> => {
-        const group = await this._repo.findById(dto.groupId);
+        const group = await this._repo.findById(dto.groupId.toString());
 
         if (!group) throw new NotFoundError(`Group Not Found`);
 
@@ -40,7 +40,7 @@ export default class implements IGroupService {
     };
 
     public removeDisFromGroup = async (dto: disToGroupDTO): Promise<boolean> => {
-        const group = await this._repo.findById(dto.groupId);
+        const group = await this._repo.findById(dto.groupId.toString());
 
         if (!group) throw new NotFoundError(`Group Not Found`);
 

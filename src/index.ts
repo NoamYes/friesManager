@@ -12,6 +12,9 @@ import ExecutedRequestController from './express/controllers/executedRequest.con
 import RequestRouter from './express/routes/request.route';
 import ExecutedRequestUseCases from './useCases/executedRequest.useCases';
 import ExecutedRequestRouter from './express/routes/executedRequest.route';
+import GroupRouter from './express/routes/group.route';
+import GroupUseCases from './useCases/group.useCases';
+import GroupController from './express/controllers/group.controller';
 // import Auth from './services/auth.service';
 
 const { mongo } = config;
@@ -29,17 +32,20 @@ const main = async () => {
     const requestUseCases = new RequestUseCases(requestRepo, groupRepo);
     const groupService = new GroupService(groupRepo);
     const executedRequestUseCases = new ExecutedRequestUseCases(requestRepo, groupService);
+    const groupUseCases = new GroupUseCases(groupRepo);
 
     const requestController = new RequestController(requestUseCases);
     const executedRequestController = new ExecutedRequestController(executedRequestUseCases);
+    const groupController = new GroupController(groupUseCases);
 
     // const auth = new Auth(userService.auth);
 
     const requestRouter = new RequestRouter(requestController);
     const executedRequestRouter = new ExecutedRequestRouter(executedRequestController);
+    const groupsRouter = new GroupRouter(groupController);
 
     const port = config.server.port;
-    new App(port, [requestRouter, executedRequestRouter]);
+    new App(port, [requestRouter, executedRequestRouter, groupsRouter]);
 };
 
 main().catch((err) => {

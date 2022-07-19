@@ -33,8 +33,8 @@ export default class implements IGroupRepo {
         }
     };
 
-    public findById = async (id: Types.ObjectId): Promise<Group | null> => {
-        const res = await this._model.findOne({ _id: id }).lean();
+    public findById = async (id: string): Promise<Group | null> => {
+        const res = await this._model.findOne({ _id: new Types.ObjectId(id) }).lean();
 
         if (!res) return null;
 
@@ -47,5 +47,10 @@ export default class implements IGroupRepo {
         if (!res) return null;
 
         return Group.toDomain(res);
+    };
+
+    public findMany = async (query: groupQuery): Promise<Group[]> => {
+        const res = await this._model.find(query).lean();
+        return res.map((group) => Group.toDomain(group));
     };
 }
