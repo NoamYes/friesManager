@@ -36,7 +36,7 @@ beforeAll(async () => {
         const requestRepo = new RequestRepo(modelsMap);
         const groupRepo = new GroupRepo(groupModel);
 
-        const requestService = new RequestUseCases(requestRepo);
+        const requestService = new RequestUseCases(requestRepo, groupRepo);
         const groupService = new GroupService(groupRepo);
         const executedRequestService = new ExecutedRequestUseCases(requestRepo, groupService);
         const groupUseCases = new GroupUseCases(groupRepo);

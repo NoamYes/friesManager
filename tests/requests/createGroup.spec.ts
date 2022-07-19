@@ -13,16 +13,16 @@ export const testCreateGroup = () => {
 
     describe('Create create group requests useCases', () => {
         it('Valid Create Group Request Without Approvals', async () => {
-            const reqBody = {
+            let reqBody = {
                 name: 'RoeiGroup',
                 types: ['distribution'],
                 applicant: '507f1f77bcf86cd799439011',
             };
 
-            const res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            let res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
             expect(res.status).toBe(200);
 
-            const insertedCreateGroupRequest = await findOneByQuery(requestsCollectionName, {
+            let insertedCreateGroupRequest = await findOneByQuery(requestsCollectionName, {
                 name: reqBody.name,
             });
 
@@ -30,6 +30,24 @@ export const testCreateGroup = () => {
             expect(insertedCreateGroupRequest.name).toBe(reqBody.name);
             expect(insertedCreateGroupRequest.types.length).toBe(reqBody.types.length);
             expect(insertedCreateGroupRequest.requestNumber).toBe(1);
+
+            reqBody = {
+                name: 'RoeiGroup2',
+                types: ['distribution'],
+                applicant: '507f1f77bcf86cd799439011',
+            };
+
+            res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            expect(res.status).toBe(200);
+
+            insertedCreateGroupRequest = await findOneByQuery(requestsCollectionName, {
+                name: reqBody.name,
+            });
+
+            expect(insertedCreateGroupRequest).toBeTruthy();
+            expect(insertedCreateGroupRequest.name).toBe(reqBody.name);
+            expect(insertedCreateGroupRequest.types.length).toBe(reqBody.types.length);
+            expect(insertedCreateGroupRequest.requestNumber).toBe(2);
         });
 
         it('Valid Create Group Request With Approvals', async () => {
