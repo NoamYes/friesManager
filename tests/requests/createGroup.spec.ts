@@ -7,11 +7,12 @@ import { emptyDB, findOneByQuery } from '../seed';
 const requestsCollectionName = config.mongo.requestCollectionName;
 
 export const testCreateGroup = () => {
-    beforeEach(async () => {
-        await emptyDB();
-    });
-
     describe('Create create group requests useCases', () => {
+
+        beforeEach(async () => {
+            await emptyDB();
+        });
+
         it('Valid Create Group Request Without Approvals', async () => {
             let reqBody = {
                 name: 'RoeiGroup',

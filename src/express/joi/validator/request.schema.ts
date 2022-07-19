@@ -41,7 +41,7 @@ export const createGroupRequestSchema = Joi.object({
         applicant: objectIdValidation().required(), // TODO: consider transform to objectId validation
         approvalsNeeded: Joi.array().items(
             Joi.object({
-                authorityId: objectIdValidation().required(),
+                authorityId: Joi.string().required(),
                 approvalType: Joi.string()
                     .valid(...Object.values(RESPONSIBILITY_PERM))
                     .required(),
@@ -57,7 +57,7 @@ export const AddDisToGroupSchema = Joi.object({
         applicant: objectIdValidation().required(),
         approvalsNeeded: Joi.array().items(
             Joi.object({
-                authorityId: objectIdValidation().required(),
+                authorityId: Joi.string().required(),
                 approvalType: Joi.string()
                     .valid(...Object.values(RESPONSIBILITY_PERM))
                     .required(),
@@ -73,7 +73,7 @@ export const approveRequestSchema = Joi.object({
         requestId: objectIdValidation().required(),
     },
     body: {
-        authorityId: objectIdValidation().required(),
+        authorityId: Joi.string().required(),
         approved: Joi.boolean().required(),
     },
 });

@@ -9,11 +9,12 @@ const requestsCollectionName = config.mongo.requestCollectionName;
 const groupsCollectionName = config.mongo.groupCollectionName;
 
 export const testAddDisToGroup = () => {
-    beforeEach(async () => {
-        await emptyDB();
-    });
-
     describe('Add Dis to group useCases', () => {
+
+        beforeEach(async () => {
+            await emptyDB();
+        });
+
         it('Valid add Dis to group requests without approvals', async () => {
             let reqCreateBody = {
                 name: 'RoeiGroup',
@@ -28,7 +29,7 @@ export const testAddDisToGroup = () => {
                 name: reqCreateBody.name,
             });
 
-            const resExecuted = await request(server.app).post(`/api/executedRequest/executed/${insertedCreateGroupRequest.requestNumber}`).send({});
+            const resExecuted = await request(server.app).post(`/api/executedRequest/${insertedCreateGroupRequest.requestNumber}`).send({});
             expect(resExecuted.status).toBe(200);
 
             let foundCreatedGroup = await findOneByQuery(groupsCollectionName, {

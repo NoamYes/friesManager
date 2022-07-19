@@ -9,7 +9,7 @@ export const emptyDB = async () => {
     try {
         await requestsCollection.deleteMany({});
         await groupsCollection.deleteMany({});
-    } catch (err) {}
+    } catch (err) { }
 };
 
 // export const seedDB = async () => {

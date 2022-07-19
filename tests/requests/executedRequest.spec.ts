@@ -69,7 +69,7 @@ export const testExecutedRequests = () => {
 
             const requestNumber = insertedCreateGroupRequest.requestNumber;
             expect(requestNumber).toBe(1);
-            const resExecuted = await request(server.app).post(`/api/executedRequest/executed/${requestNumber}`).send({});
+            const resExecuted = await request(server.app).post(`/api/executedRequest/${requestNumber}`).send({});
             expect(resExecuted.status).toBe(200);
             let foundCreatedGroup = await findOneByQuery(groupsCollectionName, {
                 name: insertedCreateGroupRequest.name,
@@ -92,7 +92,7 @@ export const testExecutedRequests = () => {
                 name: reqCreateBody.name,
             });
 
-            let resExecuted = await request(server.app).post(`/api/executedRequest/executed/${insertedCreateGroupRequest.requestNumber}`).send({});
+            let resExecuted = await request(server.app).post(`/api/executedRequest/${insertedCreateGroupRequest.requestNumber}`).send({});
             expect(resExecuted.status).toBe(200);
 
             let foundCreatedGroup = await findOneByQuery(groupsCollectionName, {
@@ -116,7 +116,7 @@ export const testExecutedRequests = () => {
             expect(insertedAddDIsRequest.disUniqueId.length).toBe(reqAddBody.disUniqueId.length);
             expect(insertedAddDIsRequest.requestNumber).toBe(2);
 
-            resExecuted = await request(server.app).post(`/api/executedRequest/executed/${insertedAddDIsRequest.requestNumber}`).send({});
+            resExecuted = await request(server.app).post(`/api/executedRequest/${insertedAddDIsRequest.requestNumber}`).send({});
             expect(resExecuted.status).toBe(200);
 
             foundCreatedGroup = await findOneByQuery(groupsCollectionName, {

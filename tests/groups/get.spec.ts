@@ -1,51 +1,55 @@
+import { findByQuery } from './../seed/index';
 import * as request from 'supertest';
 import { emptyDB, findOneByQuery } from "../seed";
 import { server } from '../main.spec';
 
 import config from "../../src/config";
-import { Types } from 'mongoose';
 
 const groupsCollection = config.mongo.groupCollectionName;
 
-export const testGroupGets = () => {
-    beforeAll(async () => {
-        await emptyDB();
+export const testGroupUseCases = () => {
+    describe('GET Groups', () => {
+        beforeAll(async () => {
+            await emptyDB();
 
-        let reqBody = {
-            name: 'RoeiGroup',
-            types: ['distribution'],
-            applicant: '507f1f77bcf86cd799439011',
-        };
+            let reqBody = {
+                name: 'RoeiGroup',
+                types: ['distribution'],
+                applicant: '507f1f77bcf86cd799439011',
+            };
 
-        let res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
-        expect(res.status).toBe(200);
+            let res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            expect(res.status).toBe(200);
 
-        reqBody = {
-            name: 'RoeiGroup2',
-            types: ['distribution'],
-            applicant: '507f1f77bcf86cd799439011',
-        }
+            reqBody = {
+                name: 'RoeiGroup2',
+                types: ['distribution'],
+                applicant: '507f1f77bcf86cd799439011',
+            }
 
-        res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
-        expect(res.status).toBe(200);
+            res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            expect(res.status).toBe(200);
 
-        reqBody = {
-            name: 'RoeiGroup3',
-            types: ['distribution'],
-            applicant: '507f1f77bcf86cd799438011',
-        }
+            reqBody = {
+                name: 'RoeiGroup3',
+                types: ['distribution'],
+                applicant: '507f1f77bcf86cd799438011',
+            }
 
-        res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
-        expect(res.status).toBe(200);
+            res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            expect(res.status).toBe(200);
 
-        await request(server.app).post(`/api/executedRequest/1`).send({}).expect(200);
-        await request(server.app).post(`/api/executedRequest/2`).send({}).expect(200);
-        await request(server.app).post(`/api/executedRequest/3`).send({}).expect(200);
+            await request(server.app).post(`/api/executedRequest/1`).send({}).expect(200);
+            await request(server.app).post(`/api/executedRequest/2`).send({}).expect(200);
+            await request(server.app).post(`/api/executedRequest/3`).send({}).expect(200);
 
-    })
+            const dbs = await findByQuery(groupsCollection, {});
+            console.log(dbs);
 
-    describe('Get request Groups', () => {
+        })
+
         it('Get By Group Id', async () => {
+
             const groupInDB = await findOneByQuery(groupsCollection, {
                 name: 'RoeiGroup'
             });

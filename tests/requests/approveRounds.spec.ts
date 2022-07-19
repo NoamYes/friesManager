@@ -7,11 +7,11 @@ import { emptyDB, findOneByQuery } from '../seed';
 const requestsCollectionName = config.mongo.requestCollectionName;
 
 export const testApprovalRounds = () => {
-    beforeEach(async () => {
-        await emptyDB();
-    });
-
     describe('Update approval rounds useCases', () => {
+        beforeEach(async () => {
+            await emptyDB();
+        });
+
         it('2 approval Rounds of create group request', async () => {
             const reqBody = {
                 name: 'GroupWithApprovals',

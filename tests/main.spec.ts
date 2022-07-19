@@ -21,7 +21,7 @@ import ExecutedRequestRouter from '../src/express/routes/executedRequest.route';
 import { testCreateGroup } from './requests/createGroup.spec';
 import { testApprovalRounds } from './requests/approveRounds.spec';
 import { testAddDisToGroup } from './requests/addDisToGroup.spec';
-import { testGroupGets } from './groups/get.spec';
+import { testGroupUseCases } from './groups/get.spec';
 import GroupUseCases from '../src/useCases/group.useCases';
 import GroupController from '../src/express/controllers/group.controller';
 import GroupRouter from '../src/express/routes/group.route';
@@ -88,7 +88,7 @@ describe('Run all tests', () => {
     testApprovalRounds();
     testAddDisToGroup();
     testExecutedRequests();
-    testGroupGets();
+    testGroupUseCases();
 });
 
 afterAll(async () => {
