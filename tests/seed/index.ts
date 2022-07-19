@@ -5,9 +5,11 @@ import config from '../../src/config';
 
 export const emptyDB = async () => {
     const requestsCollection = mongoose.connection.db.collection(config.mongo.requestCollectionName);
+    const groupsCollection = mongoose.connection.db.collection(config.mongo.groupCollectionName);
     try {
         await requestsCollection.deleteMany({});
-    } catch (err) { }
+        await groupsCollection.deleteMany({});
+    } catch (err) {}
 };
 
 // export const seedDB = async () => {
@@ -21,7 +23,6 @@ export const emptyDB = async () => {
 // };
 
 export const findByQuery = async (collectionName: string, query: Object) => {
-
     const collection = mongoose.connection.db.collection(collectionName);
     const res = (await collection.find(query)).toArray();
     return res;
