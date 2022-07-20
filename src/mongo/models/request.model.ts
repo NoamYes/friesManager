@@ -19,7 +19,7 @@ export interface RequestDoc {
     status: REQUEST_STATUS;
 }
 
-export const createGroupApprovalSchema = new mongoose.Schema<approvalRound>({
+export const approvalSchema = new mongoose.Schema<approvalRound>({
     permissionResponsibility: {
         type: { type: String, enum: RESPONSIBILITY_PERM, required: true },
         authorityId: { type: String, required: true },
@@ -36,11 +36,12 @@ export const requestSchema = new mongoose.Schema<RequestDoc>(
         applicant: { type: String, required: true },
         createdAt: { type: Date, required: false },
         updatedAt: { type: Date, required: false },
-        approvalRounds: { type: [createGroupApprovalSchema], required: false },
-    }, {
-    // versionKey: false,
-    ...requestOptions
-}
+        approvalRounds: { type: [approvalSchema], required: false },
+    },
+    {
+        // versionKey: false,
+        ...requestOptions,
+    },
 );
 
 export const RequestModel = mongoose.model('Request', requestSchema);
@@ -51,7 +52,7 @@ const CreateGroupRequestModel = RequestModel.discriminator<createGroupRequest>(
         name: { type: String, required: true, unique: true },
         types: { type: [String], enum: GROUP_TYPE, required: true },
         admin: { type: String, required: true },
-        clearance: { type: String, required: false }
+        clearance: { type: String, required: false },
     }),
 );
 

@@ -122,7 +122,7 @@ export const testExecutedRequests = () => {
             foundCreatedGroup = await findOneByQuery(groupsCollectionName, {
                 name: reqCreateBody.name,
             });
-            expect(arraysAreIdentical(foundCreatedGroup.groupDis, reqAddBody.disUniqueId)).toBeTruthy();
+            expect(arraysAreIdentical(foundCreatedGroup.dis, reqAddBody.disUniqueId)).toBeTruthy();
         });
     });
 };
