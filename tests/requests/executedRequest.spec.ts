@@ -78,7 +78,7 @@ export const testExecutedRequests = () => {
             expect(foundCreatedGroup.name).toBe(insertedCreateGroupRequest.name);
         });
 
-        it('2 approval Rounds of add addDiGoup request and then add dis to group', async () => {
+        it('2 approval Rounds of add addDiGroup request and then add dis to group', async () => {
             let reqCreateBody = {
                 name: 'RoeiGroup',
                 types: ['distribution'],

@@ -55,8 +55,16 @@ const CreateGroupRequestModel = RequestModel.discriminator<createGroupRequest>(
     }),
 );
 
-const AddDiToGroupRequestModel = RequestModel.discriminator<disToGroup>(
+const AddDisToGroupRequestModel = RequestModel.discriminator<disToGroup>(
     REQUEST_TYPE.ADD_DIS_GROUP,
+    new mongoose.Schema<disToGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true }, //TODO: refer ?
+        disUniqueId: { type: [String], required: true },
+    }),
+);
+
+const RemoveDisToGroupRequestModel = RequestModel.discriminator<disToGroup>(
+    REQUEST_TYPE.REMOVE_DIS_GROUP,
     new mongoose.Schema<disToGroup>({
         groupId: { type: mongoose.Schema.Types.ObjectId, required: true }, //TODO: refer ?
         disUniqueId: { type: [String], required: true },
@@ -66,7 +74,8 @@ const AddDiToGroupRequestModel = RequestModel.discriminator<disToGroup>(
 export const modelsMap = {
     [REQUEST_TYPE.BASE_REQ]: RequestModel,
     [REQUEST_TYPE.CREATE_GROUP]: CreateGroupRequestModel,
-    [REQUEST_TYPE.ADD_DIS_GROUP]: AddDiToGroupRequestModel,
+    [REQUEST_TYPE.ADD_DIS_GROUP]: AddDisToGroupRequestModel,
+    [REQUEST_TYPE.REMOVE_DIS_GROUP]: RemoveDisToGroupRequestModel,
 };
 
-export { CreateGroupRequestModel, AddDiToGroupRequestModel };
+export { CreateGroupRequestModel, AddDisToGroupRequestModel, RemoveDisToGroupRequestModel };

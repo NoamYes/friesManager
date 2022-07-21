@@ -68,6 +68,11 @@ export default class implements IRequestUseCases {
     };
 
     public removeDisFromGroup = async (requestDetails: addDisToGroupDTO): Promise<number> => {
+
+        const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
+
+        if (!existsGroup) throw new BadRequestError(`Remove dis to non exists group with id ${requestDetails.groupId}`);
+
         const { applicant, approvalsNeeded } = requestDetails;
         const requestProps = { type: REQUEST_TYPE.REMOVE_DIS_GROUP, applicant, approvalsNeeded };
         const payload = { groupId: requestDetails.groupId, disUniqueId: requestDetails.disUniqueId };
