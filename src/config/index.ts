@@ -17,6 +17,7 @@ const config = {
         secretKey: env.get('SECRET_KEY').example('length of 36 45678901234567890123456').required().asString(),
         tokenKey: env.get('TOKEN_KEY').required().asString(),
     },
+    kartoffelAPI: env.get('KARTOFFEL_API').required().asString(),
 };
 
 export default config;

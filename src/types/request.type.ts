@@ -40,4 +40,9 @@ type disToGroup = request & {
     disUniqueId: string[];
 };
 
-export { request, createGroupRequest, disToGroup, approvalRound };
+type entitiesToGroup = request & {
+    groupId: Types.ObjectId;
+    entitiesId: string[];
+}
+
+export { request, createGroupRequest, disToGroup, entitiesToGroup, approvalRound };

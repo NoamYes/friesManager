@@ -25,6 +25,11 @@ export type disToGroupDTO = basicRequestDTO & {
     disUniqueId: string[];
 };
 
+export type addEntitiesDTO = basicRequestDTO & {
+    groupId: string;
+    entitiesId: string[];
+};
+
 export type approveRoundDTO = {
     requestNumber: number;
     authorityId: string;
@@ -67,6 +72,22 @@ export const AddDisToGroupSchema = Joi.object({
 });
 
 export const removeDisFromGroupSchema = AddDisToGroupSchema;
+
+export const addEntitySchema = Joi.object({
+    body: {
+        groupId: objectIdValidation().required(),
+        entitiesId: Joi.array().items(Joi.string()).required(), // TODO: validate objectId ?
+        applicant: objectIdValidation().required(),
+        approvalsNeeded: Joi.array().items(
+            Joi.object({
+                authorityId: Joi.string().required(),
+                approvalType: Joi.string()
+                    .valid(...Object.values(RESPONSIBILITY_PERM))
+                    .required(),
+            }),
+        ),
+    },
+})
 
 export const approveRequestSchema = Joi.object({
     params: {

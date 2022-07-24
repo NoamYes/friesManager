@@ -11,3 +11,8 @@ export type disToGroupDTO = {
     groupId: Types.ObjectId;
     disUniqueId: string[];
 };
+
+export type entitiesDTO = {
+    groupId: Types.ObjectId;
+    entitiesId: string[];
+}

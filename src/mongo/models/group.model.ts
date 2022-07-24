@@ -4,8 +4,8 @@ import config from '../../config';
 const { mongo } = config;
 
 export type groupEntity = {
-    entityId: string;
-    entityDis: string[];
+    id: string;
+    dis: string[];
 };
 export interface GroupDoc {
     _id: mongoose.Types.ObjectId;
@@ -22,8 +22,8 @@ export interface GroupDoc {
 }
 
 const groupEntitySchema = new mongoose.Schema<groupEntity>({
-    entityId: String,
-    entityDis: [String],
+    id: String,
+    dis: [String],
 });
 
 const groupSchema = new mongoose.Schema<GroupDoc>(

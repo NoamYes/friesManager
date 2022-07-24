@@ -104,6 +104,11 @@ export class Group {
         this._dis = this.dis.filter((uniqueId) => !disUniqueId.includes(uniqueId));
     }
 
+    public addEntities(entities: groupEntity[]) {
+        this._entities.push(...entities); // TODO: toLowerCase ?
+        this._entities = [...new Set(this.entities)];
+    }
+
     static create(state: GroupState): Group {
         return new Group(state);
     }

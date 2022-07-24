@@ -1,6 +1,6 @@
 import { InternalError, BadRequestError, NotFoundError } from '../express/utils/error';
 import { IRequestRepo } from '../interfaces/requestRepo.interface';
-import { approveRoundDTO, createGroupDTO, disToGroupDTO as addDisToGroupDTO } from '../express/joi/validator/request.schema';
+import { addEntitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO as addDisToGroupDTO } from '../express/joi/validator/request.schema';
 import { IRequestUseCases } from '../interfaces/requestService.interface';
 import { REQUEST_TYPE } from '../config/enums';
 import { Request } from '../domain/request';
@@ -17,17 +17,17 @@ export default class implements IRequestUseCases {
     }
 
     //TODO: return request number instead of request id
-    public createGroup = async (requestDetails: createGroupDTO): Promise<number> => {
+    public create = async (requestDetails: createGroupDTO): Promise<number> => {
         const existsGroup = await this.groupRepo.findOne({ name: requestDetails.name });
 
         if (existsGroup) throw new BadRequestError(`Group with the name ${requestDetails.name} already exists`);
 
-        const existsRequest = await this.requestRepo.findOne({ name: requestDetails.name }, REQUEST_TYPE.CREATE_GROUP);
+        const existsRequest = await this.requestRepo.findOne({ name: requestDetails.name }, REQUEST_TYPE.CREATE);
 
         if (existsRequest) throw new BadRequestError(`Create request of a group with the name ${requestDetails.name} already exists`);
 
         const { applicant, approvalsNeeded } = requestDetails;
-        const requestProps = { type: REQUEST_TYPE.CREATE_GROUP, applicant, approvalsNeeded };
+        const requestProps = { type: REQUEST_TYPE.CREATE, applicant, approvalsNeeded };
         const payload = {
             name: requestDetails.name,
             types: requestDetails.types,
@@ -39,49 +39,74 @@ export default class implements IRequestUseCases {
 
         const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
 
-        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.CREATE_GROUP);
+        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.CREATE);
 
         if (!res) throw new InternalError(`Error Creating Create Group Request: ${payload.name}`);
 
         return requestNumber;
     };
 
-    public addDisToGroup = async (requestDetails: addDisToGroupDTO): Promise<number> => {
+    public addDis = async (requestDetails: addDisToGroupDTO): Promise<number> => {
         // TODO: check if request already exists ?
         const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
 
         if (!existsGroup) throw new BadRequestError(`Add dis to non exists group with id ${requestDetails.groupId}`);
 
         const { applicant, approvalsNeeded } = requestDetails;
-        const requestProps = { type: REQUEST_TYPE.ADD_DIS_GROUP, applicant, approvalsNeeded };
+        const requestProps = { type: REQUEST_TYPE.ADD_DIS, applicant, approvalsNeeded };
         const payload = { groupId: requestDetails.groupId, disUniqueId: requestDetails.disUniqueId };
 
         const requestNumber = (await this.requestRepo.count()) + 1;
 
         const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
 
-        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.ADD_DIS_GROUP);
+        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.ADD_DIS);
 
         if (!res) throw new InternalError(`Error Creating Add Dis To Group Request: ${payload.groupId} -> ${payload.disUniqueId}`);
 
         return requestNumber;
     };
 
-    public removeDisFromGroup = async (requestDetails: addDisToGroupDTO): Promise<number> => {
+    public removeDis = async (requestDetails: addDisToGroupDTO): Promise<number> => {
+        const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
+
+        if (!existsGroup) throw new BadRequestError(`Remove dis to non exists group with id ${requestDetails.groupId}`);
+
         const { applicant, approvalsNeeded } = requestDetails;
-        const requestProps = { type: REQUEST_TYPE.REMOVE_DIS_GROUP, applicant, approvalsNeeded };
+        const requestProps = { type: REQUEST_TYPE.REMOVE_DIS, applicant, approvalsNeeded };
         const payload = { groupId: requestDetails.groupId, disUniqueId: requestDetails.disUniqueId };
 
         const requestNumber = (await this.requestRepo.count()) + 1;
 
         const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
 
-        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.REMOVE_DIS_GROUP);
+        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.REMOVE_DIS);
 
-        if (!res) throw new InternalError(`Error Creating Add Dis To Group Request: ${payload.groupId} -> ${payload.disUniqueId}`);
+        if (!res) throw new InternalError(`Error Creating Remove Dis To Group Request: ${payload.groupId} -> ${payload.disUniqueId}`);
 
         return requestNumber;
     };
+
+    public addEntities = async (requestDetails: addEntitiesDTO): Promise<number> => {
+        const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
+
+        if (!existsGroup) throw new BadRequestError(`Add entities to non exists group with id ${requestDetails.groupId}`);
+
+        const { applicant, approvalsNeeded } = requestDetails;
+        const requestProps = { type: REQUEST_TYPE.ADD_ENTITIES, applicant, approvalsNeeded };
+        const payload = { groupId: requestDetails.groupId, entitiesId: requestDetails.entitiesId };
+
+        const requestNumber = (await this.requestRepo.count()) + 1;
+
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
+
+        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.ADD_ENTITIES);
+
+        if (!res) throw new InternalError(`Error Creating Add Entities To Group Request: ${payload.groupId} -> ${payload.entitiesId}`);
+
+        return requestNumber;
+    }
+
 
     public approveRound = async (approveDetails: approveRoundDTO): Promise<boolean> => {
         const { requestNumber, authorityId, approved } = approveDetails;
