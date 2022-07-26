@@ -31,7 +31,7 @@ const main = async () => {
     const groupRepo = new GroupRepo(groupModel);
 
     const requestUseCases = new RequestUseCases(requestRepo, groupRepo);
-    const kartoffelService = new KartoffelService(config.kartoffelAPI);
+    const kartoffelService = new KartoffelService(config.kartoffel.baseURL);
     const groupService = new GroupService(groupRepo, kartoffelService);
     const executedRequestUseCases = new ExecutedRequestUseCases(requestRepo, groupService);
     const groupUseCases = new GroupUseCases(groupRepo);

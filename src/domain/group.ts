@@ -109,6 +109,10 @@ export class Group {
         this._entities = [...new Set(this.entities)];
     }
 
+    public removeEntities(entitiesId: string[]) {
+        this._entities = this.entities.filter(entity => !entitiesId.includes(entity.id));
+    }
+
     static create(state: GroupState): Group {
         return new Group(state);
     }

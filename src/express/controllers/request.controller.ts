@@ -14,6 +14,7 @@ export default class implements IRequestController {
             [REQUEST_TYPE.ADD_DIS]: this._useCases.addDis,
             [REQUEST_TYPE.REMOVE_DIS]: this._useCases.removeDis,
             [REQUEST_TYPE.ADD_ENTITIES]: this._useCases.addEntities,
+            [REQUEST_TYPE.REMOVE_ENTITIES]: this._useCases.removeEntities,
         };
     }
 

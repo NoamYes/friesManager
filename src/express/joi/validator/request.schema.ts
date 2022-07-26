@@ -25,7 +25,7 @@ export type disToGroupDTO = basicRequestDTO & {
     disUniqueId: string[];
 };
 
-export type addEntitiesDTO = basicRequestDTO & {
+export type entitiesDTO = basicRequestDTO & {
     groupId: string;
     entitiesId: string[];
 };
@@ -55,7 +55,7 @@ export const createGroupRequestSchema = Joi.object({
     },
 });
 
-export const AddDisToGroupSchema = Joi.object({
+export const DisToGroupSchema = Joi.object({
     body: {
         groupId: objectIdValidation().required(),
         disUniqueId: Joi.array().items(Joi.string()).required(),
@@ -71,9 +71,7 @@ export const AddDisToGroupSchema = Joi.object({
     },
 });
 
-export const removeDisFromGroupSchema = AddDisToGroupSchema;
-
-export const addEntitySchema = Joi.object({
+export const entitiesToGroupSchema = Joi.object({
     body: {
         groupId: objectIdValidation().required(),
         entitiesId: Joi.array().items(Joi.string()).required(), // TODO: validate objectId ?

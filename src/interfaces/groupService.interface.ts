@@ -5,4 +5,5 @@ export interface IGroupService {
     addDisToGroup(dto: disToGroupDTO): Promise<boolean>;
     removeDisFromGroup(dto: disToGroupDTO): Promise<boolean>;
     addEntities(dto: entitiesDTO): Promise<boolean>;
+    removeEntities(dto: entitiesDTO): Promise<boolean>;
 }

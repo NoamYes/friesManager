@@ -84,4 +84,18 @@ export default class implements IGroupService {
 
         return true;
     }
+
+    public removeEntities = async (dto: entitiesDTO): Promise<boolean> => {
+        const group = await this._repo.findById(dto.groupId.toString());
+
+        if (!group) throw new NotFoundError(`Group Not Found`);
+
+        group.removeEntities(dto.entitiesId);
+
+        const res = await this._repo.save(group);
+
+        if (!res) throw new InternalError(`Error removing entities to group: ${group.name}`);
+
+        return true;
+    }
 }

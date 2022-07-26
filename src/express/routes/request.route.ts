@@ -1,5 +1,5 @@
 import { REQUEST_TYPE } from './../../config/enums';
-import { createGroupRequestSchema, AddDisToGroupSchema, addEntitySchema } from './../joi/validator/request.schema';
+import { createGroupRequestSchema, DisToGroupSchema, entitiesToGroupSchema } from './../joi/validator/request.schema';
 import * as express from 'express';
 import { wrapController } from '../utils/wraps';
 import { approveRequestSchema } from '../joi/validator/request.schema';
@@ -30,18 +30,23 @@ export default class {
         );
         this.router.post(
             '/addDis',
-            validateRequest(AddDisToGroupSchema),
+            validateRequest(DisToGroupSchema),
             wrapController(this.controller.createRequest, { type: REQUEST_TYPE.ADD_DIS }),
         );
         this.router.post(
-            '/remove',
-            validateRequest(AddDisToGroupSchema),
+            '/removeDis',
+            validateRequest(DisToGroupSchema),
             wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_DIS }),
         );
         this.router.post(
-            '/addEntity',
-            validateRequest(addEntitySchema),
+            '/addEntities',
+            validateRequest(entitiesToGroupSchema),
             wrapController(this.controller.createRequest, { type: REQUEST_TYPE.ADD_ENTITIES })
+        )
+        this.router.post(
+            '/removeEntities',
+            validateRequest(entitiesToGroupSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_ENTITIES })
         )
 
         this.router.put('/approve/:requestNumber', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound));

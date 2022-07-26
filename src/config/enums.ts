@@ -8,7 +8,8 @@ export enum REQUEST_TYPE {
     CREATE = 'create', // TODO: should change names?
     ADD_DIS = 'add_dis',
     REMOVE_DIS = 'remove_dis',
-    ADD_ENTITIES = 'add_entities'
+    ADD_ENTITIES = 'add_entities',
+    REMOVE_ENTITIES = 'remove_entities'
 }
 
 export enum RESPONSIBILITY_PERM {

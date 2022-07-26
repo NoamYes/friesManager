@@ -72,11 +72,20 @@ const AddEntitiesToGroupRequestModel = RequestModel.discriminator<entitiesToGrou
     }),
 );
 
+const RemoveEntitiesRequestModel = RequestModel.discriminator<entitiesToGroup>(
+    REQUEST_TYPE.REMOVE_ENTITIES,
+    new mongoose.Schema<entitiesToGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true }, //TODO: refer ?
+        entitiesId: { type: [String], required: true },
+    }),
+)
+
 export const modelsMap = {
     [REQUEST_TYPE.BASE_REQ]: RequestModel,
     [REQUEST_TYPE.CREATE]: CreateGroupRequestModel,
     [REQUEST_TYPE.ADD_DIS]: AddDiToGroupRequestModel,
-    [REQUEST_TYPE.ADD_ENTITIES]: AddEntitiesToGroupRequestModel
+    [REQUEST_TYPE.ADD_ENTITIES]: AddEntitiesToGroupRequestModel,
+    [REQUEST_TYPE.REMOVE_ENTITIES]: RemoveEntitiesRequestModel,
 };
 
 export { CreateGroupRequestModel, AddDiToGroupRequestModel, AddEntitiesToGroupRequestModel };

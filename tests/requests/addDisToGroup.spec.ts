@@ -22,7 +22,7 @@ export const testAddDisToGroup = () => {
                 applicant: '507f1f77bcf86cd799439011',
             };
 
-            let res = await request(server.app).post(`/api/requests/createGroup`).send(reqCreateBody);
+            let res = await request(server.app).post(`/api/requests/create`).send(reqCreateBody);
             expect(res.status).toBe(200);
 
             let insertedCreateGroupRequest = await findOneByQuery(requestsCollectionName, {
@@ -42,7 +42,7 @@ export const testAddDisToGroup = () => {
                 applicant: '507f1f77bcf86cd799439011',
             };
 
-            res = await request(server.app).post(`/api/requests/addDisToGroup`).send(reqAddBody);
+            res = await request(server.app).post(`/api/requests/addDis`).send(reqAddBody);
             expect(res.status).toBe(200);
 
             let insertedAddDIsRequest = await findOneByQuery(requestsCollectionName, {

@@ -1,6 +1,6 @@
 import { InternalError, BadRequestError, NotFoundError } from '../express/utils/error';
 import { IRequestRepo } from '../interfaces/requestRepo.interface';
-import { addEntitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO as addDisToGroupDTO } from '../express/joi/validator/request.schema';
+import { entitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO } from '../express/joi/validator/request.schema';
 import { IRequestUseCases } from '../interfaces/requestService.interface';
 import { REQUEST_TYPE } from '../config/enums';
 import { Request } from '../domain/request';
@@ -46,7 +46,7 @@ export default class implements IRequestUseCases {
         return requestNumber;
     };
 
-    public addDis = async (requestDetails: addDisToGroupDTO): Promise<number> => {
+    public addDis = async (requestDetails: disToGroupDTO): Promise<number> => {
         // TODO: check if request already exists ?
         const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
 
@@ -67,7 +67,7 @@ export default class implements IRequestUseCases {
         return requestNumber;
     };
 
-    public removeDis = async (requestDetails: addDisToGroupDTO): Promise<number> => {
+    public removeDis = async (requestDetails: disToGroupDTO): Promise<number> => {
         const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
 
         if (!existsGroup) throw new BadRequestError(`Remove dis to non exists group with id ${requestDetails.groupId}`);
@@ -87,7 +87,7 @@ export default class implements IRequestUseCases {
         return requestNumber;
     };
 
-    public addEntities = async (requestDetails: addEntitiesDTO): Promise<number> => {
+    public addEntities = async (requestDetails: entitiesDTO): Promise<number> => {
         const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
 
         if (!existsGroup) throw new BadRequestError(`Add entities to non exists group with id ${requestDetails.groupId}`);
@@ -103,6 +103,26 @@ export default class implements IRequestUseCases {
         const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.ADD_ENTITIES);
 
         if (!res) throw new InternalError(`Error Creating Add Entities To Group Request: ${payload.groupId} -> ${payload.entitiesId}`);
+
+        return requestNumber;
+    };
+
+    public removeEntities = async (requestDetails: entitiesDTO): Promise<number> => {
+        const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
+
+        if (!existsGroup) throw new BadRequestError(`Remove entities to non exists group with id ${requestDetails.groupId}`);
+
+        const { applicant, approvalsNeeded } = requestDetails;
+        const requestProps = { type: REQUEST_TYPE.REMOVE_ENTITIES, applicant, approvalsNeeded };
+        const payload = { groupId: requestDetails.groupId, entitiesId: requestDetails.entitiesId };
+
+        const requestNumber = (await this.requestRepo.count()) + 1;
+
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
+
+        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.REMOVE_ENTITIES);
+
+        if (!res) throw new InternalError(`Error Creating Remove Entities To Group Request: ${payload.groupId} -> ${payload.entitiesId}`);
 
         return requestNumber;
     }
