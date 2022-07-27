@@ -1,6 +1,6 @@
 import { InternalError, BadRequestError, NotFoundError } from '../express/utils/error';
 import { IRequestRepo } from '../interfaces/requestRepo.interface';
-import { entitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO, renameDTO } from '../express/joi/validator/request.schema';
+import { entitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO, renameDTO, adminsDTO } from '../express/joi/validator/request.schema';
 import { IRequestUseCases } from '../interfaces/requestService.interface';
 import { REQUEST_TYPE } from '../config/enums';
 import { Request } from '../domain/request';
@@ -147,6 +147,26 @@ export default class implements IRequestUseCases {
         const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.RENAME);
 
         if (!res) throw new InternalError(`Error Renaming Group Request: ${payload.groupId}}`);
+
+        return requestNumber;
+    }
+
+    public addAdmins = async (requestDetails: adminsDTO): Promise<number> => {
+        const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
+
+        if (!existsGroup) throw new BadRequestError(`Add admins to non exists group with id ${requestDetails.groupId}`);
+
+        const { applicant, approvalsNeeded } = requestDetails;
+        const requestProps = { type: REQUEST_TYPE.ADD_ADMINS, applicant, approvalsNeeded };
+        const payload = { groupId: requestDetails.groupId, adminsId: requestDetails.adminsId };
+
+        const requestNumber = (await this.requestRepo.count()) + 1;
+
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
+
+        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.ADD_ADMINS);
+
+        if (!res) throw new InternalError(`Error Creating Add Admins To Group Request: ${payload.groupId} -> ${payload.adminsId}`);
 
         return requestNumber;
     }

@@ -10,7 +10,8 @@ export enum REQUEST_TYPE {
     REMOVE_DIS = 'remove_dis',
     ADD_ENTITIES = 'add_entities',
     REMOVE_ENTITIES = 'remove_entities',
-    RENAME = 'rename'
+    RENAME = 'rename',
+    ADD_ADMINS = 'add_admins',
 }
 
 export enum RESPONSIBILITY_PERM {

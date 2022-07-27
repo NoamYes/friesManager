@@ -1,5 +1,5 @@
 import { REQUEST_TYPE } from './../../config/enums';
-import { createGroupRequestSchema, DisToGroupSchema, entitiesToGroupSchema, renameGroupSchema } from '../joi/validator/request.schema';
+import { adminsSchema, createGroupRequestSchema, DisToGroupSchema, entitiesToGroupSchema, renameGroupSchema } from '../joi/validator/request.schema';
 import * as express from 'express';
 import { wrapController } from '../utils/wraps';
 import { approveRequestSchema } from '../joi/validator/request.schema';
@@ -52,6 +52,11 @@ export default class {
             '/rename',
             validateRequest(renameGroupSchema),
             wrapController(this.controller.createRequest, { type: REQUEST_TYPE.RENAME })
+        )
+        this.router.post(
+            '/addAdmins',
+            validateRequest(adminsSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.ADD_ADMINS })
         )
 
         this.router.put('/approve/:requestNumber', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound));

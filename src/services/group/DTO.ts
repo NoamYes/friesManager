@@ -21,3 +21,8 @@ export type renameDTO = {
     groupId: Types.ObjectId;
     name: string;
 }
+
+export type adminsDTO = {
+    groupId: Types.ObjectId;
+    adminsId: string[];
+}

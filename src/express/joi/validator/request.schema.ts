@@ -33,6 +33,11 @@ export type entitiesDTO = basicRequestDTO & {
 export type renameDTO = basicRequestDTO & {
     groupId: string;
     name: string;
+};
+
+export type adminsDTO = basicRequestDTO & {
+    groupId: string;
+    adminsId: string[];
 }
 
 export type approveRoundDTO = {
@@ -86,6 +91,14 @@ export const renameGroupSchema = Joi.object({
         name: Joi.string().required(),
         ...baseRequestBody
     },
+})
+
+export const adminsSchema = Joi.object({
+    body: {
+        groupId: objectIdValidation().required(),
+        adminsId: Joi.array().items(Joi.string()).required(),
+        ...baseRequestBody
+    }
 })
 
 export const approveRequestSchema = Joi.object({

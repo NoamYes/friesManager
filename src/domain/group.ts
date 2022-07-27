@@ -117,6 +117,11 @@ export class Group {
         this._name = newName;
     }
 
+    public addAdmins(adminsId: string[]) {
+        this._admins.push(...adminsId);
+        this._admins = [...new Set(this.admins)];
+    }
+
     static create(state: GroupState): Group {
         return new Group(state);
     }
