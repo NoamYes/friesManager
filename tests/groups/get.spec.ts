@@ -43,7 +43,6 @@ export const testGroupUseCases = () => {
             await request(server.app).post(`/api/executedRequest/2`).send({}).expect(200);
             await request(server.app).post(`/api/executedRequest/3`).send({}).expect(200);
 
-            const dbs = await findByQuery(groupsCollection, {});
         })
 
         it('Get By Group Id', async () => {
