@@ -16,3 +16,8 @@ export type entitiesDTO = {
     groupId: Types.ObjectId;
     entitiesId: string[];
 }
+
+export type renameDTO = {
+    groupId: Types.ObjectId;
+    name: string;
+}

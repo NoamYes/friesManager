@@ -1,7 +1,7 @@
 import { REQUEST_TYPE, GROUP_TYPE, RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS, REQUEST_STATUS } from './../../config/enums';
 import mongoose, { Types } from 'mongoose';
 import config from '../../config';
-import { approvalRound, disToGroup, createGroupRequest, entitiesToGroup } from '../../types/request.type';
+import { approvalRound, disToGroup, createGroupRequest, entitiesToGroup, rename } from '../../types/request.type';
 
 const requestOptions = {
     discriminatorKey: 'type',
@@ -86,6 +86,14 @@ const RemoveEntitiesRequestModel = RequestModel.discriminator<entitiesToGroup>(
         groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
         entitiesId: { type: [String], required: true },
     }),
+
+)
+const RenameRequestModel = RequestModel.discriminator<entitiesToGroup>(
+    REQUEST_TYPE.RENAME,
+    new mongoose.Schema<rename>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+        name: { type: String, required: true }
+    }),
 )
 
 export const modelsMap = {
@@ -95,6 +103,7 @@ export const modelsMap = {
     [REQUEST_TYPE.REMOVE_DIS]: RemoveDisFromGroupRequestModel,
     [REQUEST_TYPE.ADD_ENTITIES]: AddEntitiesToGroupRequestModel,
     [REQUEST_TYPE.REMOVE_ENTITIES]: RemoveEntitiesRequestModel,
+    [REQUEST_TYPE.RENAME]: RenameRequestModel
 };
 
-export { CreateGroupRequestModel, AddDisToGroupRequestModel, RemoveDisFromGroupRequestModel };
+// export { CreateGroupRequestModel, AddDisToGroupRequestModel, RemoveDisFromGroupRequestModel };

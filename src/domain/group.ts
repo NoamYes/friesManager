@@ -113,6 +113,10 @@ export class Group {
         this._entities = this.entities.filter(entity => !entitiesId.includes(entity.id));
     }
 
+    public rename(newName: string) {
+        this._name = newName;
+    }
+
     static create(state: GroupState): Group {
         return new Group(state);
     }

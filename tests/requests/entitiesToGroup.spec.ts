@@ -58,8 +58,7 @@ export const testEntitiesToGroup = () => {
             res = await request(server.app).post(`/api/requests/addEntities`).send(reqAddBody).expect(200);
 
             let insertedAddEntitiesRequest = await findOneByQuery(requestsCollectionName, {
-                groupId: new Types.ObjectId(groupId),
-                type: REQUEST_TYPE.ADD_ENTITIES
+                requestNumber: res.body.requestNumber
             });
 
             expect(insertedAddEntitiesRequest).toBeTruthy();
@@ -104,8 +103,7 @@ export const testEntitiesToGroup = () => {
             expect(requestNumber).toBeTruthy();
 
             let insertedRemoveEntitiesRequest = await findOneByQuery(requestsCollectionName, {
-                groupId: new Types.ObjectId(groupId),
-                type: REQUEST_TYPE.REMOVE_ENTITIES
+                requestNumber
             });
 
             expect(insertedRemoveEntitiesRequest).toBeTruthy();

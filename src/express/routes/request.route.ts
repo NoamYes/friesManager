@@ -1,5 +1,5 @@
 import { REQUEST_TYPE } from './../../config/enums';
-import { createGroupRequestSchema, DisToGroupSchema, entitiesToGroupSchema } from './../joi/validator/request.schema';
+import { createGroupRequestSchema, DisToGroupSchema, entitiesToGroupSchema, renameGroupSchema } from '../joi/validator/request.schema';
 import * as express from 'express';
 import { wrapController } from '../utils/wraps';
 import { approveRequestSchema } from '../joi/validator/request.schema';
@@ -47,6 +47,11 @@ export default class {
             '/removeEntities',
             validateRequest(entitiesToGroupSchema),
             wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_ENTITIES })
+        )
+        this.router.post(
+            '/rename',
+            validateRequest(renameGroupSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.RENAME })
         )
 
         this.router.put('/approve/:requestNumber', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound));

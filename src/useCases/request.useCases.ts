@@ -1,6 +1,6 @@
 import { InternalError, BadRequestError, NotFoundError } from '../express/utils/error';
 import { IRequestRepo } from '../interfaces/requestRepo.interface';
-import { entitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO } from '../express/joi/validator/request.schema';
+import { entitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO, renameDTO } from '../express/joi/validator/request.schema';
 import { IRequestUseCases } from '../interfaces/requestService.interface';
 import { REQUEST_TYPE } from '../config/enums';
 import { Request } from '../domain/request';
@@ -123,6 +123,30 @@ export default class implements IRequestUseCases {
         const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.REMOVE_ENTITIES);
 
         if (!res) throw new InternalError(`Error Creating Remove Entities To Group Request: ${payload.groupId} -> ${payload.entitiesId}`);
+
+        return requestNumber;
+    }
+
+    public rename = async (requestDetails: renameDTO): Promise<number> => {
+        const existsGroup = await this.groupRepo.findOne({ name: requestDetails.name });
+
+        if (existsGroup) throw new BadRequestError(`Group with the name ${requestDetails.name} already exists`);
+
+        const existsRequest = await this.requestRepo.findOne({ name: requestDetails.name }, REQUEST_TYPE.RENAME);
+
+        if (existsRequest) throw new BadRequestError(`Create request of a group with the name ${requestDetails.name} already exists`);
+
+        const { applicant, approvalsNeeded } = requestDetails;
+        const requestProps = { type: REQUEST_TYPE.RENAME, applicant, approvalsNeeded };
+        const payload = { groupId: requestDetails.groupId, name: requestDetails.name };
+
+        const requestNumber = (await this.requestRepo.count()) + 1;
+
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
+
+        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.RENAME);
+
+        if (!res) throw new InternalError(`Error Renaming Group Request: ${payload.groupId}}`);
 
         return requestNumber;
     }

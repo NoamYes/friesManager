@@ -1,4 +1,4 @@
-import { createGroupDTO, disToGroupDTO, entitiesDTO } from '../services/group/DTO';
+import { createGroupDTO, disToGroupDTO, entitiesDTO, renameDTO } from '../services/group/DTO';
 
 export interface IGroupService {
     createGroup(dto: createGroupDTO): Promise<string>;
@@ -6,4 +6,5 @@ export interface IGroupService {
     removeDisFromGroup(dto: disToGroupDTO): Promise<boolean>;
     addEntities(dto: entitiesDTO): Promise<boolean>;
     removeEntities(dto: entitiesDTO): Promise<boolean>;
+    rename(dto: renameDTO): Promise<boolean>;
 }

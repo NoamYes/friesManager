@@ -45,4 +45,9 @@ type entitiesToGroup = request & {
     entitiesId: string[];
 }
 
-export { request, createGroupRequest, disToGroup, entitiesToGroup, approvalRound };
+type rename = request & {
+    groupId: Types.ObjectId;
+    name: string;
+}
+
+export { request, createGroupRequest, disToGroup, entitiesToGroup, approvalRound, rename };
