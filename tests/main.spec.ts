@@ -20,7 +20,7 @@ import RequestRouter from '../src/express/routes/request.route';
 import ExecutedRequestRouter from '../src/express/routes/executedRequest.route';
 import { testCreateGroup } from './requests/createGroup.spec';
 import { testApprovalRounds } from './requests/approveRounds.spec';
-import { testAddDisToGroup } from './requests/addDisToGroup.spec';
+import { testAddDisToGroup } from './requests/disToGroup.spec';
 import { testGroupUseCases } from './groups/get.spec';
 import GroupUseCases from '../src/useCases/group.useCases';
 import GroupController from '../src/express/controllers/group.controller';

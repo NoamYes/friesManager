@@ -56,10 +56,18 @@ const CreateGroupRequestModel = RequestModel.discriminator<createGroupRequest>(
     }),
 );
 
-const AddDiToGroupRequestModel = RequestModel.discriminator<disToGroup>(
+const AddDisToGroupRequestModel = RequestModel.discriminator<disToGroup>(
     REQUEST_TYPE.ADD_DIS,
     new mongoose.Schema<disToGroup>({
-        groupId: { type: mongoose.Schema.Types.ObjectId, required: true }, //TODO: refer ?
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+        disUniqueId: { type: [String], required: true },
+    }),
+);
+
+const RemoveDisFromGroupRequestModel = RequestModel.discriminator<disToGroup>(
+    REQUEST_TYPE.REMOVE_DIS,
+    new mongoose.Schema<disToGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
         disUniqueId: { type: [String], required: true },
     }),
 );
@@ -67,7 +75,7 @@ const AddDiToGroupRequestModel = RequestModel.discriminator<disToGroup>(
 const AddEntitiesToGroupRequestModel = RequestModel.discriminator<entitiesToGroup>(
     REQUEST_TYPE.ADD_ENTITIES,
     new mongoose.Schema<entitiesToGroup>({
-        groupId: { type: mongoose.Schema.Types.ObjectId, required: true }, //TODO: refer ?
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
         entitiesId: { type: [String], required: true },
     }),
 );
@@ -75,7 +83,7 @@ const AddEntitiesToGroupRequestModel = RequestModel.discriminator<entitiesToGrou
 const RemoveEntitiesRequestModel = RequestModel.discriminator<entitiesToGroup>(
     REQUEST_TYPE.REMOVE_ENTITIES,
     new mongoose.Schema<entitiesToGroup>({
-        groupId: { type: mongoose.Schema.Types.ObjectId, required: true }, //TODO: refer ?
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
         entitiesId: { type: [String], required: true },
     }),
 )
@@ -83,9 +91,10 @@ const RemoveEntitiesRequestModel = RequestModel.discriminator<entitiesToGroup>(
 export const modelsMap = {
     [REQUEST_TYPE.BASE_REQ]: RequestModel,
     [REQUEST_TYPE.CREATE]: CreateGroupRequestModel,
-    [REQUEST_TYPE.ADD_DIS]: AddDiToGroupRequestModel,
+    [REQUEST_TYPE.ADD_DIS]: AddDisToGroupRequestModel,
+    [REQUEST_TYPE.REMOVE_DIS]: RemoveDisFromGroupRequestModel,
     [REQUEST_TYPE.ADD_ENTITIES]: AddEntitiesToGroupRequestModel,
     [REQUEST_TYPE.REMOVE_ENTITIES]: RemoveEntitiesRequestModel,
 };
 
-export { CreateGroupRequestModel, AddDiToGroupRequestModel, AddEntitiesToGroupRequestModel };
+export { CreateGroupRequestModel, AddDisToGroupRequestModel, RemoveDisFromGroupRequestModel };

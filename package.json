@@ -4,7 +4,7 @@
   "description": "template-express",
   "main": ".prettierrc.js",
   "scripts": {
-    "start": "npm run build && npm ./dist/index.js",
+    "start": "node ./dist/index.js",
     "dev:linux": "LOAD_DEV_DOTENV=true nodemon ./src/index.ts",
     "dev:windows": "set LOAD_DEV_DOTENV=true && nodemon ./src/index.ts",
     "ts": "set LOAD_DEV_DOTENV=true && ts-node ./src/index.ts",
