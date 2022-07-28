@@ -28,6 +28,7 @@ import GroupRouter from '../src/express/routes/group.route';
 import KartoffelService from '../src/services/kartoffel.service';
 import { testEntitiesToGroup } from './requests/entitiesToGroup.spec';
 import { testRenameGroup } from './requests/rename.spec';
+import { testAdminsToGroup } from './requests/admins.spec';
 
 export let server: Server;
 let replset: MongoMemoryReplSet;
@@ -95,6 +96,7 @@ describe('Run all tests', () => {
     testGroupUseCases();
     testEntitiesToGroup();
     testRenameGroup();
+    testAdminsToGroup();
 });
 
 afterAll(async () => {
