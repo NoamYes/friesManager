@@ -13,7 +13,7 @@ const groupsCollectionName = config.mongo.groupCollectionName;
 
 export const testAdminsToGroup = () => {
 
-    describe.only('Admins to Group', () => {
+    describe('Admins to Group', () => {
         beforeAll(async () => {
             emptyDB();
         })
