@@ -106,7 +106,7 @@ export class Group {
 
     public addEntities(entities: groupEntity[]) {
         this._entities.push(...entities); // TODO: toLowerCase ?
-        this._entities = [...new Set(this.entities)];
+        this._entities = [...new Set(this.entities)]; // TODO: implement a compare function to prevent duplicates entities
     }
 
     public removeEntities(entitiesId: string[]) {

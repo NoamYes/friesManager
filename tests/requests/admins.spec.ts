@@ -15,7 +15,7 @@ export const testAdminsToGroup = () => {
 
     describe('Admins to Group', () => {
         beforeAll(async () => {
-            emptyDB();
+            await emptyDB();
         })
 
         let adminsToAdd = ['615af7afd64f5fdea26daf15', '507f1f77bcf86cd799438011'];
