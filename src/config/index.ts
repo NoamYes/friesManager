@@ -17,6 +17,19 @@ const config = {
         secretKey: env.get('SECRET_KEY').example('length of 36 45678901234567890123456').required().asString(),
         tokenKey: env.get('TOKEN_KEY').required().asString(),
     },
+    kartoffel: {
+        baseURL: env.get('KARTOFFEL_API').required().asString(),
+        isAuth: env.get('IS_KARTOFFEL_AUTH').required().asBool()
+    },
+    spike: {
+        spikeUrl: env.get('SPIKE_URL').required().asString(),
+        redisKeyName: env.get('REDIS_KEY_NAME').required().asString(),
+        myAud: env.get('MY_AUDIENCE').required().asString(),
+        clientId: env.get('MY_CLIENT_ID').required().asString(),
+        clientSecret: env.get('MY_CLIENT_SECRET').required().asString(),
+        kartoffelAud: env.get('KARTOFFEL_AUDIENCE').required().asString(),
+    },
+    redisUrl: env.get('REDIS_URL').required().asString(),
 };
 
 export default config;

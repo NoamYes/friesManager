@@ -25,6 +25,10 @@ import { testGroupUseCases } from './groups/get.spec';
 import GroupUseCases from '../src/useCases/group.useCases';
 import GroupController from '../src/express/controllers/group.controller';
 import GroupRouter from '../src/express/routes/group.route';
+import KartoffelService from '../src/services/kartoffel.service';
+import { testEntitiesToGroup } from './requests/entitiesToGroup.spec';
+import { testRenameGroup } from './requests/rename.spec';
+import { testAdminsToGroup } from './requests/admins.spec';
 
 export let server: Server;
 let replset: MongoMemoryReplSet;
@@ -37,7 +41,8 @@ beforeAll(async () => {
         const groupRepo = new GroupRepo(groupModel);
 
         const requestService = new RequestUseCases(requestRepo, groupRepo);
-        const groupService = new GroupService(groupRepo);
+        const kartoffelService = new KartoffelService(config.kartoffel.baseURL);
+        const groupService = new GroupService(groupRepo, kartoffelService);
         const executedRequestService = new ExecutedRequestUseCases(requestRepo, groupService);
         const groupUseCases = new GroupUseCases(groupRepo);
 
@@ -89,6 +94,9 @@ describe('Run all tests', () => {
     testAddDisToGroup();
     testExecutedRequests();
     testGroupUseCases();
+    testEntitiesToGroup();
+    testRenameGroup();
+    testAdminsToGroup();
 });
 
 afterAll(async () => {

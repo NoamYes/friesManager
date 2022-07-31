@@ -10,13 +10,13 @@ export type groupResponseDTO = {
     name: string;
     types: GROUP_TYPE[];
     clearance?: string;
-    groupDis: string[];
+    dis: string[];
     admins: string[];
     subGroups: string[];
     kartoffelSubGroups: string[];
     createdAt: Date;
     updatedAt: Date;
-}
+};
 
 export default class implements IGroupUseCases {
     private _repo: IGroupRepo;
@@ -31,14 +31,14 @@ export default class implements IGroupUseCases {
             name: group.name,
             types: group.types,
             ...(group.clearance ? { clearance: group.clearance } : {}),
-            groupDis: group.groupDis,
+            dis: group.dis,
             admins: group.admins,
-            subGroups: group.subGroups.map(id => id.toString()),
+            subGroups: group.subGroups.map((id) => id.toString()),
             kartoffelSubGroups: group.kartoffelSubGroups,
             createdAt: group.createdAt,
             updatedAt: group.updatedAt,
-        }
-    }
+        };
+    };
 
     public getById = async (id: string): Promise<groupResponseDTO> => {
         const group: Group | null = await this._repo.findById(id);
@@ -46,7 +46,7 @@ export default class implements IGroupUseCases {
         if (!group) throw new NotFoundError(`Group with id: ${id} not found`);
 
         return this.toResponseDTO(group);
-    }
+    };
 
     public getByName = async (name: string): Promise<groupResponseDTO> => {
         const group: Group | null = await this._repo.findOne({ name });
@@ -54,11 +54,11 @@ export default class implements IGroupUseCases {
         if (!group) throw new NotFoundError(`Group with name: ${name} not found`);
 
         return this.toResponseDTO(group);
-    }
+    };
 
     public getByAdminId = async (id: string): Promise<groupResponseDTO[]> => {
         const groups: Group[] = await this._repo.findMany({ admins: id });
 
-        return groups.map(group => this.toResponseDTO(group));
-    }
+        return groups.map((group) => this.toResponseDTO(group));
+    };
 }

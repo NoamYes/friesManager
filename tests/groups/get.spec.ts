@@ -18,7 +18,7 @@ export const testGroupUseCases = () => {
                 applicant: '507f1f77bcf86cd799439011',
             };
 
-            let res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            let res = await request(server.app).post(`/api/requests/create`).send(reqBody);
             expect(res.status).toBe(200);
 
             reqBody = {
@@ -27,7 +27,7 @@ export const testGroupUseCases = () => {
                 applicant: '507f1f77bcf86cd799439011',
             }
 
-            res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            res = await request(server.app).post(`/api/requests/create`).send(reqBody);
             expect(res.status).toBe(200);
 
             reqBody = {
@@ -36,7 +36,7 @@ export const testGroupUseCases = () => {
                 applicant: '507f1f77bcf86cd799438011',
             }
 
-            res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            res = await request(server.app).post(`/api/requests/create`).send(reqBody);
             expect(res.status).toBe(200);
 
             await request(server.app).post(`/api/executedRequest/1`).send({}).expect(200);

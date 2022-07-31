@@ -30,7 +30,7 @@ export const testAddDisToGroup = () => {
 
         it('Valid add Dis to group requests without approvals', async () => {
 
-            let res = await request(server.app).post(`/api/requests/createGroup`).send(reqCreateBody);
+            let res = await request(server.app).post(`/api/requests/create`).send(reqCreateBody);
             expect(res.status).toBe(200);
 
             let insertedCreateGroupRequest = await findOneByQuery(requestsCollectionName, {
@@ -52,12 +52,11 @@ export const testAddDisToGroup = () => {
                 applicant: '507f1f77bcf86cd799439011',
             };
 
-            res = await request(server.app).post(`/api/requests/addDisToGroup`).send(reqAddBody);
+            res = await request(server.app).post(`/api/requests/addDis`).send(reqAddBody);
             expect(res.status).toBe(200);
 
             let insertedAddDIsRequest = await findOneByQuery(requestsCollectionName, {
-                groupId: new Types.ObjectId(groupId),
-                type: REQUEST_TYPE.ADD_DIS_GROUP
+                requestNumber: res.body.requestNumber
             });
 
             expect(insertedAddDIsRequest).toBeTruthy();
@@ -69,7 +68,7 @@ export const testAddDisToGroup = () => {
                 name: reqCreateBody.name,
             });
 
-            expect(arraysAreIdentical(foundCreatedGroup.groupDis, addDisUniqueId)).toBeTruthy();
+            expect(arraysAreIdentical(foundCreatedGroup.dis, addDisUniqueId)).toBeTruthy();
         });
 
         it('Valid remove dis from group without approvals', async () => {
@@ -80,13 +79,12 @@ export const testAddDisToGroup = () => {
                 applicant: '507f1f77bcf86cd799439011'
             }
 
-            const res = await request(server.app).post(`/api/requests/removeDisFromGroup`).send(reqBody).expect(200);
+            const res = await request(server.app).post(`/api/requests/removeDis`).send(reqBody).expect(200);
             const requestNumber = res.body.requestNumber;
             expect(requestNumber).toBeTruthy();
 
             let insertedRemoveDIsRequest = await findOneByQuery(requestsCollectionName, {
-                groupId: new Types.ObjectId(groupId),
-                type: REQUEST_TYPE.REMOVE_DIS_GROUP
+                requestNumber
             });
 
             expect(insertedRemoveDIsRequest).toBeTruthy();
@@ -96,7 +94,7 @@ export const testAddDisToGroup = () => {
 
             let group = await findOneByQuery(groupsCollectionName, { name: reqCreateBody.name });
 
-            expect(arraysAreIdentical(group.groupDis, addDisUniqueId.filter(e => !removeDisUniqueId.includes(e)))).toBeTruthy();
+            expect(arraysAreIdentical(group.dis, addDisUniqueId.filter(e => !removeDisUniqueId.includes(e)))).toBeTruthy();
         });
     });
 };

@@ -11,3 +11,18 @@ export type disToGroupDTO = {
     groupId: Types.ObjectId;
     disUniqueId: string[];
 };
+
+export type entitiesDTO = {
+    groupId: Types.ObjectId;
+    entitiesId: string[];
+}
+
+export type renameDTO = {
+    groupId: Types.ObjectId;
+    name: string;
+}
+
+export type adminsDTO = {
+    groupId: Types.ObjectId;
+    adminsId: string[];
+}

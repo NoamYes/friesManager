@@ -30,7 +30,7 @@ export const testApprovalRounds = () => {
                 ],
             };
 
-            const res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            const res = await request(server.app).post(`/api/requests/create`).send(reqBody);
             expect(res.status).toBe(200);
 
             let insertedCreateGroupRequest;
@@ -79,7 +79,7 @@ export const testApprovalRounds = () => {
                 ],
             };
 
-            const res = await request(server.app).post(`/api/requests/createGroup`).send(reqBody);
+            const res = await request(server.app).post(`/api/requests/create`).send(reqBody);
             expect(res.status).toBe(200);
 
             let insertedCreateGroupRequest;
