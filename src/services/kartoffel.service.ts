@@ -7,8 +7,8 @@ import * as https from 'https';
 class TokenWrap {
     token?: string;
 
-    async getToken(expired: Boolean): Promise<string> {
-        if (expired || !this.token) {
+    async getToken(renewToken: Boolean): Promise<string> {
+        if (renewToken || !this.token) {
             this.token = await getToken();
             return this.token;
         }

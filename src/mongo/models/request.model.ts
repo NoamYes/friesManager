@@ -1,7 +1,7 @@
 import { REQUEST_TYPE, GROUP_TYPE, RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS, REQUEST_STATUS } from './../../config/enums';
 import mongoose, { Types } from 'mongoose';
 import config from '../../config';
-import { approvalRound, disToGroup, createGroupRequest, entitiesToGroup, rename, adminsToGroup } from '../../types/request.type';
+import { approvalRound, disToGroup, createGroupRequest, entitiesToGroup, renameGroup, adminsToGroup } from '../../types/request.type';
 
 const requestOptions = {
     discriminatorKey: 'type',
@@ -90,7 +90,7 @@ const RemoveEntitiesRequestModel = RequestModel.discriminator<entitiesToGroup>(
 )
 const RenameRequestModel = RequestModel.discriminator<entitiesToGroup>(
     REQUEST_TYPE.RENAME,
-    new mongoose.Schema<rename>({
+    new mongoose.Schema<renameGroup>({
         groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
         name: { type: String, required: true }
     }),
