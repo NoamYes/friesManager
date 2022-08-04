@@ -1,5 +1,5 @@
 import { REQUEST_TYPE } from './../../config/enums';
-import { adminsSchema, createGroupRequestSchema, DisToGroupSchema, entitiesToGroupSchema, renameGroupSchema } from '../joi/validator/request.schema';
+import { adminsSchema, clearanceSchema, createGroupRequestSchema, DisToGroupSchema, entitiesToGroupSchema, renameGroupSchema } from '../joi/validator/request.schema';
 import * as express from 'express';
 import { wrapController } from '../utils/wraps';
 import { approveRequestSchema } from '../joi/validator/request.schema';
@@ -62,6 +62,11 @@ export default class {
             '/removeAdmins',
             validateRequest(adminsSchema),
             wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_ADMINS })
+        )
+        this.router.post(
+            '/changeClearance',
+            validateRequest(clearanceSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.CHANGE_CLEARANCE })
         )
 
         this.router.put('/approve/:requestNumber', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound));

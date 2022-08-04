@@ -1,4 +1,4 @@
-import { adminsDTO, approveRoundDTO, createGroupDTO, disToGroupDTO, entitiesDTO, renameDTO } from '../express/joi/validator/request.schema';
+import { adminsDTO, approveRoundDTO, changeClearanceDTO, createGroupDTO, disToGroupDTO, entitiesDTO, renameDTO } from '../express/joi/validator/request.schema';
 
 export interface IRequestUseCases {
     create(requestDetails: createGroupDTO): Promise<number>;
@@ -9,6 +9,7 @@ export interface IRequestUseCases {
     rename(requestDetails: renameDTO): Promise<number>;
     addAdmins(requestDetails: adminsDTO): Promise<number>;
     removeAdmins(requestDetails: adminsDTO): Promise<number>;
+    changeClearance(requestDetails: changeClearanceDTO): Promise<number>;
 
     approveRound(approveDetails: approveRoundDTO): Promise<boolean>;
 }

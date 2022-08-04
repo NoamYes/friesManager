@@ -55,4 +55,9 @@ type adminsToGroup = request & {
     adminsId: string[];
 }
 
-export { request, createGroupRequest, disToGroup, entitiesToGroup, approvalRound, renameGroup, adminsToGroup };
+type changeClearanceToGroup = request & {
+    groupId: Types.ObjectId;
+    clearance: string;
+}
+
+export { request, createGroupRequest, disToGroup, entitiesToGroup, approvalRound, renameGroup, adminsToGroup, changeClearanceToGroup };

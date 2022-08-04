@@ -1,6 +1,6 @@
 import { IGroupRepo } from '../../interfaces/group.interface';
 import { IGroupService } from '../../interfaces/groupService.interface';
-import { adminsDTO, createGroupDTO, disToGroupDTO, entitiesDTO, renameDTO } from './DTO';
+import { adminsDTO, changeClearanceDTO, createGroupDTO, disToGroupDTO, entitiesDTO, renameDTO } from './DTO';
 import { Group } from '../../domain/group';
 import { BadRequestError, InternalError, NotFoundError } from '../../express/utils/error';
 import { groupEntity } from '../../mongo/models/group.model';
@@ -133,6 +133,20 @@ export default class implements IGroupService {
         if (!group) throw new NotFoundError(`Group Not Found`);
 
         group.removeAdmins(dto.adminsId);
+
+        const res = await this._repo.save(group);
+
+        if (!res) throw new InternalError(`Error adding admins to group: ${group.id.toString()}`);
+
+        return true;
+    }
+
+    public changeClearance = async (dto: changeClearanceDTO) => {
+        const group = await this._repo.findById(dto.groupId.toString());
+
+        if (!group) throw new NotFoundError(`Group Not Found`);
+
+        group.changeClearance(dto.clearance);
 
         const res = await this._repo.save(group);
 

@@ -26,3 +26,8 @@ export type adminsDTO = {
     groupId: Types.ObjectId;
     adminsId: string[];
 }
+
+export type changeClearanceDTO = {
+    groupId: Types.ObjectId;
+    clearance: string;
+}

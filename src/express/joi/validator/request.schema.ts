@@ -40,6 +40,11 @@ export type adminsDTO = basicRequestDTO & {
     adminsId: string[];
 }
 
+export type changeClearanceDTO = basicRequestDTO & {
+    groupId: string;
+    clearance: string;
+}
+
 export type approveRoundDTO = {
     requestNumber: number;
     authorityId: string;
@@ -97,6 +102,14 @@ export const adminsSchema = Joi.object({
     body: {
         groupId: objectIdValidation().required(),
         adminsId: Joi.array().items(Joi.string()).required(),
+        ...baseRequestBody
+    }
+})
+
+export const clearanceSchema = Joi.object({
+    body: {
+        groupId: objectIdValidation().required(),
+        clearance: Joi.string().required(),
         ...baseRequestBody
     }
 })

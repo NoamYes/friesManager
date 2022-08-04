@@ -13,6 +13,7 @@ export enum REQUEST_TYPE {
     RENAME = 'rename',
     ADD_ADMINS = 'add_admins',
     REMOVE_ADMINS = 'remove_admins',
+    CHANGE_CLEARANCE = 'change_clearance',
 }
 
 export enum RESPONSIBILITY_PERM {

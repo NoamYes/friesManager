@@ -126,6 +126,10 @@ export class Group {
         this._admins = this.admins.filter((adminId) => !adminsId.includes(adminId));
     }
 
+    public changeClearance(clearance: string) {
+        this._clearance = clearance;
+    }
+
     static create(state: GroupState): Group {
         return new Group(state);
     }

@@ -29,6 +29,7 @@ import KartoffelService from '../src/services/kartoffel.service';
 import { testEntitiesToGroup } from './requests/entitiesToGroup.spec';
 import { testRenameGroup } from './requests/rename.spec';
 import { testAdminsToGroup } from './requests/admins.spec';
+import { testChangeClearance } from './requests/changeClearance.spec';
 
 export let server: Server;
 let replset: MongoMemoryReplSet;
@@ -97,6 +98,7 @@ describe('Run all tests', () => {
     testEntitiesToGroup();
     testRenameGroup();
     testAdminsToGroup();
+    testChangeClearance();
 });
 
 afterAll(async () => {

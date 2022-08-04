@@ -1,6 +1,6 @@
 import { InternalError, BadRequestError, NotFoundError } from '../express/utils/error';
 import { IRequestRepo } from '../interfaces/requestRepo.interface';
-import { entitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO, renameDTO, adminsDTO } from '../express/joi/validator/request.schema';
+import { entitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO, renameDTO, adminsDTO, changeClearanceDTO } from '../express/joi/validator/request.schema';
 import { IRequestUseCases } from '../interfaces/requestService.interface';
 import { REQUEST_TYPE } from '../config/enums';
 import { Request } from '../domain/request';
@@ -191,6 +191,25 @@ export default class implements IRequestUseCases {
         return requestNumber;
     }
 
+    public changeClearance = async (requestDetails: changeClearanceDTO): Promise<number> => {
+        const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
+
+        if (!existsGroup) throw new BadRequestError(`Change clearance to non exists group with id ${requestDetails.groupId}`);
+
+        const { applicant, approvalsNeeded } = requestDetails;
+        const requestProps = { type: REQUEST_TYPE.CHANGE_CLEARANCE, applicant, approvalsNeeded };
+        const payload = { groupId: requestDetails.groupId, clearance: requestDetails.clearance };
+
+        const requestNumber = (await this.requestRepo.count()) + 1;
+
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
+
+        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.CHANGE_CLEARANCE);
+
+        if (!res) throw new InternalError(`Error Creating Change Clearance to Group Request: ${payload.groupId} -> ${payload.clearance}`);
+
+        return requestNumber;
+    }
 
     public approveRound = async (approveDetails: approveRoundDTO): Promise<boolean> => {
         const { requestNumber, authorityId, approved } = approveDetails;
