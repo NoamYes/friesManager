@@ -17,6 +17,7 @@ export default class implements IRequestController {
             [REQUEST_TYPE.REMOVE_ENTITIES]: this._useCases.removeEntities,
             [REQUEST_TYPE.RENAME]: this._useCases.rename,
             [REQUEST_TYPE.ADD_ADMINS]: this._useCases.addAdmins,
+            [REQUEST_TYPE.REMOVE_ADMINS]: this._useCases.removeAdmins,
         };
     }
 

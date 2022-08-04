@@ -104,6 +104,14 @@ const AddAdminsRequestModel = RequestModel.discriminator<adminsToGroup>(
     }),
 )
 
+const RemoveAdminsRequestModel = RequestModel.discriminator<adminsToGroup>(
+    REQUEST_TYPE.REMOVE_ADMINS,
+    new mongoose.Schema<adminsToGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+        adminsId: { type: [String], required: true }
+    }),
+)
+
 export const modelsMap = {
     [REQUEST_TYPE.BASE_REQ]: RequestModel,
     [REQUEST_TYPE.CREATE]: CreateGroupRequestModel,
@@ -113,6 +121,8 @@ export const modelsMap = {
     [REQUEST_TYPE.REMOVE_ENTITIES]: RemoveEntitiesRequestModel,
     [REQUEST_TYPE.RENAME]: RenameRequestModel,
     [REQUEST_TYPE.ADD_ADMINS]: AddAdminsRequestModel,
+    [REQUEST_TYPE.REMOVE_ADMINS]: RemoveAdminsRequestModel,
+
 };
 
 // export { CreateGroupRequestModel, AddDisToGroupRequestModel, RemoveDisFromGroupRequestModel };

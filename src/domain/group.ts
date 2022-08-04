@@ -122,6 +122,10 @@ export class Group {
         this._admins = [...new Set(this.admins)];
     }
 
+    public removeAdmins(adminsId: string[]) {
+        this._admins = this.admins.filter((adminId) => !adminsId.includes(adminId));
+    }
+
     static create(state: GroupState): Group {
         return new Group(state);
     }

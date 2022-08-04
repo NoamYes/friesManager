@@ -126,4 +126,18 @@ export default class implements IGroupService {
 
         return true;
     }
+
+    public removeAdmins = async (dto: adminsDTO): Promise<boolean> => {
+        const group = await this._repo.findById(dto.groupId.toString());
+
+        if (!group) throw new NotFoundError(`Group Not Found`);
+
+        group.removeAdmins(dto.adminsId);
+
+        const res = await this._repo.save(group);
+
+        if (!res) throw new InternalError(`Error adding admins to group: ${group.id.toString()}`);
+
+        return true;
+    }
 }

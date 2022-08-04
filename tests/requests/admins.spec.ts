@@ -65,6 +65,33 @@ export const testAdminsToGroup = () => {
             expect(arraysAreIdentical(foundCreatedGroup.admins, [...adminsToAdd, reqAddBody.applicant])).toBeTruthy();
         })
 
+        it('Valid Add Admins requests without approvals', async () => {
+            const reqBody = {
+                groupId,
+                adminsId: adminsToRemove,
+                applicant: '507f1f77bcf86cd799439011',
+            }
+
+            const res = await request(server.app).post(`/api/requests/removeAdmins`).send(reqBody).expect(200);
+            const requestNumber = res.body.requestNumber;
+            expect(requestNumber).toBeTruthy();
+
+            let insertedRemoveEntitiesRequest = await findOneByQuery(requestsCollectionName, {
+                requestNumber
+            });
+
+            expect(insertedRemoveEntitiesRequest).toBeTruthy();
+            expect(arraysAreIdentical(insertedRemoveEntitiesRequest.adminsId, adminsToRemove)).toBeTruthy();
+
+            await request(server.app).post(`/api/executedRequest/${requestNumber}`).send({}).expect(200);
+
+            let group = await findOneByQuery(groupsCollectionName, { name: reqCreateBody.name });
+
+            expect(arraysAreIdentical(group.admins, [...adminsToAdd, reqCreateBody.applicant]
+                .filter(e => !adminsToRemove.includes(e)))).toBeTruthy();
+
+        })
+
     })
 
 }

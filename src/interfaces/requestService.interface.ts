@@ -8,6 +8,7 @@ export interface IRequestUseCases {
     removeEntities(requestDetails: entitiesDTO): Promise<number>;
     rename(requestDetails: renameDTO): Promise<number>;
     addAdmins(requestDetails: adminsDTO): Promise<number>;
+    removeAdmins(requestDetails: adminsDTO): Promise<number>;
 
     approveRound(approveDetails: approveRoundDTO): Promise<boolean>;
 }

@@ -171,6 +171,26 @@ export default class implements IRequestUseCases {
         return requestNumber;
     }
 
+    public removeAdmins = async (requestDetails: adminsDTO): Promise<number> => {
+        const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
+
+        if (!existsGroup) throw new BadRequestError(`Remove admins to non exists group with id ${requestDetails.groupId}`);
+
+        const { applicant, approvalsNeeded } = requestDetails;
+        const requestProps = { type: REQUEST_TYPE.REMOVE_ADMINS, applicant, approvalsNeeded };
+        const payload = { groupId: requestDetails.groupId, adminsId: requestDetails.adminsId };
+
+        const requestNumber = (await this.requestRepo.count()) + 1;
+
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
+
+        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.REMOVE_ADMINS);
+
+        if (!res) throw new InternalError(`Error Creating Remove Admins From Group Request: ${payload.groupId} -> ${payload.adminsId}`);
+
+        return requestNumber;
+    }
+
 
     public approveRound = async (approveDetails: approveRoundDTO): Promise<boolean> => {
         const { requestNumber, authorityId, approved } = approveDetails;

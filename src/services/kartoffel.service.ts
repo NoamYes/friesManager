@@ -3,6 +3,7 @@ import IKartoffelService from '../interfaces/kartoffelService.interface';
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import getToken from '../auth/spike';
 import * as https from 'https';
+import { ConflictError } from '../express/utils/error';
 
 class TokenWrap {
     token?: string;
@@ -62,7 +63,7 @@ class KartoffelService implements IKartoffelService {
             const entity = (await this._kartoffelAxios.get(`/entities/${entityId}?expanded=true`)).data;
             return entity.digitalIdentities.map((di: { uniqueId: string }) => di.uniqueId);
         } catch (error) {
-            return []; // TODO: think about return some kind of error to handle next
+            throw new ConflictError(); // TODO: think about return some kind of error to handle next
         }
     };
 }

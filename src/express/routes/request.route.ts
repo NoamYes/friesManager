@@ -58,6 +58,11 @@ export default class {
             validateRequest(adminsSchema),
             wrapController(this.controller.createRequest, { type: REQUEST_TYPE.ADD_ADMINS })
         )
+        this.router.post(
+            '/removeAdmins',
+            validateRequest(adminsSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_ADMINS })
+        )
 
         this.router.put('/approve/:requestNumber', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound));
 

@@ -8,4 +8,5 @@ export interface IGroupService {
     removeEntities(dto: entitiesDTO): Promise<boolean>;
     rename(dto: renameDTO): Promise<boolean>;
     addAdmins(dto: adminsDTO): Promise<boolean>;
+    removeAdmins(dto: adminsDTO): Promise<boolean>;
 }

@@ -21,7 +21,9 @@ export default class implements IExecutedRequestsUseCases {
             [REQUEST_TYPE.ADD_ENTITIES]: this._groupService.addEntities,
             [REQUEST_TYPE.REMOVE_ENTITIES]: this._groupService.removeEntities,
             [REQUEST_TYPE.RENAME]: this._groupService.rename,
-            [REQUEST_TYPE.ADD_ADMINS]: this._groupService.addAdmins
+            [REQUEST_TYPE.ADD_ADMINS]: this._groupService.addAdmins,
+            [REQUEST_TYPE.REMOVE_ADMINS]: this._groupService.removeAdmins,
+
         };
     }
 
