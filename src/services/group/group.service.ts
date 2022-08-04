@@ -1,6 +1,6 @@
 import { IGroupRepo } from '../../interfaces/group.interface';
 import { IGroupService } from '../../interfaces/groupService.interface';
-import { adminsDTO, changeClearanceDTO, createGroupDTO, disToGroupDTO, entitiesDTO, renameDTO } from './DTO';
+import { adminsDTO, changeClearanceDTO, createGroupDTO, deleteGroupDTO, disToGroupDTO, entitiesDTO, renameDTO } from './DTO';
 import { Group } from '../../domain/group';
 import { BadRequestError, InternalError, NotFoundError } from '../../express/utils/error';
 import { groupEntity } from '../../mongo/models/group.model';
@@ -149,6 +149,27 @@ export default class implements IGroupService {
         group.changeClearance(dto.clearance);
 
         const res = await this._repo.save(group);
+
+        if (!res) throw new InternalError(`Error adding admins to group: ${group.id.toString()}`);
+
+        return true;
+    }
+
+    public deleteGroup = async (dto: deleteGroupDTO): Promise<boolean> => {
+        const group = await this._repo.findById(dto.groupId.toString());
+
+        if (!group) throw new NotFoundError(`Group Not Found`);
+
+        const groupsToUpdate: Group[] = await this._repo.findMany({ subGroups: group.id });
+
+        // TODO: There is a better way ?
+        for (const g of groupsToUpdate) {
+            // TODO: handle if error in the middle of the deleting process - inside the loop
+            g.removeSubGroups([group.id]);
+            await this._repo.save(g);
+        }
+
+        const res = await this._repo.deleteById(dto.groupId.toString());
 
         if (!res) throw new InternalError(`Error adding admins to group: ${group.id.toString()}`);
 

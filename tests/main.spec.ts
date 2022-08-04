@@ -30,6 +30,7 @@ import { testEntitiesToGroup } from './requests/entitiesToGroup.spec';
 import { testRenameGroup } from './requests/rename.spec';
 import { testAdminsToGroup } from './requests/admins.spec';
 import { testChangeClearance } from './requests/changeClearance.spec';
+import { testDeleteGroup } from './requests/deleteGroup.spec';
 
 export let server: Server;
 let replset: MongoMemoryReplSet;
@@ -99,6 +100,7 @@ describe('Run all tests', () => {
     testRenameGroup();
     testAdminsToGroup();
     testChangeClearance();
+    testDeleteGroup();
 });
 
 afterAll(async () => {

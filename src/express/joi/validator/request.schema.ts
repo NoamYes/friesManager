@@ -45,11 +45,16 @@ export type changeClearanceDTO = basicRequestDTO & {
     clearance: string;
 }
 
+export type deleteGroupDTO = basicRequestDTO & {
+    groupId: string;
+}
+
 export type approveRoundDTO = {
     requestNumber: number;
     authorityId: string;
     approved: boolean;
 };
+
 
 export const baseRequestBody = {
     applicant: objectIdValidation().required(),
@@ -110,6 +115,13 @@ export const clearanceSchema = Joi.object({
     body: {
         groupId: objectIdValidation().required(),
         clearance: Joi.string().required(),
+        ...baseRequestBody
+    }
+})
+
+export const deleteGroupSchema = Joi.object({
+    body: {
+        groupId: objectIdValidation().required(),
         ...baseRequestBody
     }
 })

@@ -1,6 +1,6 @@
 import { InternalError, BadRequestError, NotFoundError } from '../express/utils/error';
 import { IRequestRepo } from '../interfaces/requestRepo.interface';
-import { entitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO, renameDTO, adminsDTO, changeClearanceDTO } from '../express/joi/validator/request.schema';
+import { entitiesDTO, approveRoundDTO, createGroupDTO, disToGroupDTO, renameDTO, adminsDTO, changeClearanceDTO, deleteGroupDTO } from '../express/joi/validator/request.schema';
 import { IRequestUseCases } from '../interfaces/requestService.interface';
 import { REQUEST_TYPE } from '../config/enums';
 import { Request } from '../domain/request';
@@ -207,6 +207,26 @@ export default class implements IRequestUseCases {
         const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.CHANGE_CLEARANCE);
 
         if (!res) throw new InternalError(`Error Creating Change Clearance to Group Request: ${payload.groupId} -> ${payload.clearance}`);
+
+        return requestNumber;
+    }
+
+    public deleteGroup = async (requestDetails: deleteGroupDTO): Promise<number> => {
+        const existsGroup = await this.groupRepo.findById(requestDetails.groupId);
+
+        if (!existsGroup) throw new BadRequestError(`Delete on exists group with id ${requestDetails.groupId}`);
+
+        const { applicant, approvalsNeeded } = requestDetails;
+        const requestProps = { type: REQUEST_TYPE.DELETE, applicant, approvalsNeeded };
+        const payload = { groupId: requestDetails.groupId };
+
+        const requestNumber = (await this.requestRepo.count()) + 1;
+
+        const newRequest: Request = Request.createNew({ ...requestProps, payload, requestNumber });
+
+        const res = await this.requestRepo.create(newRequest, REQUEST_TYPE.DELETE);
+
+        if (!res) throw new InternalError(`Error Creating Deleting Group Request: ${payload.groupId}`);
 
         return requestNumber;
     }

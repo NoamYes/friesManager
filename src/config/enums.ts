@@ -14,6 +14,7 @@ export enum REQUEST_TYPE {
     ADD_ADMINS = 'add_admins',
     REMOVE_ADMINS = 'remove_admins',
     CHANGE_CLEARANCE = 'change_clearance',
+    DELETE = 'delete'
 }
 
 export enum RESPONSIBILITY_PERM {

@@ -31,3 +31,7 @@ export type changeClearanceDTO = {
     groupId: Types.ObjectId;
     clearance: string;
 }
+
+export type deleteGroupDTO = {
+    groupId: Types.ObjectId;
+}

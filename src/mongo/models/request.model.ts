@@ -1,7 +1,7 @@
 import { REQUEST_TYPE, GROUP_TYPE, RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS, REQUEST_STATUS } from './../../config/enums';
 import mongoose, { Types } from 'mongoose';
 import config from '../../config';
-import { approvalRound, disToGroup, createGroupRequest, entitiesToGroup, renameGroup, adminsToGroup, changeClearanceToGroup } from '../../types/request.type';
+import { approvalRound, disToGroup, createGroupRequest, entitiesToGroup, renameGroup, adminsToGroup, changeClearanceToGroup, deleteGroup } from '../../types/request.type';
 
 const requestOptions = {
     discriminatorKey: 'type',
@@ -120,6 +120,13 @@ const ChangeClearanceRequestModel = RequestModel.discriminator<changeClearanceTo
     }),
 )
 
+const DeleteGroupRequestModel = RequestModel.discriminator<deleteGroup>(
+    REQUEST_TYPE.DELETE,
+    new mongoose.Schema<deleteGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+    }),
+)
+
 export const modelsMap = {
     [REQUEST_TYPE.BASE_REQ]: RequestModel,
     [REQUEST_TYPE.CREATE]: CreateGroupRequestModel,
@@ -130,7 +137,8 @@ export const modelsMap = {
     [REQUEST_TYPE.RENAME]: RenameRequestModel,
     [REQUEST_TYPE.ADD_ADMINS]: AddAdminsRequestModel,
     [REQUEST_TYPE.REMOVE_ADMINS]: RemoveAdminsRequestModel,
-    [REQUEST_TYPE.CHANGE_CLEARANCE]: ChangeClearanceRequestModel
+    [REQUEST_TYPE.CHANGE_CLEARANCE]: ChangeClearanceRequestModel,
+    [REQUEST_TYPE.DELETE]: DeleteGroupRequestModel
 };
 
 // export { CreateGroupRequestModel, AddDisToGroupRequestModel, RemoveDisFromGroupRequestModel };

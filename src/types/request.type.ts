@@ -60,4 +60,8 @@ type changeClearanceToGroup = request & {
     clearance: string;
 }
 
-export { request, createGroupRequest, disToGroup, entitiesToGroup, approvalRound, renameGroup, adminsToGroup, changeClearanceToGroup };
+type deleteGroup = request & {
+    groupId: Types.ObjectId;
+}
+
+export { request, createGroupRequest, disToGroup, entitiesToGroup, approvalRound, renameGroup, adminsToGroup, changeClearanceToGroup, deleteGroup };

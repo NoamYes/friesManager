@@ -18,7 +18,8 @@ export default class implements IRequestController {
             [REQUEST_TYPE.RENAME]: this._useCases.rename,
             [REQUEST_TYPE.ADD_ADMINS]: this._useCases.addAdmins,
             [REQUEST_TYPE.REMOVE_ADMINS]: this._useCases.removeAdmins,
-            [REQUEST_TYPE.CHANGE_CLEARANCE]: this._useCases.changeClearance
+            [REQUEST_TYPE.CHANGE_CLEARANCE]: this._useCases.changeClearance,
+            [REQUEST_TYPE.DELETE]: this._useCases.deleteGroup
         };
     }
 

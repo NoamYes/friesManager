@@ -130,6 +130,10 @@ export class Group {
         this._clearance = clearance;
     }
 
+    public removeSubGroups(groupIds: Types.ObjectId[]) {
+        this._subGroups = this.subGroups.filter(gId => !groupIds.includes(gId));
+    }
+
     static create(state: GroupState): Group {
         return new Group(state);
     }
