@@ -32,7 +32,7 @@ export const testExecutedRequests = () => {
         });
 
         it('2 approval Rounds of create group request and then create group', async () => {
-            const res = await request(server.app).post(`/api/requests/createGroup`).send(groupWithApprovalsBody);
+            const res = await request(server.app).post(`/api/requests/create`).send(groupWithApprovalsBody);
             expect(res.status).toBe(200);
 
             let insertedCreateGroupRequest;
@@ -78,14 +78,14 @@ export const testExecutedRequests = () => {
             expect(foundCreatedGroup.name).toBe(insertedCreateGroupRequest.name);
         });
 
-        it('2 approval Rounds of add addDiGroup request and then add dis to group', async () => {
+        it('2 approval Rounds of add Dis to Group request and then add dis to group', async () => {
             let reqCreateBody = {
                 name: 'RoeiGroup',
                 types: ['distribution'],
                 applicant: '507f1f77bcf86cd799439011',
             };
 
-            let res = await request(server.app).post(`/api/requests/createGroup`).send(reqCreateBody);
+            let res = await request(server.app).post(`/api/requests/create`).send(reqCreateBody);
             expect(res.status).toBe(200);
 
             let insertedCreateGroupRequest = await findOneByQuery(requestsCollectionName, {
@@ -105,7 +105,7 @@ export const testExecutedRequests = () => {
                 applicant: '507f1f77bcf86cd799439011',
             };
 
-            res = await request(server.app).post(`/api/requests/addDisToGroup`).send(reqAddBody);
+            res = await request(server.app).post(`/api/requests/addDis`).send(reqAddBody);
             expect(res.status).toBe(200);
 
             let insertedAddDIsRequest = await findOneByQuery(requestsCollectionName, {
@@ -122,7 +122,7 @@ export const testExecutedRequests = () => {
             foundCreatedGroup = await findOneByQuery(groupsCollectionName, {
                 name: reqCreateBody.name,
             });
-            expect(arraysAreIdentical(foundCreatedGroup.groupDis, reqAddBody.disUniqueId)).toBeTruthy();
+            expect(arraysAreIdentical(foundCreatedGroup.dis, reqAddBody.disUniqueId)).toBeTruthy();
         });
     });
 };

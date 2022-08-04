@@ -43,6 +43,12 @@ export class NotFoundError extends ServiceError {
     }
 }
 
+export class ConflictError extends ServiceError {
+    constructor(message = 'Conflict Error') {
+        super(406, message);
+    }
+}
+
 /**
  * Error middleware, handles the error by the status code.
  * @param { Error } error - The error

@@ -40,4 +40,28 @@ type disToGroup = request & {
     disUniqueId: string[];
 };
 
-export { request, createGroupRequest, disToGroup, approvalRound };
+type entitiesToGroup = request & {
+    groupId: Types.ObjectId;
+    entitiesId: string[];
+}
+
+type renameGroup = request & {
+    groupId: Types.ObjectId;
+    name: string;
+}
+
+type adminsToGroup = request & {
+    groupId: Types.ObjectId;
+    adminsId: string[];
+}
+
+type changeClearanceToGroup = request & {
+    groupId: Types.ObjectId;
+    clearance: string;
+}
+
+type deleteGroup = request & {
+    groupId: Types.ObjectId;
+}
+
+export { request, createGroupRequest, disToGroup, entitiesToGroup, approvalRound, renameGroup, adminsToGroup, changeClearanceToGroup, deleteGroup };

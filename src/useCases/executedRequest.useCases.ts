@@ -14,11 +14,17 @@ export default class implements IExecutedRequestsUseCases {
         this._requestRepo = requestsRepo;
         this._groupService = groupService;
 
-        //TODO: Add entity to group
         this._groupServicesMap = {
-            [REQUEST_TYPE.CREATE_GROUP]: this._groupService.createGroup,
-            [REQUEST_TYPE.ADD_DIS_GROUP]: this._groupService.addDisToGroup,
-            [REQUEST_TYPE.REMOVE_DIS_GROUP]: this._groupService.removeDisFromGroup,
+            [REQUEST_TYPE.CREATE]: this._groupService.createGroup,
+            [REQUEST_TYPE.ADD_DIS]: this._groupService.addDisToGroup,
+            [REQUEST_TYPE.REMOVE_DIS]: this._groupService.removeDisFromGroup,
+            [REQUEST_TYPE.ADD_ENTITIES]: this._groupService.addEntities,
+            [REQUEST_TYPE.REMOVE_ENTITIES]: this._groupService.removeEntities,
+            [REQUEST_TYPE.RENAME]: this._groupService.rename,
+            [REQUEST_TYPE.ADD_ADMINS]: this._groupService.addAdmins,
+            [REQUEST_TYPE.REMOVE_ADMINS]: this._groupService.removeAdmins,
+            [REQUEST_TYPE.CHANGE_CLEARANCE]: this._groupService.changeClearance,
+            [REQUEST_TYPE.DELETE]: this._groupService.deleteGroup
         };
     }
 

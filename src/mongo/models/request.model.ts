@@ -1,7 +1,7 @@
 import { REQUEST_TYPE, GROUP_TYPE, RESPONSIBILITY_PERM, APPROVAL_ROUND_STATUS, REQUEST_STATUS } from './../../config/enums';
 import mongoose, { Types } from 'mongoose';
 import config from '../../config';
-import { approvalRound, disToGroup, createGroupRequest } from '../../types/request.type';
+import { approvalRound, disToGroup, createGroupRequest, entitiesToGroup, renameGroup, adminsToGroup, changeClearanceToGroup, deleteGroup } from '../../types/request.type';
 
 const requestOptions = {
     discriminatorKey: 'type',
@@ -19,7 +19,7 @@ export interface RequestDoc {
     status: REQUEST_STATUS;
 }
 
-export const createGroupApprovalSchema = new mongoose.Schema<approvalRound>({
+export const approvalSchema = new mongoose.Schema<approvalRound>({
     permissionResponsibility: {
         type: { type: String, enum: RESPONSIBILITY_PERM, required: true },
         authorityId: { type: String, required: true },
@@ -36,46 +36,109 @@ export const requestSchema = new mongoose.Schema<RequestDoc>(
         applicant: { type: String, required: true },
         createdAt: { type: Date, required: false },
         updatedAt: { type: Date, required: false },
-        approvalRounds: { type: [createGroupApprovalSchema], required: false },
-    }, {
-    // versionKey: false,
-    ...requestOptions
-}
+        approvalRounds: { type: [approvalSchema], required: false },
+    },
+    {
+        // versionKey: false,
+        ...requestOptions,
+    },
 );
 
 export const RequestModel = mongoose.model('Request', requestSchema);
 
 const CreateGroupRequestModel = RequestModel.discriminator<createGroupRequest>(
-    REQUEST_TYPE.CREATE_GROUP,
+    REQUEST_TYPE.CREATE,
     new mongoose.Schema<createGroupRequest>({
         name: { type: String, required: true, unique: true },
         types: { type: [String], enum: GROUP_TYPE, required: true },
         admin: { type: String, required: true },
-        clearance: { type: String, required: false }
+        clearance: { type: String, required: false },
     }),
 );
 
 const AddDisToGroupRequestModel = RequestModel.discriminator<disToGroup>(
-    REQUEST_TYPE.ADD_DIS_GROUP,
+    REQUEST_TYPE.ADD_DIS,
     new mongoose.Schema<disToGroup>({
-        groupId: { type: mongoose.Schema.Types.ObjectId, required: true }, //TODO: refer ?
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
         disUniqueId: { type: [String], required: true },
     }),
 );
 
-const RemoveDisToGroupRequestModel = RequestModel.discriminator<disToGroup>(
-    REQUEST_TYPE.REMOVE_DIS_GROUP,
+const RemoveDisFromGroupRequestModel = RequestModel.discriminator<disToGroup>(
+    REQUEST_TYPE.REMOVE_DIS,
     new mongoose.Schema<disToGroup>({
-        groupId: { type: mongoose.Schema.Types.ObjectId, required: true }, //TODO: refer ?
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
         disUniqueId: { type: [String], required: true },
     }),
 );
+
+const AddEntitiesToGroupRequestModel = RequestModel.discriminator<entitiesToGroup>(
+    REQUEST_TYPE.ADD_ENTITIES,
+    new mongoose.Schema<entitiesToGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+        entitiesId: { type: [String], required: true },
+    }),
+);
+
+const RemoveEntitiesRequestModel = RequestModel.discriminator<entitiesToGroup>(
+    REQUEST_TYPE.REMOVE_ENTITIES,
+    new mongoose.Schema<entitiesToGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+        entitiesId: { type: [String], required: true },
+    }),
+
+)
+const RenameRequestModel = RequestModel.discriminator<entitiesToGroup>(
+    REQUEST_TYPE.RENAME,
+    new mongoose.Schema<renameGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+        name: { type: String, required: true }
+    }),
+)
+
+const AddAdminsRequestModel = RequestModel.discriminator<adminsToGroup>(
+    REQUEST_TYPE.ADD_ADMINS,
+    new mongoose.Schema<adminsToGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+        adminsId: { type: [String], required: true }
+    }),
+)
+
+const RemoveAdminsRequestModel = RequestModel.discriminator<adminsToGroup>(
+    REQUEST_TYPE.REMOVE_ADMINS,
+    new mongoose.Schema<adminsToGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+        adminsId: { type: [String], required: true }
+    }),
+)
+
+const ChangeClearanceRequestModel = RequestModel.discriminator<changeClearanceToGroup>(
+    REQUEST_TYPE.CHANGE_CLEARANCE,
+    new mongoose.Schema<changeClearanceToGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+        clearance: { type: String, required: true }
+    }),
+)
+
+const DeleteGroupRequestModel = RequestModel.discriminator<deleteGroup>(
+    REQUEST_TYPE.DELETE,
+    new mongoose.Schema<deleteGroup>({
+        groupId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'groupModel' }, //TODO: refer ?
+    }),
+)
 
 export const modelsMap = {
     [REQUEST_TYPE.BASE_REQ]: RequestModel,
-    [REQUEST_TYPE.CREATE_GROUP]: CreateGroupRequestModel,
-    [REQUEST_TYPE.ADD_DIS_GROUP]: AddDisToGroupRequestModel,
-    [REQUEST_TYPE.REMOVE_DIS_GROUP]: RemoveDisToGroupRequestModel,
+    [REQUEST_TYPE.CREATE]: CreateGroupRequestModel,
+    [REQUEST_TYPE.ADD_DIS]: AddDisToGroupRequestModel,
+    [REQUEST_TYPE.REMOVE_DIS]: RemoveDisFromGroupRequestModel,
+    [REQUEST_TYPE.ADD_ENTITIES]: AddEntitiesToGroupRequestModel,
+    [REQUEST_TYPE.REMOVE_ENTITIES]: RemoveEntitiesRequestModel,
+    [REQUEST_TYPE.RENAME]: RenameRequestModel,
+    [REQUEST_TYPE.ADD_ADMINS]: AddAdminsRequestModel,
+    [REQUEST_TYPE.REMOVE_ADMINS]: RemoveAdminsRequestModel,
+    [REQUEST_TYPE.CHANGE_CLEARANCE]: ChangeClearanceRequestModel,
+    [REQUEST_TYPE.DELETE]: DeleteGroupRequestModel
 };
 
-export { CreateGroupRequestModel, AddDisToGroupRequestModel, RemoveDisToGroupRequestModel };
+// export { CreateGroupRequestModel, AddDisToGroupRequestModel, RemoveDisFromGroupRequestModel };

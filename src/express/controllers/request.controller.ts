@@ -10,9 +10,16 @@ export default class implements IRequestController {
     constructor(RequestUseCases: IRequestUseCases) {
         this._useCases = RequestUseCases;
         this._useCasesMap = {
-            [REQUEST_TYPE.CREATE_GROUP]: this._useCases.createGroup,
-            [REQUEST_TYPE.ADD_DIS_GROUP]: this._useCases.addDisToGroup,
-            [REQUEST_TYPE.REMOVE_DIS_GROUP]: this._useCases.removeDisFromGroup,
+            [REQUEST_TYPE.CREATE]: this._useCases.create,
+            [REQUEST_TYPE.ADD_DIS]: this._useCases.addDis,
+            [REQUEST_TYPE.REMOVE_DIS]: this._useCases.removeDis,
+            [REQUEST_TYPE.ADD_ENTITIES]: this._useCases.addEntities,
+            [REQUEST_TYPE.REMOVE_ENTITIES]: this._useCases.removeEntities,
+            [REQUEST_TYPE.RENAME]: this._useCases.rename,
+            [REQUEST_TYPE.ADD_ADMINS]: this._useCases.addAdmins,
+            [REQUEST_TYPE.REMOVE_ADMINS]: this._useCases.removeAdmins,
+            [REQUEST_TYPE.CHANGE_CLEARANCE]: this._useCases.changeClearance,
+            [REQUEST_TYPE.DELETE]: this._useCases.deleteGroup
         };
     }
 

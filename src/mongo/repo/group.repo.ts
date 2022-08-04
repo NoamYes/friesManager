@@ -53,4 +53,14 @@ export default class implements IGroupRepo {
         const res = await this._model.find(query).lean();
         return res.map((group) => Group.toDomain(group));
     };
+
+    public deleteById = async (id: string) => {
+        try {
+            const res = await this._model.deleteOne({ _id: new Types.ObjectId(id) });
+            return !!res;
+        } catch (err: any) {
+            console.log(err.message);
+            throw new MongoError(err.message);
+        }
+    }
 }

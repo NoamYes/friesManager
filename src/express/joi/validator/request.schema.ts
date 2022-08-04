@@ -1,4 +1,4 @@
-import { GROUP_TYPE, RESPONSIBILITY_PERM } from './../../../config/enums';
+import { GROUP_TYPE, RESPONSIBILITY_PERM } from '../../../config/enums';
 import * as Joi from 'joi';
 import * as JoiObjectId from 'joi-objectid';
 
@@ -25,11 +25,48 @@ export type disToGroupDTO = basicRequestDTO & {
     disUniqueId: string[];
 };
 
+export type entitiesDTO = basicRequestDTO & {
+    groupId: string;
+    entitiesId: string[];
+};
+
+export type renameDTO = basicRequestDTO & {
+    groupId: string;
+    name: string;
+};
+
+export type adminsDTO = basicRequestDTO & {
+    groupId: string;
+    adminsId: string[];
+}
+
+export type changeClearanceDTO = basicRequestDTO & {
+    groupId: string;
+    clearance: string;
+}
+
+export type deleteGroupDTO = basicRequestDTO & {
+    groupId: string;
+}
+
 export type approveRoundDTO = {
     requestNumber: number;
     authorityId: string;
     approved: boolean;
 };
+
+
+export const baseRequestBody = {
+    applicant: objectIdValidation().required(),
+    approvalsNeeded: Joi.array().items(
+        Joi.object({
+            authorityId: Joi.string().required(),
+            approvalType: Joi.string()
+                .valid(...Object.values(RESPONSIBILITY_PERM))
+                .required(),
+        }),
+    ),
+}
 
 export const createGroupRequestSchema = Joi.object({
     body: {
@@ -38,35 +75,56 @@ export const createGroupRequestSchema = Joi.object({
             .try(Joi.array().items(Joi.string().valid(...Object.values(GROUP_TYPE))), Joi.string())
             .required(),
         clearance: Joi.string(),
-        applicant: objectIdValidation().required(), // TODO: consider transform to objectId validation
-        approvalsNeeded: Joi.array().items(
-            Joi.object({
-                authorityId: Joi.string().required(),
-                approvalType: Joi.string()
-                    .valid(...Object.values(RESPONSIBILITY_PERM))
-                    .required(),
-            }),
-        ),
+        ...baseRequestBody
     },
 });
 
-export const AddDisToGroupSchema = Joi.object({
+export const DisToGroupSchema = Joi.object({
     body: {
         groupId: objectIdValidation().required(),
         disUniqueId: Joi.array().items(Joi.string()).required(),
-        applicant: objectIdValidation().required(),
-        approvalsNeeded: Joi.array().items(
-            Joi.object({
-                authorityId: Joi.string().required(),
-                approvalType: Joi.string()
-                    .valid(...Object.values(RESPONSIBILITY_PERM))
-                    .required(),
-            }),
-        ),
+        ...baseRequestBody
     },
 });
 
-export const removeDisFromGroupSchema = AddDisToGroupSchema;
+export const entitiesToGroupSchema = Joi.object({
+    body: {
+        groupId: objectIdValidation().required(), // TODO: validate objectId ?
+        entitiesId: Joi.array().items(Joi.string()).required(),
+        ...baseRequestBody
+    },
+})
+
+export const renameGroupSchema = Joi.object({
+    body: {
+        groupId: objectIdValidation().required(), // TODO: validate objectId ?
+        name: Joi.string().required(),
+        ...baseRequestBody
+    },
+})
+
+export const adminsSchema = Joi.object({
+    body: {
+        groupId: objectIdValidation().required(),
+        adminsId: Joi.array().items(Joi.string()).required(),
+        ...baseRequestBody
+    }
+})
+
+export const clearanceSchema = Joi.object({
+    body: {
+        groupId: objectIdValidation().required(),
+        clearance: Joi.string().required(),
+        ...baseRequestBody
+    }
+})
+
+export const deleteGroupSchema = Joi.object({
+    body: {
+        groupId: objectIdValidation().required(),
+        ...baseRequestBody
+    }
+})
 
 export const approveRequestSchema = Joi.object({
     params: {

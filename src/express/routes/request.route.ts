@@ -1,5 +1,5 @@
 import { REQUEST_TYPE } from './../../config/enums';
-import { createGroupRequestSchema, AddDisToGroupSchema } from './../joi/validator/request.schema';
+import { adminsSchema, clearanceSchema, createGroupRequestSchema, DisToGroupSchema, entitiesToGroupSchema, renameGroupSchema, deleteGroupSchema } from '../joi/validator/request.schema';
 import * as express from 'express';
 import { wrapController } from '../utils/wraps';
 import { approveRequestSchema } from '../joi/validator/request.schema';
@@ -24,20 +24,55 @@ export default class {
 
     public initializeRoutes() {
         this.router.post(
-            '/createGroup',
+            '/create',
             validateRequest(createGroupRequestSchema),
-            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.CREATE_GROUP }),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.CREATE }),
         );
         this.router.post(
-            '/addDisToGroup',
-            validateRequest(AddDisToGroupSchema),
-            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.ADD_DIS_GROUP }),
+            '/addDis',
+            validateRequest(DisToGroupSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.ADD_DIS }),
         );
         this.router.post(
-            '/removeDisFromGroup',
-            validateRequest(AddDisToGroupSchema),
-            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_DIS_GROUP }),
+            '/removeDis',
+            validateRequest(DisToGroupSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_DIS }),
         );
+        this.router.post(
+            '/addEntities',
+            validateRequest(entitiesToGroupSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.ADD_ENTITIES })
+        )
+        this.router.post(
+            '/removeEntities',
+            validateRequest(entitiesToGroupSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_ENTITIES })
+        )
+        this.router.post(
+            '/rename',
+            validateRequest(renameGroupSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.RENAME })
+        )
+        this.router.post(
+            '/addAdmins',
+            validateRequest(adminsSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.ADD_ADMINS })
+        )
+        this.router.post(
+            '/removeAdmins',
+            validateRequest(adminsSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.REMOVE_ADMINS })
+        )
+        this.router.post(
+            '/changeClearance',
+            validateRequest(clearanceSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.CHANGE_CLEARANCE })
+        )
+        this.router.post(
+            '/delete',
+            validateRequest(deleteGroupSchema),
+            wrapController(this.controller.createRequest, { type: REQUEST_TYPE.DELETE })
+        )
 
         this.router.put('/approve/:requestNumber', validateRequest(approveRequestSchema), wrapController(this.controller.approveRound));
 

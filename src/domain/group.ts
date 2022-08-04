@@ -1,26 +1,27 @@
+import { groupEntity } from './../mongo/models/group.model';
 import { GROUP_TYPE } from '../config/enums';
 import { Types } from 'mongoose';
 import { GroupDoc } from '../mongo/models/group.model';
 
 export type newGroupProps = {
     name: string;
-    types: GROUP_TYPE[],
-    admin: string, // TODO: think about it
-    clearance?: string,
+    types: GROUP_TYPE[];
+    admin: string; // TODO: think about it
+    clearance?: string;
 };
 
-
 export interface GroupState {
-    _id: Types.ObjectId,
-    name: string, // TODO: is unique?
-    types: GROUP_TYPE[],
-    clearance?: string,
-    groupDis: string[]
-    admins: string[], // TODO: admins are entities id? users?
-    subGroups: Types.ObjectId[], // TODO: refer: itself
-    kartoffelSubGroups: string[], // TODO: Relevance ?
-    createdAt: Date,
-    updatedAt: Date,
+    _id: Types.ObjectId;
+    name: string; // TODO: is unique?
+    types: GROUP_TYPE[];
+    clearance?: string;
+    entities: groupEntity[];
+    dis: string[];
+    admins: string[]; // TODO: admins are entities id? users?
+    subGroups: Types.ObjectId[]; // TODO: refer: itself
+    kartoffelSubGroups: string[]; // TODO: Relevance ?
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export class Group {
@@ -28,7 +29,8 @@ export class Group {
     private _name: string; // TODO: is unique?
     private _types: GROUP_TYPE[];
     private _clearance?: string;
-    private _groupDis: string[]
+    private _entities: groupEntity[];
+    private _dis: string[];
     private _admins: string[]; // TODO: admins are entities id? users?
     private _subGroups: Types.ObjectId[]; // TODO: refer: itself
     private _kartoffelSubGroups: string[]; // TODO: Relevance ?
@@ -40,7 +42,8 @@ export class Group {
         this._name = props.name;
         this._types = props.types;
         this._clearance = props.clearance;
-        this._groupDis = props.groupDis;
+        this._entities = props.entities;
+        this._dis = props.dis;
         this._admins = props.admins;
         this._subGroups = props.subGroups;
         this._kartoffelSubGroups = props.kartoffelSubGroups;
@@ -64,8 +67,12 @@ export class Group {
         return this._clearance;
     }
 
-    get groupDis() {
-        return this._groupDis;
+    get entities() {
+        return this._entities;
+    }
+
+    get dis() {
+        return this._dis;
     }
 
     get admins() {
@@ -89,12 +96,42 @@ export class Group {
     }
 
     public addDis(disUniqueId: string[]) {
-        this._groupDis.push(...disUniqueId); // TODO: toLowerCase ?
-        this._groupDis = [...new Set(this.groupDis)];
+        this._dis.push(...disUniqueId); // TODO: toLowerCase ?
+        this._dis = [...new Set(this.dis)];
     }
 
     public removeDis(disUniqueId: string[]) {
-        this._groupDis = this.groupDis.filter((uniqueId) => !disUniqueId.includes(uniqueId));
+        this._dis = this.dis.filter((uniqueId) => !disUniqueId.includes(uniqueId));
+    }
+
+    public addEntities(entities: groupEntity[]) {
+        this._entities.push(...entities); // TODO: toLowerCase ?
+        this._entities = [...new Set(this.entities)]; // TODO: implement a compare function to prevent duplicates entities
+    }
+
+    public removeEntities(entitiesId: string[]) {
+        this._entities = this.entities.filter(entity => !entitiesId.includes(entity.id));
+    }
+
+    public rename(newName: string) {
+        this._name = newName;
+    }
+
+    public addAdmins(adminsId: string[]) {
+        this._admins.push(...adminsId);
+        this._admins = [...new Set(this.admins)];
+    }
+
+    public removeAdmins(adminsId: string[]) {
+        this._admins = this.admins.filter((adminId) => !adminsId.includes(adminId));
+    }
+
+    public changeClearance(clearance: string) {
+        this._clearance = clearance;
+    }
+
+    public removeSubGroups(groupIds: Types.ObjectId[]) {
+        this._subGroups = this.subGroups.filter(gId => !groupIds.includes(gId));
     }
 
     static create(state: GroupState): Group {
@@ -114,7 +151,8 @@ export class Group {
             admins: [props.admin],
             subGroups: [],
             kartoffelSubGroups: [],
-            groupDis: [],
+            dis: [],
+            entities: [],
         };
 
         return new Group(newGroupState);
@@ -130,8 +168,9 @@ export class Group {
             admins: group.admins,
             subGroups: group.subGroups,
             kartoffelSubGroups: group.kartoffelSubGroups,
-            groupDis: group.groupDis,
-            clearance: group.clearance
+            entities: group.entities,
+            dis: group.dis,
+            clearance: group.clearance,
         };
     }
 

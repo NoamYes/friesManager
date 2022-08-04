@@ -15,6 +15,7 @@ import ExecutedRequestRouter from './express/routes/executedRequest.route';
 import GroupRouter from './express/routes/group.route';
 import GroupUseCases from './useCases/group.useCases';
 import GroupController from './express/controllers/group.controller';
+import KartoffelService from './services/kartoffel.service';
 // import Auth from './services/auth.service';
 
 const { mongo } = config;
@@ -30,7 +31,8 @@ const main = async () => {
     const groupRepo = new GroupRepo(groupModel);
 
     const requestUseCases = new RequestUseCases(requestRepo, groupRepo);
-    const groupService = new GroupService(groupRepo);
+    const kartoffelService = new KartoffelService(config.kartoffel.baseURL);
+    const groupService = new GroupService(groupRepo, kartoffelService);
     const executedRequestUseCases = new ExecutedRequestUseCases(requestRepo, groupService);
     const groupUseCases = new GroupUseCases(groupRepo);
 
